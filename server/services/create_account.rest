@@ -1,0 +1,45 @@
+### SUCCESS Create one customer.
+POST http://localhost:5000/accounts
+Content-Type: application/json
+
+{
+    "cust_id": 1,
+    "curr_gold_balance": 0
+    "curr_gold_balance": 0
+}
+
+### FAILURE Create one customer; cross VARCHAR limit.
+POST http://localhost:5000/accounts
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "032164512875465132132131346546541321321654",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Create one customer; testing empty inputs.
+POST http://localhost:5000/accounts
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451287",
+    "cust_nic": "",
+    "cust_email": "asal_lamtaf@testmail.com"
+}
+
+### FAILURE Create one customer; testing missing inputs.
+POST http://localhost:5000/accounts
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}

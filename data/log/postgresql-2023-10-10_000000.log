@@ -1,0 +1,55 @@
+2023-10-10 19:37:34.560 PKT [6604] ERROR:  operator does not exist: character varying == unknown at character 156
+2023-10-10 19:37:34.560 PKT [6604] HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+2023-10-10 19:37:34.560 PKT [6604] STATEMENT:  SELECT fees, total_sample_weight, points, pure_weight, charges, taken_cash FROM transactions WHERE acco_id = 2 AND acco_tran_id = 'TE1' AND date_finalized == NULL;
+2023-10-10 19:48:03.807 PKT [2052] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 19:48:03.807 PKT [2052] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 19:48:03.807 PKT [2052] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 19:50:31.902 PKT [17588] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 19:50:31.902 PKT [17588] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 19:50:31.902 PKT [17588] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 19:51:17.397 PKT [9564] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 19:51:17.397 PKT [9564] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 19:51:17.397 PKT [9564] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 19:55:40.834 PKT [16876] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 19:55:40.834 PKT [16876] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 19:55:40.834 PKT [16876] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 19:56:41.062 PKT [18732] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 19:56:41.062 PKT [18732] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 19:56:41.062 PKT [18732] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:00:51.524 PKT [4424] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:00:51.524 PKT [4424] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:00:51.524 PKT [4424] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:01:47.224 PKT [13420] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:01:47.224 PKT [13420] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:01:47.224 PKT [13420] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:02:24.656 PKT [1688] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:02:24.656 PKT [1688] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:02:24.656 PKT [1688] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:06:04.050 PKT [6604] ERROR:  column "te6" does not exist at character 131
+2023-10-10 20:06:04.050 PKT [6604] STATEMENT:  SELECT fees, total_sample_weight, points, pure_weight, charges, taken_cash FROM transactions WHERE acco_id = 2 AND acco_tran_id = TE6 AND date_finalized IS NULL;
+2023-10-10 20:08:16.217 PKT [14896] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:08:16.217 PKT [14896] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:08:16.217 PKT [14896] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:16:05.427 PKT [13328] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:16:05.427 PKT [13328] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:16:05.427 PKT [13328] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:16:57.878 PKT [19684] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:16:57.878 PKT [19684] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:16:57.878 PKT [19684] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:18:44.197 PKT [10748] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:18:44.197 PKT [10748] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:18:44.197 PKT [10748] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:24:57.659 PKT [8032] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:24:57.659 PKT [8032] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:24:57.659 PKT [8032] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:27:32.337 PKT [16884] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:27:32.337 PKT [16884] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:27:32.337 PKT [16884] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:30:55.594 PKT [10876] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:30:55.594 PKT [10876] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:30:55.594 PKT [10876] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:35:30.712 PKT [1672] ERROR:  invalid input syntax for type integer: "TE6"
+2023-10-10 20:35:30.712 PKT [1672] CONTEXT:  unnamed portal parameter $1 = '...'
+2023-10-10 20:35:30.712 PKT [1672] STATEMENT:  SELECT COUNT(*) FROM transactions where acco_id = $1 AND transaction_type = $2;
+2023-10-10 20:42:53.038 PKT [6148] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	

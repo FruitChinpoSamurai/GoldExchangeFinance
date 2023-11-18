@@ -1,0 +1,20 @@
+### SUCCESS Login as user.
+POST http://localhost:5000/users/login
+Content-Type: application/json
+
+{
+    "user_name": "adminhoheim",
+    "user_password": "goldenadmindrowssap"
+}
+
+### FAILURE Login as user; flase username.
+POST http://localhost:5000/users/login
+Content-Type: application/json
+
+{
+    "user_name": "adminheim",
+    "user_password": "goldenadmindrowssap"
+}
+
+###
+http://localhost:5000/business_statement/balance/info/9-31-2023

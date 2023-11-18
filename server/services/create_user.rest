@@ -1,0 +1,43 @@
+### SUCCESS Create one user.
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "user_name": "newguybruh",
+    "user_password": "goldenadmindrowssap"
+}
+
+### FAILURE Create one user; username is duplicated.
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "user_name": "adminheim",
+    "user_password": "goldenadmindrowssap"
+}
+
+### FAILURE Create one user; cross VARCHAR limit.
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "user_name": "goldenadmindrowssap",
+    "user_password": "123456789123456789123456789123456"
+}
+
+### FAILURE Create one user; testing empty inputs.
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "user_name": "",
+    "user_password": ""
+}
+
+### FAILURE Create one user; testing missing inputs.
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "user_name": "where password?"
+}

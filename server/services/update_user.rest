@@ -1,0 +1,31 @@
+### SUCCESS Update one user.
+PUT http://localhost:5000/users/1
+Content-Type: application/json
+
+{
+    "user_password": "checkoutmepassword"
+}
+
+### FAILURE Update one user; user does not exist.
+PUT http://localhost:5000/users/7
+Content-Type: application/json
+
+{
+    "user_password": "123456789123456789123456789123456"
+}
+
+### FAILURE Update one user; testing empty inputs.
+PUT http://localhost:5000/users/2
+Content-Type: application/json
+
+{
+    "user_password": ""
+}
+
+### FAILURE Update one user; testing missing inputs.
+PUT http://localhost:5000/users/2
+Content-Type: application/json
+
+{
+
+}

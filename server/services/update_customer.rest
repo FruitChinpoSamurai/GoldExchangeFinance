@@ -1,0 +1,74 @@
+### SUCCESS Update one customer.
+PUT http://localhost:5000/customers/1
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451281",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Update one customer; cross VARCHAR limit.
+PUT http://localhost:5000/customers/1
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "032164512875465132132131346546541321321654",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Update one customer; testing empty inputs.
+PUT http://localhost:5000/customers/1
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451287",
+    "cust_nic": "",
+    "cust_email": "asal_lamtaf@testmail.com"
+}
+
+### FAILURE Update one customer; testing missing inputs.
+PUT http://localhost:5000/customers/1
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Update one customer; use duplicated data.
+PUT http://localhost:5000/customers/1
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451281",
+    "cust_nic": "4230175441287",
+    "cust_email": "rileyR@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Update one customer; non-existent ID.
+PUT http://localhost:5000/customers/356
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451281",
+    "cust_nic": "4230175441287",
+    "cust_email": "rileyR@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}

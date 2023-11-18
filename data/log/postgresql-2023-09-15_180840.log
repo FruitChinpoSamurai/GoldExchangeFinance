@@ -1,0 +1,13 @@
+2023-09-15 18:08:41.039 PKT [5816] LOG:  database system was shut down at 2023-09-15 17:59:22 PKT
+2023-09-15 18:13:41.041 PKT [5796] LOG:  checkpoint starting: time
+2023-09-15 18:13:41.821 PKT [5796] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.742 s, sync=0.015 s, total=0.782 s; sync files=6, longest=0.009 s, average=0.003 s; distance=0 kB, estimate=0 kB; lsn=0/481BA90, redo lsn=0/481BA58
+2023-09-15 18:23:41.842 PKT [5796] LOG:  checkpoint starting: time
+2023-09-15 18:23:42.318 PKT [5796] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.440 s, sync=0.017 s, total=0.477 s; sync files=5, longest=0.013 s, average=0.004 s; distance=1 kB, estimate=1 kB; lsn=0/481C100, redo lsn=0/481C0C8
+2023-09-15 18:27:21.818 PKT [10576] ERROR:  column reference "cust_id" is ambiguous at character 8
+2023-09-15 18:27:21.818 PKT [10576] STATEMENT:  SELECT cust_id, cust_name, cust_primary_number FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id;
+2023-09-15 18:28:35.776 PKT [10576] ERROR:  column reference "cust_id" is ambiguous at character 8
+2023-09-15 18:28:35.776 PKT [10576] STATEMENT:  SELECT cust_id, cust_name, cust_primary_number FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id;
+2023-09-15 18:29:36.156 PKT [10576] ERROR:  column reference "cust_id" is ambiguous at character 17
+2023-09-15 18:29:36.156 PKT [10576] STATEMENT:  SELECT acco_id, cust_id, cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id;
+2023-09-15 18:31:07.208 PKT [10576] ERROR:  syntax error at or near "FROM" at character 140
+2023-09-15 18:31:07.208 PKT [10576] STATEMENT:  SELECT TO_CHAR(acco_id, '000000', TO_CHAR(accounts.cust_id, '00000'), cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id;

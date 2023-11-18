@@ -1,0 +1,228 @@
+2023-09-04 17:31:30.787 PKT [6472] LOG:  database system was shut down at 2023-09-04 17:31:25 PKT
+2023-09-04 17:36:30.774 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 17:36:38.517 PKT [7600] LOG:  checkpoint complete: wrote 74 buffers (0.5%); 0 WAL file(s) added, 0 removed, 0 recycled; write=7.707 s, sync=0.030 s, total=7.743 s; sync files=31, longest=0.015 s, average=0.001 s; distance=406 kB, estimate=406 kB; lsn=0/15D4460, redo lsn=0/15D4428
+2023-09-04 17:41:30.526 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 17:43:16.959 PKT [7600] LOG:  checkpoint complete: wrote 978 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=106.301 s, sync=0.114 s, total=106.434 s; sync files=303, longest=0.015 s, average=0.001 s; distance=4580 kB, estimate=4580 kB; lsn=0/1A4D808, redo lsn=0/1A4D7D0
+2023-09-04 17:58:23.429 PKT [13080] FATAL:  password authentication failed for user "AyyRmao"
+2023-09-04 17:58:23.429 PKT [13080] DETAIL:  Role "AyyRmao" does not exist.
+	Connection matched file "D:/EGR/data/pg_hba.conf" line 117: "host    all             all             ::1/128                 scram-sha-256"
+2023-09-04 18:01:12.255 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 18:01:12.261 PKT [7600] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=4122 kB; lsn=0/1A4DEA8, redo lsn=0/1A4DE70
+2023-09-04 18:02:17.689 PKT [11472] ERROR:  syntax error at or near "*" at character 6
+2023-09-04 18:02:17.689 PKT [11472] STATEMENT:  SHOW * FROM user;
+2023-09-04 18:06:12.262 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 18:07:58.896 PKT [7600] LOG:  checkpoint complete: wrote 979 buffers (6.0%); 1 WAL file(s) added, 0 removed, 0 recycled; write=106.482 s, sync=0.108 s, total=106.635 s; sync files=304, longest=0.014 s, average=0.001 s; distance=4564 kB, estimate=4564 kB; lsn=0/1EC3250, redo lsn=0/1EC3218
+2023-09-04 19:11:20.672 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 19:11:20.680 PKT [7600] LOG:  checkpoint complete: wrote 1 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.008 s; sync files=1, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=4108 kB; lsn=0/1EC37E8, redo lsn=0/1EC37B0
+2023-09-04 19:11:59.659 PKT [5996] ERROR:  syntax error at or near "PRIMARY" at character 33
+2023-09-04 19:11:59.659 PKT [5996] STATEMENT:  CREATE TABLE users(
+	    user_id PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	    user_name VARCHAR(25) NOT NULL,
+	    user_password VARCHAR(25) NOT NULL
+	);
+2023-09-04 19:13:32.429 PKT [5996] ERROR:  syntax error at or near "ALWAYS" at character 43
+2023-09-04 19:13:32.429 PKT [5996] STATEMENT:  CREATE TABLE users(
+	    user_id GENERATED ALWAYS AS IDENTITY,
+	    user_name VARCHAR(25) NOT NULL,
+	    user_password VARCHAR(25) NOT NULL,
+	    PRIMARY KEY (user_id)
+	);
+2023-09-04 19:13:40.712 PKT [5996] ERROR:  syntax error at or near "ALWAYS" at character 43
+2023-09-04 19:13:40.712 PKT [5996] STATEMENT:  CREATE TABLE users(
+	    user_id GENERATED ALWAYS AS IDENTITY,
+	    user_name VARCHAR(25) NOT NULL,
+	    user_password VARCHAR(25) NOT NULL,
+	    PRIMARY KEY (user_id)
+	);
+2023-09-04 19:13:46.931 PKT [5996] ERROR:  syntax error at or near "ALWAYS" at character 43
+2023-09-04 19:13:46.931 PKT [5996] STATEMENT:  CREATE TABLE users(
+	    user_id GENERATED ALWAYS AS IDENTITY,
+	    user_name VARCHAR(25) NOT NULL,
+	    user_password VARCHAR(25) NOT NULL,
+	    PRIMARY KEY (user_id)
+	);
+2023-09-04 19:13:52.753 PKT [5996] ERROR:  syntax error at or near "clear" at character 1
+2023-09-04 19:13:52.753 PKT [5996] STATEMENT:  clear
+	clear;
+2023-09-04 19:14:08.277 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 19:14:08.287 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.003 s, total=0.010 s; sync files=4, longest=0.001 s, average=0.001 s; distance=4551 kB, estimate=4551 kB; lsn=0/2335600, redo lsn=0/23355C8
+2023-09-04 19:14:22.816 PKT [5924] FATAL:  password authentication failed for user "postgres"
+2023-09-04 19:14:22.816 PKT [5924] DETAIL:  Connection matched file "D:/EGR/data/pg_hba.conf" line 117: "host    all             all             ::1/128                 scram-sha-256"
+2023-09-04 19:14:55.384 PKT [13352] ERROR:  syntax error at or near "ALWAYS" at character 43
+2023-09-04 19:14:55.384 PKT [13352] STATEMENT:  CREATE TABLE users(
+	    user_id GENERATED ALWAYS AS IDENTITY,
+	    user_name VARCHAR(25) NOT NULL,
+	    user_password VARCHAR(25) NOT NULL,
+	    PRIMARY KEY (user_id)
+	);
+2023-09-04 19:19:08.286 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 19:20:55.961 PKT [7600] LOG:  checkpoint complete: wrote 989 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=107.542 s, sync=0.115 s, total=107.675 s; sync files=313, longest=0.013 s, average=0.001 s; distance=4623 kB, estimate=4623 kB; lsn=0/27B94E8, redo lsn=0/27B94B0
+2023-09-04 19:59:09.016 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 19:59:10.001 PKT [7600] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.976 s, sync=0.005 s, total=0.986 s; sync files=7, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=4161 kB; lsn=0/27B97C8, redo lsn=0/27B9790
+2023-09-04 19:59:25.883 PKT [3448] ERROR:  value too long for type character varying(25)
+2023-09-04 19:59:25.883 PKT [3448] STATEMENT:  INSERT INTO users (user_name, user_password) VALUES($1, $2) RETURNING *
+2023-09-04 19:59:48.050 PKT [9088] ERROR:  value too long for type character varying(25)
+2023-09-04 19:59:48.050 PKT [9088] STATEMENT:  INSERT INTO users (user_name, user_password) VALUES($1, $2) RETURNING *
+2023-09-04 20:01:45.550 PKT [2364] ERROR:  null value in column "user_password" of relation "users" violates not-null constraint
+2023-09-04 20:01:45.550 PKT [2364] DETAIL:  Failing row contains (3, where password?, null).
+2023-09-04 20:01:45.550 PKT [2364] STATEMENT:  INSERT INTO users (user_name, user_password) VALUES($1, $2) RETURNING *
+2023-09-04 20:04:09.003 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:04:09.360 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.323 s, sync=0.016 s, total=0.358 s; sync files=4, longest=0.014 s, average=0.004 s; distance=0 kB, estimate=3745 kB; lsn=0/27B9B80, redo lsn=0/27B9B48
+2023-09-04 20:16:24.712 PKT [14264] ERROR:  value too long for type character varying(15)
+2023-09-04 20:16:24.712 PKT [14264] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:16:42.745 PKT [7864] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:16:42.745 PKT [7864] DETAIL:  Failing row contains (3, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:16:42.745 PKT [7864] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:18:20.168 PKT [12552] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:18:20.168 PKT [12552] DETAIL:  Failing row contains (4, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:18:20.168 PKT [12552] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:18:55.592 PKT [11832] ERROR:  null value in column "cust_test_fees" of relation "customers" violates not-null constraint
+2023-09-04 20:18:55.592 PKT [11832] DETAIL:  Failing row contains (5, Aslam Altaf, 03216451287, 4230175441287, asal_lamtaf@testmail.com, null, null, null, null, null, null, null).
+2023-09-04 20:18:55.592 PKT [11832] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:19:01.875 PKT [13232] ERROR:  null value in column "cust_test_fees" of relation "customers" violates not-null constraint
+2023-09-04 20:19:01.875 PKT [13232] DETAIL:  Failing row contains (6, Aslam Altaf, 03216451287, 4230175441287, asal_lamtaf@testmail.com, null, null, null, null, null, null, null).
+2023-09-04 20:19:01.875 PKT [13232] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:19:09.372 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:19:10.173 PKT [7600] LOG:  checkpoint complete: wrote 8 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.761 s, sync=0.020 s, total=0.802 s; sync files=6, longest=0.015 s, average=0.004 s; distance=1 kB, estimate=3370 kB; lsn=0/27B9FB8, redo lsn=0/27B9F80
+2023-09-04 20:20:26.459 PKT [8540] ERROR:  database "goldbuysell" is being accessed by other users
+2023-09-04 20:20:26.459 PKT [8540] DETAIL:  There are 2 other sessions using the database.
+2023-09-04 20:20:26.459 PKT [8540] STATEMENT:  DROP DATABASE IF EXISTS goldbuysell;
+	
+2023-09-04 20:20:40.712 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 20:20:40.718 PKT [7600] LOG:  checkpoint complete: wrote 1 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.006 s; sync files=1, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=3034 kB; lsn=0/27BA6E0, redo lsn=0/27BA6A8
+2023-09-04 20:22:23.794 PKT [1364] ERROR:  value too long for type character varying(15)
+2023-09-04 20:22:23.794 PKT [1364] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:22:32.967 PKT [10708] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:22:32.967 PKT [10708] DETAIL:  Failing row contains (3, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:22:32.967 PKT [10708] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:24:21.683 PKT [8360] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:24:21.683 PKT [8360] DETAIL:  Failing row contains (6, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:24:21.683 PKT [8360] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:24:26.236 PKT [4584] ERROR:  value too long for type character varying(15)
+2023-09-04 20:24:26.236 PKT [4584] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:25:04.052 PKT [8344] ERROR:  value too long for type character varying(15)
+2023-09-04 20:25:04.052 PKT [8344] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:25:15.126 PKT [13720] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:25:15.126 PKT [13720] DETAIL:  Failing row contains (9, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:25:15.126 PKT [13720] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:25:40.726 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:25:43.912 PKT [3992] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:25:43.912 PKT [3992] DETAIL:  Failing row contains (11, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:25:43.912 PKT [3992] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:25:45.836 PKT [7076] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:25:45.836 PKT [7076] DETAIL:  Failing row contains (12, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:25:45.836 PKT [7076] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:27:28.569 PKT [7600] LOG:  checkpoint complete: wrote 992 buffers (6.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=107.711 s, sync=0.115 s, total=107.843 s; sync files=313, longest=0.014 s, average=0.001 s; distance=4626 kB, estimate=4626 kB; lsn=0/2C3F590, redo lsn=0/2C3EFB8
+2023-09-04 20:30:05.955 PKT [10360] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:30:05.955 PKT [10360] DETAIL:  Failing row contains (14, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:30:05.955 PKT [10360] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:30:40.565 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:30:40.911 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.321 s, sync=0.003 s, total=0.347 s; sync files=4, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=4163 kB; lsn=0/2C3F7A0, redo lsn=0/2C3F768
+2023-09-04 20:31:29.866 PKT [14228] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:29.866 PKT [14228] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:31.549 PKT [3384] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:31.549 PKT [3384] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:44.744 PKT [1452] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:44.744 PKT [1452] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:45.191 PKT [1976] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:45.191 PKT [1976] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:45.495 PKT [13036] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:45.495 PKT [13036] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:45.514 PKT [1716] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:45.514 PKT [1716] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:46.266 PKT [9912] ERROR:  value too long for type character varying(15)
+2023-09-04 20:31:46.266 PKT [9912] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:31:56.934 PKT [3292] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:31:56.934 PKT [3292] DETAIL:  Failing row contains (18, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:31:56.934 PKT [3292] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:35:40.915 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:35:41.284 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.326 s, sync=0.018 s, total=0.370 s; sync files=4, longest=0.014 s, average=0.005 s; distance=2 kB, estimate=3747 kB; lsn=0/2C40178, redo lsn=0/2C40140
+2023-09-04 20:36:36.409 PKT [8540] ERROR:  database "goldbuysell" is being accessed by other users
+2023-09-04 20:36:36.409 PKT [8540] DETAIL:  There is 1 other session using the database.
+2023-09-04 20:36:36.409 PKT [8540] STATEMENT:  DROP DATABASE IF EXISTS goldbuysell;
+	
+2023-09-04 20:36:50.599 PKT [8540] ERROR:  database "goldbuysell" is being accessed by other users
+2023-09-04 20:36:50.599 PKT [8540] DETAIL:  There is 1 other session using the database.
+2023-09-04 20:36:50.599 PKT [8540] STATEMENT:  DROP DATABASE IF EXISTS goldbuysell;
+	
+2023-09-04 20:37:21.278 PKT [8540] ERROR:  database "goldbuysell" is being accessed by other users
+2023-09-04 20:37:21.278 PKT [8540] DETAIL:  There is 1 other session using the database.
+2023-09-04 20:37:21.278 PKT [8540] STATEMENT:  DROP DATABASE IF EXISTS goldbuysell;
+	
+2023-09-04 20:37:25.020 PKT [14116] FATAL:  terminating connection due to administrator command
+2023-09-04 20:37:32.591 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 20:37:32.597 PKT [7600] LOG:  checkpoint complete: wrote 1 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.007 s; sync files=1, longest=0.001 s, average=0.001 s; distance=1 kB, estimate=3373 kB; lsn=0/2C40940, redo lsn=0/2C40908
+2023-09-04 20:40:16.323 PKT [11864] ERROR:  value too long for type character varying(15)
+2023-09-04 20:40:16.323 PKT [11864] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:40:30.440 PKT [12564] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:40:30.440 PKT [12564] DETAIL:  Failing row contains (4, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:40:30.440 PKT [12564] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:40:55.435 PKT [11848] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:40:55.435 PKT [11848] DETAIL:  Failing row contains (6, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:40:55.435 PKT [11848] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:42:16.527 PKT [3536] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:42:16.527 PKT [3536] DETAIL:  Failing row contains (8, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:42:16.527 PKT [3536] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:42:29.649 PKT [12312] ERROR:  null value in column "cust_personal_number" of relation "customers" violates not-null constraint
+2023-09-04 20:42:29.649 PKT [12312] DETAIL:  Failing row contains (10, Aslam Altaf, null, 4230175441287, asal_lamtaf@testmail.com, null, null, null, 275, 25, null, null).
+2023-09-04 20:42:29.649 PKT [12312] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 20:42:32.604 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 20:44:20.307 PKT [7600] LOG:  checkpoint complete: wrote 992 buffers (6.1%); 0 WAL file(s) added, 0 removed, 1 recycled; write=107.587 s, sync=0.099 s, total=107.704 s; sync files=313, longest=0.001 s, average=0.001 s; distance=4626 kB, estimate=4626 kB; lsn=0/30C5700, redo lsn=0/30C5130
+2023-09-04 20:59:02.742 PKT [13596] ERROR:  value too long for type character varying(15)
+2023-09-04 20:59:02.742 PKT [13596] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 21:00:00.597 PKT [12912] ERROR:  value too long for type character varying(15)
+2023-09-04 21:00:00.597 PKT [12912] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 21:02:32.324 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:02:33.545 PKT [7600] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.194 s, sync=0.018 s, total=1.222 s; sync files=9, longest=0.014 s, average=0.002 s; distance=3 kB, estimate=4163 kB; lsn=0/30C6130, redo lsn=0/30C60F8
+2023-09-04 21:03:16.834 PKT [2976] ERROR:  value too long for type character varying(15)
+2023-09-04 21:03:16.834 PKT [2976] STATEMENT:  INSERT INTO customers (cust_name, cust_personal_number, cust_nic, cust_email, cust_shop_number, cust_shop_address, cust_reference, cust_test_fees, cust_pg_charges) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *
+2023-09-04 21:03:40.186 PKT [3992] ERROR:  value too long for type character varying(25)
+2023-09-04 21:03:40.186 PKT [3992] STATEMENT:  INSERT INTO users (user_name, user_password) VALUES($1, $2) RETURNING *
+2023-09-04 21:07:32.558 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:07:33.681 PKT [7600] LOG:  checkpoint complete: wrote 11 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.094 s, sync=0.009 s, total=1.124 s; sync files=9, longest=0.002 s, average=0.001 s; distance=4 kB, estimate=3747 kB; lsn=0/30C7230, redo lsn=0/30C71F8
+2023-09-04 21:12:32.691 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:12:33.071 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.335 s, sync=0.020 s, total=0.380 s; sync files=4, longest=0.016 s, average=0.005 s; distance=3 kB, estimate=3373 kB; lsn=0/30C7E60, redo lsn=0/30C7E28
+2023-09-04 21:22:32.088 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:22:32.450 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.322 s, sync=0.019 s, total=0.363 s; sync files=4, longest=0.016 s, average=0.005 s; distance=3 kB, estimate=3036 kB; lsn=0/30C8AC0, redo lsn=0/30C8A88
+2023-09-04 21:27:32.460 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:27:32.827 PKT [7600] LOG:  checkpoint complete: wrote 4 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.324 s, sync=0.018 s, total=0.367 s; sync files=4, longest=0.015 s, average=0.005 s; distance=3 kB, estimate=2733 kB; lsn=0/30C9760, redo lsn=0/30C9728
+2023-09-04 21:28:21.601 PKT [12792] ERROR:  column "cust_id" of relation "accounts" does not exist at character 23
+2023-09-04 21:28:21.601 PKT [12792] STATEMENT:  INSERT INTO accounts (cust_id, init_gold_balance, init_gold_balance) VALUES($1, $2, $3) RETURNING *
+2023-09-04 21:28:45.731 PKT [7072] ERROR:  column "init_gold_balance" specified more than once at character 51
+2023-09-04 21:28:45.731 PKT [7072] STATEMENT:  INSERT INTO accounts (acco_id, init_gold_balance, init_gold_balance) VALUES($1, $2, $3) RETURNING *
+2023-09-04 21:29:12.716 PKT [5612] ERROR:  cannot insert a non-DEFAULT value into column "acco_id"
+2023-09-04 21:29:12.716 PKT [5612] DETAIL:  Column "acco_id" is an identity column defined as GENERATED ALWAYS.
+2023-09-04 21:29:12.716 PKT [5612] HINT:  Use OVERRIDING SYSTEM VALUE to override.
+2023-09-04 21:29:12.716 PKT [5612] STATEMENT:  INSERT INTO accounts (acco_id, init_gold_balance, init_cash_balance) VALUES($1, $2, $3) RETURNING *
+2023-09-04 21:32:32.834 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:32:34.187 PKT [7600] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.315 s, sync=0.018 s, total=1.354 s; sync files=11, longest=0.014 s, average=0.002 s; distance=5 kB, estimate=2460 kB; lsn=0/30CAB88, redo lsn=0/30CAB50
+2023-09-04 21:36:35.720 PKT [5832] ERROR:  column "curr_gold_balance" of relation "accounts" does not exist at character 61
+2023-09-04 21:36:35.720 PKT [5832] STATEMENT:  INSERT INTO accounts (init_gold_balance, init_cash_balance, curr_gold_balance, curr_cash_balance) VALUES($1, $2, $3, $4) RETURNING *
+2023-09-04 21:37:05.591 PKT [7600] LOG:  checkpoint starting: immediate force wait
+2023-09-04 21:37:05.598 PKT [7600] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.002 s, total=0.007 s; sync files=2, longest=0.001 s, average=0.001 s; distance=5 kB, estimate=2214 kB; lsn=0/30CC2B8, redo lsn=0/30CC280
+2023-09-04 21:38:19.171 PKT [8540] ERROR:  cannot drop table accounts because other objects depend on it
+2023-09-04 21:38:19.171 PKT [8540] DETAIL:  constraint cust_and_accos_acco_id_fkey on table cust_and_accos depends on table accounts
+2023-09-04 21:38:19.171 PKT [8540] HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+2023-09-04 21:38:19.171 PKT [8540] STATEMENT:  DROP TABLE IF EXISTS public.accounts;
+2023-09-04 21:38:50.940 PKT [8936] ERROR:  database "goldbuysell" already exists
+2023-09-04 21:38:50.940 PKT [8936] STATEMENT:  CREATE DATABASE goldbuysell;
+2023-09-04 21:42:05.612 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:43:19.559 PKT [13224] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 21:44:01.490 PKT [7600] LOG:  checkpoint complete: wrote 1069 buffers (6.5%); 0 WAL file(s) added, 0 removed, 0 recycled; write=115.722 s, sync=0.129 s, total=115.879 s; sync files=369, longest=0.013 s, average=0.001 s; distance=4896 kB, estimate=4896 kB; lsn=0/35952F0, redo lsn=0/3594288
+2023-09-04 21:47:05.483 PKT [7600] LOG:  checkpoint starting: time
+2023-09-04 21:47:06.929 PKT [7600] LOG:  checkpoint complete: wrote 14 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.404 s, sync=0.018 s, total=1.446 s; sync files=12, longest=0.013 s, average=0.002 s; distance=6 kB, estimate=4407 kB; lsn=0/3595CA0, redo lsn=0/3595C68
+2023-09-04 21:55:43.656 PKT [8936] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.281 PKT [8540] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.282 PKT [4360] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.282 PKT [7684] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.282 PKT [12732] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.282 PKT [8008] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-09-04 23:52:46.282 PKT [2384] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	

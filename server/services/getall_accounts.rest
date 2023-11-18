@@ -1,0 +1,5 @@
+### SUCCESS Get all customers.
+GET http://localhost:5000/accounts
+
+### FAILURE Get all customers; URL issue.
+GET http://localhost:5000/accountss

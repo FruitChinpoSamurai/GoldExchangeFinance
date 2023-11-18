@@ -1,0 +1,46 @@
+2023-10-17 16:59:42.089 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 16:59:43.012 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.883 s, sync=0.013 s, total=0.923 s; sync files=9, longest=0.003 s, average=0.002 s; distance=12 kB, estimate=12 kB; lsn=0/6DC0D18, redo lsn=0/6DC0CE0
+2023-10-17 17:28:04.640 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 17:28:05.543 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.867 s, sync=0.023 s, total=0.903 s; sync files=9, longest=0.014 s, average=0.003 s; distance=13 kB, estimate=13 kB; lsn=0/6DC4488, redo lsn=0/6DC4450
+2023-10-17 19:27:25.427 PKT [11420] ERROR:  null value in column "acco_id" of relation "transactions" violates not-null constraint
+2023-10-17 19:27:25.427 PKT [11420] DETAIL:  Failing row contains (26, null, 10/17/2023 7:27:24 PM, 10/17/2023 7:27:24 PM, null, IM0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, Impure, t, null, null, null, null, null, f).
+2023-10-17 19:27:25.427 PKT [11420] STATEMENT:  INSERT INTO transactions (acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, standard_weight, egr_weight, item_type, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39) RETURNING *
+2023-10-17 19:27:31.836 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 19:27:32.084 PKT [12764] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.209 s, sync=0.017 s, total=0.248 s; sync files=3, longest=0.014 s, average=0.006 s; distance=0 kB, estimate=12 kB; lsn=0/6DC4638, redo lsn=0/6DC4600
+2023-10-17 19:32:31.077 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 19:32:32.533 PKT [12764] LOG:  checkpoint complete: wrote 14 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.403 s, sync=0.028 s, total=1.456 s; sync files=14, longest=0.014 s, average=0.002 s; distance=3 kB, estimate=11 kB; lsn=0/6DC52B0, redo lsn=0/6DC5278
+2023-10-17 19:47:31.553 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 19:47:33.014 PKT [12764] LOG:  checkpoint complete: wrote 14 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.415 s, sync=0.023 s, total=1.461 s; sync files=14, longest=0.014 s, average=0.002 s; distance=5 kB, estimate=10 kB; lsn=0/6DC6820, redo lsn=0/6DC67E8
+2023-10-17 19:57:31.021 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 19:57:32.454 PKT [12764] LOG:  checkpoint complete: wrote 14 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.388 s, sync=0.023 s, total=1.434 s; sync files=14, longest=0.014 s, average=0.002 s; distance=4 kB, estimate=10 kB; lsn=0/6DC7AC0, redo lsn=0/6DC7A88
+2023-10-17 20:07:31.468 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:07:32.388 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.876 s, sync=0.023 s, total=0.920 s; sync files=9, longest=0.014 s, average=0.003 s; distance=13 kB, estimate=13 kB; lsn=0/6DCB248, redo lsn=0/6DCB210
+2023-10-17 20:12:31.387 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:12:32.406 PKT [12764] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.969 s, sync=0.024 s, total=1.019 s; sync files=10, longest=0.014 s, average=0.003 s; distance=3 kB, estimate=12 kB; lsn=0/6DCC048, redo lsn=0/6DCBFC0
+2023-10-17 20:22:31.433 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:22:32.346 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.868 s, sync=0.022 s, total=0.914 s; sync files=9, longest=0.014 s, average=0.003 s; distance=16 kB, estimate=16 kB; lsn=0/6DD01B8, redo lsn=0/6DD0180
+2023-10-17 20:37:05.147 PKT [13124] WARNING:  PID 15568 is not a PostgreSQL backend process
+2023-10-17 20:42:31.374 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:42:31.960 PKT [12764] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.541 s, sync=0.020 s, total=0.587 s; sync files=6, longest=0.014 s, average=0.004 s; distance=13 kB, estimate=16 kB; lsn=0/6DD37D0, redo lsn=0/6DD3798
+2023-10-17 20:52:31.971 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:52:32.992 PKT [12764] LOG:  checkpoint complete: wrote 10 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.975 s, sync=0.024 s, total=1.022 s; sync files=10, longest=0.014 s, average=0.003 s; distance=15 kB, estimate=16 kB; lsn=0/6DD75B8, redo lsn=0/6DD7580
+2023-10-17 20:57:31.978 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 20:57:32.887 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.862 s, sync=0.023 s, total=0.910 s; sync files=9, longest=0.014 s, average=0.003 s; distance=15 kB, estimate=16 kB; lsn=0/6DDB518, redo lsn=0/6DDB4E0
+2023-10-17 21:02:31.893 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 21:02:32.816 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.877 s, sync=0.023 s, total=0.923 s; sync files=9, longest=0.015 s, average=0.003 s; distance=17 kB, estimate=17 kB; lsn=0/6DDFA38, redo lsn=0/6DDFA00
+2023-10-17 21:07:31.809 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 21:07:32.720 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.864 s, sync=0.022 s, total=0.911 s; sync files=9, longest=0.014 s, average=0.003 s; distance=17 kB, estimate=17 kB; lsn=0/6DE3E40, redo lsn=0/6DE3E08
+2023-10-17 21:12:31.736 PKT [12764] LOG:  checkpoint starting: time
+2023-10-17 21:12:32.652 PKT [12764] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.869 s, sync=0.023 s, total=0.917 s; sync files=9, longest=0.015 s, average=0.003 s; distance=17 kB, estimate=17 kB; lsn=0/6DE8578, redo lsn=0/6DE8540
+2023-10-17 21:33:29.467 PKT [12312] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-10-17 21:33:29.468 PKT [8348] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-10-17 21:33:29.469 PKT [4000] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-10-17 21:33:29.469 PKT [11268] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-10-17 21:33:29.471 PKT [9648] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-10-17 21:33:29.472 PKT [12892] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	

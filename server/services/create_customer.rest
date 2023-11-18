@@ -1,0 +1,66 @@
+### SUCCESS Create one customer.
+POST http://localhost:5000/customers
+Content-Type: application/json
+
+{
+    "cust_name": "Shapatar Machine",
+    "cust_personal_number": "92216451288",
+    "cust_nic": "4245275441977",
+    "cust_email": "tomatpotat@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Create one customer; cross VARCHAR limit.
+POST http://localhost:5000/customers
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "032164512875465132132131346546541321321654",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### FAILURE Create one customer; testing empty inputs.
+POST http://localhost:5000/customers
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_personal_number": "03216451287",
+    "cust_nic": "",
+    "cust_email": "asal_lamtaf@testmail.com"
+}
+
+### FAILURE Create one customer; testing missing inputs.
+POST http://localhost:5000/customers
+Content-Type: application/json
+
+{
+    "cust_name": "Aslam Altaf",
+    "cust_nic": "4230175441287",
+    "cust_email": "asal_lamtaf@testmail.com",
+    "cust_test_fees": "275",
+    "cust_pg_charges": "25"
+}
+
+### DATA INPUT PURPOSES.
+POST http://localhost:5000/customers
+Content-Type: application/json
+
+{
+    "cust_name": "Huffman Gilbert",
+    "cust_primary_number": "+928094053606",
+    "cust_alternate_number": "+929015382476",
+    "cust_nic": 4685834662826,
+    "cust_email": "huffmangilbert@octocore.com",
+    "cust_ptclf_number": "",
+    "cust_ptcls_number": "",
+    "cust_shop_address": "920 Banner Avenue, Lutsen, Florida, 5529",
+    "cust_reference": "HingerDingerShungerJungar",
+    "cust_test_fees": 300,
+    "cust_pg_charges": 15
+}

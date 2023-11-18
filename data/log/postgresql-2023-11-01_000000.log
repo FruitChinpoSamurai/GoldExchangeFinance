@@ -1,0 +1,16 @@
+2023-11-01 00:12:55.408 PKT [6180] LOG:  checkpoint starting: time
+2023-11-01 00:12:56.313 PKT [6180] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.863 s, sync=0.021 s, total=0.906 s; sync files=9, longest=0.013 s, average=0.003 s; distance=20 kB, estimate=20 kB; lsn=0/6ECFDD0, redo lsn=0/6ECFD98
+2023-11-01 00:27:55.333 PKT [6180] LOG:  checkpoint starting: time
+2023-11-01 00:27:56.237 PKT [6180] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.861 s, sync=0.022 s, total=0.905 s; sync files=9, longest=0.015 s, average=0.003 s; distance=18 kB, estimate=20 kB; lsn=0/6ED46D8, redo lsn=0/6ED46A0
+2023-11-01 00:31:23.773 PKT [2488] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-11-01 00:31:23.774 PKT [13916] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-11-01 00:31:23.774 PKT [6088] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-11-01 00:31:23.775 PKT [13044] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-11-01 00:31:23.776 PKT [7188] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
+	
+2023-11-01 00:49:56.988 PKT [6180] LOG:  checkpoint starting: time
+2023-11-01 00:49:57.887 PKT [6180] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.863 s, sync=0.019 s, total=0.900 s; sync files=9, longest=0.013 s, average=0.003 s; distance=18 kB, estimate=20 kB; lsn=0/6ED90E0, redo lsn=0/6ED90A8
