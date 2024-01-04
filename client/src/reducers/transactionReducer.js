@@ -304,6 +304,15 @@ const transactionReducer = (state, action) => {
                 }
             };
 
+        // Testing.
+        case 'UpdateMetalSelection': {
+            return {
+                ...state,
+                // eslint-disable-next-line
+                remarks: state.remarks === '' ? action.payload.name + '(' + action.payload.symbol + ')' + ': 0' : state.remarks + ', ' + action.payload.name + '(' + action.payload.symbol + ')' + ': 0'
+            }
+        }
+
         // TAKEN, GIVEN
         // When you select previous transactions for which you have to pay or receive money for.
         case 'UpdateUseTranID':
@@ -371,12 +380,13 @@ const transactionReducer = (state, action) => {
         // Impure, Exchange, Both
         case "UpdateTestingInitial": {
             const { fees, total_sample_weight, points, pure_weight, charges, taken_cash, taken_gold, transferred } = action.payload;
+            console.log(taken_cash)
             return {
                 ...state,
                 totalWeight: total_sample_weight,
                 points: points,
                 pure: pure_weight,
-                charges: state.transactionType === 'Both' ? `${charges * total_sample_weight}R` : charges * total_sample_weight,
+                charges: state.transactionType === 'Both' ? `${Math.round(charges * total_sample_weight)}R` : Math.round(charges * total_sample_weight),
                 pendingTakeCash: taken_cash || '',
                 pendingTakeGold: taken_gold || '',
                 carriedFees: fees,
@@ -416,17 +426,18 @@ const transactionReducer = (state, action) => {
                 let payable = '';
                 let final = '';
                 let tempAmount = '';
+                let charges = typeof(state.charges) === 'number' ? state.charges : Number(state.charges.slice(0, -1));
                 if (state.pendingTakeCash !== '' && state.pendingTakeGold !== '') {
-                    final = `${Math.round((state.pure - state.pendingTakeGold - (Number(state.charges.slice(0, -1)) * 11.664 / action.payload) - pendingTakeCashInGold) * 100) / 100}G`;
+                    final = `${Math.round((state.pure - state.pendingTakeGold - (charges * 11.664 / action.payload) - pendingTakeCashInGold) * 100) / 100}G`;
                     if (state.convertCharges) {
-                        tempAmount = pureMinusPendingGoldInCash - state.pendingTakeCash - Number(state.charges.slice(0, -1));
+                        tempAmount = pureMinusPendingGoldInCash - state.pendingTakeCash - charges;
                         if (tempAmount > 0) {
                             receivable = `${tempAmount}R`
                         } else {
                             payable = `${Math.abs(tempAmount)}R`;
                         }
                     } else {
-                        tempAmount = state.pure - state.pendingTakeGold - Number(state.charges.slice(0, -1)) - pendingTakeCashInGold;
+                        tempAmount = state.pure - state.pendingTakeGold - charges - pendingTakeCashInGold;
                         if (tempAmount > 0) {
                             receivable = `${tempAmount}G`
                         } else {
@@ -435,16 +446,16 @@ const transactionReducer = (state, action) => {
                     }
                     paid = `${state.pendingTakeGold}G ${state.pendingTakeCash}R`
                 } else if (state.pendingTakeCash !== '') {
-                    receivable = `${goldToCash - state.pendingTakeCash - Number(state.charges.slice(0, -1))}R`;
+                    receivable = `${goldToCash - state.pendingTakeCash - charges}R`;
                     paid = `${state.pendingTakeCash}R`;
-                    final = (state.pure - pendingTakeCashInGold - Math.round(((Number(state.charges.slice(0, -1)) * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
+                    final = (state.pure - pendingTakeCashInGold - Math.round(((charges * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
                 } else if (state.pendingTakeGold !== '') {
-                    receivable = `${pureMinusPendingGoldInCash - Number(state.charges.slice(0, -1))}R`;
+                    receivable = `${pureMinusPendingGoldInCash - charges}R`;
                     paid = `${state.pendingTakeGold}G`;
-                    final = (state.pure - state.pendingTakeGold - Math.round(((Number(state.charges.slice(0, -1)) * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
+                    final = (state.pure - state.pendingTakeGold - Math.round(((charges * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
                 } else {
-                    receivable = `${goldToCash - Number(state.charges.slice(0, -1))}R`
-                    final = (state.pure - state.pendingTakeGold - Math.round(((Number(state.charges.slice(0, -1)) * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
+                    receivable = `${goldToCash - charges}R`
+                    final = (state.pure - state.pendingTakeGold - Math.round(((charges * 11.664) / Number(action.payload)) * 100) / 100).toFixed(2);
                 }
                 return {
                     ...state,

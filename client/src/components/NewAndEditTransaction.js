@@ -282,6 +282,13 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
         })
     }
 
+    const handleMetalSelect = (name, symbol) => {
+        dispatch({
+            type: 'UpdateMetalSelection',
+            payload: { name: name, symbol: symbol }
+        })
+    }
+
     const switchView = (view) => {
         switch (view) {
             case 'Testing':
@@ -298,6 +305,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         handleTakeGoldChange={handleTakeGoldChange}
                         handleAccoTranID={handleAccoTranID}
                         preventNegativeValues={preventNegativeValues}
+                        handleMetalSelect={handleMetalSelect}
                         readOnly={editMode}
                     />
                 )

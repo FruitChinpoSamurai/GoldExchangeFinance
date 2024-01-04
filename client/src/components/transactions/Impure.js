@@ -100,7 +100,7 @@ const Impure = ({ formData, handleTextChange, handleAccoTranID, pullTestingTrans
                     <></>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" value={formData.penedingTakeCash} placeholder="Pending Take Cash" disabled />
+                    <input type="number" className="form-control" value={formData.pendingTakeCash} placeholder="Pending Take Cash" disabled />
                 </div>
                 <div className="col">
                     <></>

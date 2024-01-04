@@ -255,7 +255,7 @@ app.post("/transactions", async (request, response) => {
         // If what customer has paid is equal to the payable fees, we set 'true' for the Testing Transaction.
         if (transaction_type === 'Testing') {
             let feesPaid = paid.split(' ')[1];
-            if (feesPaid === payable) {
+            if (feesPaid === payable || feesPaid === payable.split(' ')[1] - taken_cash) {
                 transferred = true;
             }
             if (test_type === 'Other' && payable === paid) {

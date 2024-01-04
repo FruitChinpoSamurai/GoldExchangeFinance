@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const BusinessStatementHeader = ({ returnClickHandle, title, date, handleDateChange }) => {
+const BusinessStatementHeader = ({ returnClickHandle, title, date, handleDateChange, searched, searchHandle }) => {
     const [allowNextDate, setAllowNextDate] = useState(true);
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const BusinessStatementHeader = ({ returnClickHandle, title, date, handleDateCha
             </div>
             <div className="row">
                 <div className="col mt-1">
-                    <input type="text" className="col form-control mt-1 mx-auto" placeholder="Search..." />
+                    <input type="text" className="col form-control mt-1 mx-auto" placeholder="Search by Tr.ID, Sample, Pure, and Rate..." value={searched} onChange={searchHandle} />
                 </div>
             </div>
         </div>

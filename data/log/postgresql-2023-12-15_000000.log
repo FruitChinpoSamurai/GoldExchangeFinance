@@ -1,0 +1,6 @@
+2023-12-16 01:10:12.337 PKT [4160] ERROR:  could not seek to end of file "global/1262": Permission denied
+2023-12-16 01:10:12.338 PKT [4160] ERROR:  could not seek to end of file "global/1262": Permission denied
+2023-12-16 01:10:12.355 PKT [5096] LOG:  shutting down
+2023-12-16 01:10:12.356 PKT [5096] LOG:  checkpoint starting: shutdown immediate
+2023-12-16 01:10:12.359 PKT [5096] LOG:  unrecognized win32 error code: 21
+2023-12-16 01:10:12.359 PKT [5096] PANIC:  could not write to log file 000000010000000000000007 at offset 65536, length 8192: Invalid argument

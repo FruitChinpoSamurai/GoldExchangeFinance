@@ -5,13 +5,14 @@ import DataPopup from "../DataPopup";
 import AlertPopup from "../AlertPopup";
 import NewAndEditTransaction from "../NewAndEditTransaction"
 
-const CustomerStatementTransactions = ({ accountID }) => {
+const CustomerStatementTransactions = ({ accountID, searched }) => {
     const [transactions, setTransactions] = useState([]);
     const [display, setDisplay] = useState([false, 0, 0, '']);
     const [view, setView] = useState(false);
     const [transactionAlert, setTransactionAlert] = useState('');
     const [displayTransaction, setDisplayTransaction] = useState([]);
-    
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
+
     useEffect(() => {
         let balances = { cash: 0, gold: 0, sample: 0 };
         customerStatmentService.getAllByID(accountID)
@@ -79,6 +80,19 @@ const CustomerStatementTransactions = ({ accountID }) => {
         setDisplay([false, 0, 0, '']);
     }
 
+    useEffect(() => {
+        if (transactions.length > 0) {
+            const filtered = transactions.filter(transaction => (
+                (transaction.date_created.split(' ')[0]).includes(searched) ||
+                (transaction.acco_tran_id).includes(searched) ||
+                (transaction.pure_weight && (transaction.pure_weight).includes(searched)) ||
+                (transaction.total_sample_weight && (transaction.total_sample_weight).includes(searched)) ||
+                (transaction.rate && (transaction.rate.toString()).includes(searched))
+            ))
+            setFilteredTransactions(filtered)
+        }
+    }, [transactions, searched])
+
     return (
         <div className="mb-2 mx-2">
             <table className="table table-striped table-hover table-bordered text-center">
@@ -104,40 +118,75 @@ const CustomerStatementTransactions = ({ accountID }) => {
                 </thead>
                 <tbody className="table-group-divider">
                     {
-                        view && transactions.map((transaction, index, {length}) => (
-                            <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id])} style={{ cursor: 'pointer' }}>
-                                <td>{transaction.date_created.split(' ')[0]}</td>
-                                {
-                                    transaction.acco_tran_id.slice(0, 2) === 'TA' || transaction.acco_tran_id.slice(0, 2) === 'GI' ?
-                                    <td onMouseEnter={(e) => displayTransactionDetails(e)} onMouseLeave={(e) => resetDisplay(e)} >{transaction.acco_tran_id}</td> :
-                                    <td>{transaction.acco_tran_id}</td>
-                                }
-                                <td>{transaction.total_sample_weight}</td>
-                                <td>{transaction.pure_weight}</td>
-                                <td>{transaction.taken_cash}</td>
-                                <td>{transaction.taken_gold}</td>
-                                <td>{transaction.charges}</td>
-                                <td>{transaction.rate}</td>
-                                <td>{transaction.amount}</td>
-                                <td>{transaction.received}</td>
-                                <td>{transaction.receivable}</td>
-                                <td>{transaction.paid}</td>
-                                <td>{transaction.payable}</td>
-                                {
-                                    index === length - 1 ?
-                                        <>
-                                            <td><b>{transaction.cBalance}</b></td>
-                                            <td><b>{transaction.gBalance}</b></td>
-                                            <td><b>{transaction.sBalance}</b></td>
-                                        </> :
-                                        <>
-                                            <td>{transaction.cBalance}</td>
-                                            <td>{transaction.gBalance}</td>
-                                            <td>{transaction.sBalance}</td>
-                                        </>
-                                }
-                            </tr>
-                        ))
+                        searched === '' && transactions.length !== 0 ?
+                            view && transactions.map((transaction, index, {length}) => (
+                                <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id])} style={{ cursor: 'pointer' }}>
+                                    <td>{transaction.date_created.split(' ')[0]}</td>
+                                    {
+                                        transaction.acco_tran_id.slice(0, 2) === 'TA' || transaction.acco_tran_id.slice(0, 2) === 'GI' ?
+                                        <td onMouseEnter={(e) => displayTransactionDetails(e)} onMouseLeave={(e) => resetDisplay(e)} >{transaction.acco_tran_id}</td> :
+                                        <td>{transaction.acco_tran_id}</td>
+                                    }
+                                    <td>{transaction.total_sample_weight}</td>
+                                    <td>{transaction.pure_weight}</td>
+                                    <td>{transaction.taken_cash}</td>
+                                    <td>{transaction.taken_gold}</td>
+                                    <td>{transaction.charges}</td>
+                                    <td>{transaction.rate}</td>
+                                    <td>{transaction.amount}</td>
+                                    <td>{transaction.received}</td>
+                                    <td>{transaction.receivable}</td>
+                                    <td>{transaction.paid}</td>
+                                    <td>{transaction.payable}</td>
+                                    {
+                                        index === length - 1 ?
+                                            <>
+                                                <td><b>{transaction.cBalance}</b></td>
+                                                <td><b>{transaction.gBalance}</b></td>
+                                                <td><b>{transaction.sBalance}</b></td>
+                                            </> :
+                                            <>
+                                                <td>{transaction.cBalance}</td>
+                                                <td>{transaction.gBalance}</td>
+                                                <td>{transaction.sBalance}</td>
+                                            </>
+                                    }
+                                </tr>
+                            )) :
+                            view && filteredTransactions.map((transaction, index, {length}) => (
+                                <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id])} style={{ cursor: 'pointer' }}>
+                                    <td>{transaction.date_created.split(' ')[0]}</td>
+                                    {
+                                        transaction.acco_tran_id.slice(0, 2) === 'TA' || transaction.acco_tran_id.slice(0, 2) === 'GI' ?
+                                        <td onMouseEnter={(e) => displayTransactionDetails(e)} onMouseLeave={(e) => resetDisplay(e)} >{transaction.acco_tran_id}</td> :
+                                        <td>{transaction.acco_tran_id}</td>
+                                    }
+                                    <td>{transaction.total_sample_weight}</td>
+                                    <td>{transaction.pure_weight}</td>
+                                    <td>{transaction.taken_cash}</td>
+                                    <td>{transaction.taken_gold}</td>
+                                    <td>{transaction.charges}</td>
+                                    <td>{transaction.rate}</td>
+                                    <td>{transaction.amount}</td>
+                                    <td>{transaction.received}</td>
+                                    <td>{transaction.receivable}</td>
+                                    <td>{transaction.paid}</td>
+                                    <td>{transaction.payable}</td>
+                                    {
+                                        index === length - 1 ?
+                                            <>
+                                                <td><b>{transaction.cBalance}</b></td>
+                                                <td><b>{transaction.gBalance}</b></td>
+                                                <td><b>{transaction.sBalance}</b></td>
+                                            </> :
+                                            <>
+                                                <td>{transaction.cBalance}</td>
+                                                <td>{transaction.gBalance}</td>
+                                                <td>{transaction.sBalance}</td>
+                                            </>
+                                    }
+                                </tr>
+                            ))
                     }
                 </tbody>
             </table>

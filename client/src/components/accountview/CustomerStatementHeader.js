@@ -1,6 +1,6 @@
 import React from "react";
 
-const CustomerStatementHeader = ({ data, returnClickHandle, flag }) => {
+const CustomerStatementHeader = ({ data, returnClickHandle, flag, searched, searchHandle }) => {
 
     return (
         <div className="col mx-2 mt-2 mb-2">
@@ -25,7 +25,7 @@ const CustomerStatementHeader = ({ data, returnClickHandle, flag }) => {
             </div>
             <div className="row">
                 <div className="col mt-1">
-                    <input type="text" className="col form-control mt-1 mx-auto" placeholder="Search..." />
+                    <input type="text" className="col form-control mt-1 mx-auto" placeholder="Search by Date, Tr. ID, Sample, Pure, and Rate..." value={searched} onChange={searchHandle} />
                 </div>
             </div>
         </div>

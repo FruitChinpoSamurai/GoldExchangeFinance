@@ -4,6 +4,7 @@ import Customers from "./customerview/Customers";
 import Accounts from "./accountview/Accounts";
 import NewAndEditTransaction from "./NewAndEditTransaction";
 import BusinessDashboard from "./businessview/BusinessDashboard";
+import Calculator from "./Calculator";
 import AlertPopup from "./AlertPopup";
 
 const Dashboard = () => {
@@ -16,6 +17,7 @@ const Dashboard = () => {
     const [clicked, setClicked] = useState('Dashboard');
     const [transactionAlert, setTransactionAlert] = useState('');
     const [custStatementHeader, setCustStatementHeader] = useState({});
+    const [display, setDisplay] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {
@@ -86,6 +88,10 @@ const Dashboard = () => {
         }
     }
 
+    const displayCalculator = (e) => {
+        setDisplay(!display)
+    }
+
     const switchView = (view) => {
         switch (view) {
             case 'Customers':
@@ -143,6 +149,10 @@ const Dashboard = () => {
 
     return (
         <>
+            <i className={`bi bi-calculator`} style={{fontSize: "2rem", color: 'white'}} onClick={(e) => displayCalculator(e)} ></i>
+            {
+                display && <Calculator />
+            }
             {
                 switchView(clicked)
             }
