@@ -61,7 +61,7 @@ const Impure = ({ formData, handleTextChange, handleAccoTranID, pullTestingTrans
                     <input type="number" className="form-control" style={{backgroundColor:'#E7CD78', cursor: 'pointer'}} value={formData.grossAmount} placeholder="Gross Amount" readOnly onClick={(e) => handleReceivableUpdate(e)} />
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" style={{backgroundColor:'#E7CD78', cursor: 'pointer'}} value={formData.netAmount} placeholder="Net Amount" readOnly onClick={(e) => handleReceivableUpdate(e)} />
+                    <input type="number" className="form-control" style={{backgroundColor:'#cfff69', cursor: 'pointer'}} value={formData.netAmount} placeholder="Net Amount" readOnly onClick={(e) => handleReceivableUpdate(e)} />
                 </div>
             </div>
             {/* Fourth row. */}

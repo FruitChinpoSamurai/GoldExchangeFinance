@@ -3,9 +3,12 @@ import DashboardItem from "./DashboardItem";
 import Customers from "./customerview/Customers";
 import Accounts from "./accountview/Accounts";
 import NewAndEditTransaction from "./NewAndEditTransaction";
+import SuggestedTransaction from "./SuggestedTransaction";
 import BusinessDashboard from "./businessview/BusinessDashboard";
+import Inventory from "./Inventory";
 import Calculator from "./Calculator";
 import AlertPopup from "./AlertPopup";
+import readService from "./ScaleRead";
 
 const Dashboard = () => {
     const [one, setOne] = useState('#CDB450');
@@ -116,6 +119,13 @@ const Dashboard = () => {
                     />
                 )
 
+            case 'Inventory':
+                return (
+                    <Inventory 
+                        returnClickHandle={itemClicked}
+                    />
+                )
+
             // The default case is to display the dashboard.
             default:
                 return (
@@ -149,10 +159,13 @@ const Dashboard = () => {
 
     return (
         <>
-            <i className={`bi bi-calculator`} style={{fontSize: "2rem", color: 'white'}} onClick={(e) => displayCalculator(e)} ></i>
+            <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={(e) => displayCalculator(e)}></i>
+            <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
+            <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={async () => readService.scaleRead()}></i>
             {
                 display && <Calculator />
             }
+            <SuggestedTransaction />
             {
                 switchView(clicked)
             }

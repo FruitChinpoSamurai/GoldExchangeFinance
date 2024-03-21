@@ -65,9 +65,7 @@ CREATE TABLE transactions(
     remarks VARCHAR(255),
     test_type VARCHAR(8),
     premium INTEGER,
-    standard_weight NUMERIC(6, 2),
-    egr_weight NUMERIC(6, 2),
-    item_type VARCHAR(20),
+    inventory_details JSONB,
     sample_returned BOOLEAN,
     received VARCHAR(50),
     receivable VARCHAR(50),
@@ -85,6 +83,9 @@ CREATE TABLE transactions(
     pure_minus_gold_in_cash INTEGER,
     taken_cash_in_gold NUMERIC(6, 2), 
     final_gold VARCHAR(10),
+    current_balance VARCHAR(50),
+    previous_balance VARCHAR(50),
+    global_id VARCHAR(20),
     PRIMARY KEY (tran_id)
 );
 
@@ -137,19 +138,185 @@ CREATE TABLE business_balances(
     PRIMARY KEY (balance_id)
 );
 
-INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES('10/4/2023', 1500000, 900.00, 0.00, 0, 0.00);
+INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES('3/7/2024', 4500000, 1800.00, 0, 0, 0.00);
 
-CREATE TABLE business_inventory(
+CREATE TABLE inventory(
     item_id INTEGER GENERATED ALWAYS AS IDENTITY,
-    item_name VARCHAR(30),
-    total_weight NUMERIC(6, 2),
+    category VARCHAR(25) NOT NULL,
+    subcategory VARCHAR(20),
+    quantity INTEGER DEFAULT 0,
     PRIMARY KEY (item_id)
 );
 
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Pure Gold', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('10 Tola Bar', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Millat', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Small Pieces', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Coins', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Article', 0);
-INSERT INTO business_inventory (item_name, total_weight) VALUES('Metals', 0);
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '1.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '2.50 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '5.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', 'Half Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '10.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '1 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', 'Half Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '20.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '2 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '1 Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '50.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '5 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '100.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Millat', '10 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '1.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '2.50 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '5.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', 'Half Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '10.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '1 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', 'Half Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '20.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '2 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '1 Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '50.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '5 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '100.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Small Pieces', '10 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '1.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '2.50 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '5.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', 'Half Tola');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '10.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '1 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', 'Half Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '20.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '2 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '1 Ounce');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '50.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '5 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '100.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('KBE', '10 Tola');
+INSERT INTO inventory (category, subcategory) VALUES('Coins', '1.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Coins', '2.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Coins', '4.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('Coins', '8.00 Gram');
+INSERT INTO inventory (category, subcategory) VALUES('10 Tola Standard Bar', 'NA');
+INSERT INTO inventory (category, subcategory) VALUES('Articles', 'NA');
+
+CREATE TABLE suggested_transactions(
+    suggested_transaction_id INTEGER,
+    transaction_date VARCHAR(10),
+    customer_name VARCHAR(60),
+    contact VARCHAR(13),
+    sample_weight NUMERIC(6, 2),
+    expected_points NUMERIC(6, 2),
+    expected_pure NUMERIC(6, 2),
+    discussed_rate INTEGER,
+    remarks VARCHAR(500),
+    PRIMARY KEY (suggested_transaction_id)
+);
+
+CREATE TABLE metals(
+    metal_type VARCHAR(15) NOT NULL UNIQUE,
+    metal_weight NUMERIC(10, 2) DEFAULT 0.00,
+    PRIMARY KEY (metal_type) 
+);
+
+INSERT INTO metals (metal_type) VALUES('Gold');
+INSERT INTO metals (metal_type) VALUES('Platinum');
+INSERT INTO metals (metal_type) VALUES('Paladium');
+INSERT INTO metals (metal_type) VALUES('Silver');
+INSERT INTO metals (metal_type) VALUES('Copper');
+INSERT INTO metals (metal_type) VALUES('Tin');
+INSERT INTO metals (metal_type) VALUES('Zinc');
+INSERT INTO metals (metal_type) VALUES('Rhodium');
+INSERT INTO metals (metal_type) VALUES('Lead');
+INSERT INTO metals (metal_type) VALUES('Rhutenium');
+INSERT INTO metals (metal_type) VALUES('Zirconium');
+INSERT INTO metals (metal_type) VALUES('Iridium');
+INSERT INTO metals (metal_type) VALUES('Tungsten');
+INSERT INTO metals (metal_type) VALUES('Osmium');
+INSERT INTO metals (metal_type) VALUES('Cadmium');
+INSERT INTO metals (metal_type) VALUES('Arsenic');
+INSERT INTO metals (metal_type) VALUES('Bismuth');
+INSERT INTO metals (metal_type) VALUES('Antimony');
+INSERT INTO metals (metal_type) VALUES('Molybdenum');
+INSERT INTO metals (metal_type) VALUES('Nickel');
+INSERT INTO metals (metal_type) VALUES('Titanium');
+
+CREATE TABLE donations(
+    donation_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    donation_date VARCHAR(10) NOT NULL,
+    donation_type VARCHAR(20) NOT NULL,
+    cash_amount INTEGER NOT NULL,
+    PRIMARY KEY (donation_id)
+);
+
+CREATE TABLE general_expenses(
+    g_expense_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    g_expense_date VARCHAR(10) NOT NULL,
+    g_expense_purpose VARCHAR(20) NOT NULL,
+    cash_amount INTEGER NOT NULL,
+    desccription VARCHAR(500) NOT NULL,
+    PRIMARY KEY (g_expense_id)
+);
+
+CREATE TABLE salaries(
+    salary_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    salary_date VARCHAR(10) NOT NULL,
+    employee_name VARCHAR(50) NOT NULL,
+    cash_amount INTEGER NOT NULL,
+    PRIMARY KEY (salary_id)
+);
+
+CREATE TABLE capital_gain_loss(
+    capital_gl_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    capital_gl_date VARCHAR(10) NOT NULL,
+    capital_gl_purpose VARCHAR(20) NOT NULL,
+    cash_amount INTEGER NOT NULL,
+    desccription VARCHAR(500) NOT NULL,
+    PRIMARY KEY (capital_gl_id)
+);
+
+CREATE TABLE inventory_gold_gain_loss(
+    invengold_gl_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    invengold_gl_date VARCHAR(10) NOT NULL,
+    invengold_gl_type VARCHAR(20) NOT NULL,
+    invengold_gl_subtype VARCHAR(20) NOT NULL,
+    invengold_gl_weight NUMERIC(10, 2) DEFAULT 0.00 NOT NULL,
+    PRIMARY KEY (invengold_gl_id)
+);
+
+CREATE TABLE standard_weights_to_prices(
+    weight_class VARCHAR(25) NOT NULL,
+    gold_weight NUMERIC(10, 3) DEFAULT 0.000 NOT NULL,
+    price INTEGER NOT NULL,
+    PRIMARY KEY (weight_class)
+);
+
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('1.00 Gram', 1.000, 700);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('2.50 Gram', 2.500, 700);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('5.00 Gram', 5.000, 700);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('Half Tola', 5.830, 700);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('10.00 Gram', 10.000, 850);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('1 Tola', 11.664, 850);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('Half Ounce', 15.550, 850);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('20.00 Gram', 20.000, 1150);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('2 Tola', 23.328, 1150);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('1 Ounce', 31.100, 1150);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('50.00 Gram', 50.000, 1300);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('5 Tola', 58.320, 1300);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('100.00 Gram', 100.000, 2000);
+INSERT INTO standard_weights_to_prices (weight_class, gold_weight, price) VALUES('10 Tola', 116.64, 3500);
+
+CREATE TABLE workshop(
+    workshop_id INTEGER GENERATED ALWAYS AS IDENTITY,
+    date_created VARCHAR(25) NOT NULL UNIQUE,
+    total_impure NUMERIC(10, 2) DEFAULT 0.00,
+    total_pure NUMERIC(10, 2) DEFAULT 0.00,
+    done_impure NUMERIC(10, 2) DEFAULT 0.00,
+    done_pure NUMERIC(10, 2) DEFAULT 0.00,
+    diff_impure NUMERIC(10, 2) DEFAULT 0.00,
+    diff_pure NUMERIC(10, 2) DEFAULT 0.00,
+    actual_impure NUMERIC(10, 2),
+    missing_impure NUMERIC(10, 2),
+    shop_impure NUMERIC(10, 2),
+    shop_pure NUMERIC(10, 2),
+    shop_mix NUMERIC(10, 2),
+    final_pure NUMERIC(10, 2),
+    PRIMARY KEY (workshop_id)
+);

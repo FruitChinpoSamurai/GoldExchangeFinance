@@ -14,6 +14,7 @@ import PureGoldBuyAndSell from "./transactions/PureGoldBuyAndSell";
 import BarExchangeInAndOut from "./transactions/BarExchangeInAndOut";
 
 const initialFormState = {
+    tranID: '',
     accountID: '',
     accoTranID: '',
     testID: '',
@@ -46,9 +47,8 @@ const initialFormState = {
     rate: '',
     discount: '',
     premium: '',
-    stdWeight: '',
-    egrWeight: '',
-    itemType: '10 Tola Gold',
+    itemType: '',
+    itemSubType: '',
     amount: '',
     transferredDue: false,
     pendingTakeCash: '',
@@ -64,7 +64,10 @@ const initialFormState = {
     pureMinusGoldInCash: '',
     // Is for take cash converted to gold amount.
     takeCashInGold: '',
-    finalGold: ''
+    finalGold: '',
+    currBalance: '',
+    prevBalance: '',
+    globalID: ''
 }
 
 const DisplayTransaction = ({ transaction }) => {

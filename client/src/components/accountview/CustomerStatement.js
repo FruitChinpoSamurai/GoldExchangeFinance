@@ -18,7 +18,7 @@ const CustomerStatement = ({ data, returnClickHandle, flag }) => {
                 searched={searched}
                 searchHandle={searchHandle}
             />
-            <CustomerStatementTransactions accountID={data.acco_id} searched={searched} />
+            <CustomerStatementTransactions accountID={data.acco_id} searched={searched} data={data} />
         </>
     )
 };

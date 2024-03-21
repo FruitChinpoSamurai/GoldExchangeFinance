@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import transactionService from "../../services/transaction";
 import DisplayMetals from "../DisplayMetals";
 
-const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleReturned, handleTestType, handleWeightsChange, handlePureChange, handleTakeCashChange, handleTakeGoldChange, handleAccoTranID, preventNegativeValues, handleMetalSelect, readOnly }) => {
+const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleReturned, handleTestType, handleWeightsChange, handlePureChange, handleTakeCashChange, handleTakeGoldChange, handleAccoTranID, preventNegativeValues, handleMetalSelect, readOnly, handleClearCPandBR }) => {
     useEffect(() => {
         if (!readOnly) {
             transactionService.getAccoTranID(formData.transactionType, formData.accountID)
@@ -125,7 +125,7 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
             {/* Sixth row. */}
             <div className="row my-2"> 
                 <div className="col">
-                    <textarea className="form-control" rows={formData.testType === 'Raw Gold' ? '3' : '9'} placeholder="Remarks..." name="remarks" value={formData.remarks} onInput={(e) => handleTextChange(e)} ></textarea>
+                    <textarea className="form-control" rows={formData.testType === 'Raw Gold' ? '3' : '9'} placeholder={formData.testType === 'Raw Gold' ? "Remarks..." : "Metal percentages must equal to 1000 in order to save transaction..."} name="remarks" value={formData.remarks} onInput={(e) => handleTextChange(e)} ></textarea>
                 </div>
                 <div className="col">
                     <></>
@@ -155,6 +155,9 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                     </div>
                     <div className="col">
                         <input type="text" className="form-control form-control-sm" placeholder="0" name="cPaid" value={formData.cPaid} onInput={(e) => handleTextChange(e)} />
+                        {
+                            !readOnly && formData.cPaid !== '' && <i className="bi bi-x-circle" style={{ position: 'absolute', top: '114px', right: '27px', cursor: 'pointer' }} onClick={() => handleClearCPandBR()}></i> 
+                        }
                     </div>
                 </div>
                 <div className="row text-end mx-2 mt-5">

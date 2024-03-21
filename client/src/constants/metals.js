@@ -73,7 +73,7 @@ export const metals = [
     },
     {
         name: 'Tungsten',
-        symbol: 'Tn',
+        symbol: 'W',
         color: '#4169e1',
         textColor: 'white'
     },

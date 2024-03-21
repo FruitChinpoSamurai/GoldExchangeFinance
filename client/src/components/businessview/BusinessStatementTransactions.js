@@ -29,6 +29,7 @@ const BusinessStatementTransactions = ({ title, date, searched }) => {
                 let balances = latestBalances;
                 businessStatmentService.getAll(title, date.replaceAll("/", "-"))
                     .then(response => {
+                        console.log(response)
                         const cRegex = /\d+R/;
                         const gRegex = /\d+\.?\d*G/;
                         response.forEach(tn => {
@@ -60,7 +61,7 @@ const BusinessStatementTransactions = ({ title, date, searched }) => {
                                 tn['unGBalance'] = (Math.round((Number(balances.un_gold_balance) - gReceived + gReceivable) * 100) / 100).toFixed(2);
                                 tn['gBalance'] = (Math.round((Number(balances.gold_balance) + gReceived + (/G/.test(tn.charges) ? Number(tn.charges.slice(0, -1)) : 0)) * 100) / 100).toFixed(2);
                             } else if (tran_id === 'PB' || tran_id === 'PS') {
-                                tn['unGBalance'] = (Math.round((Number(balances.un_gold_balance) + gPaid - gReceivable - gReceived + gReceivable) * 100) / 100).toFixed(2);
+                                tn['unGBalance'] = (Math.round((Number(balances.un_gold_balance) + gPaid - gPayable - gReceived + gReceivable) * 100) / 100).toFixed(2);
                                 tn['gBalance'] = (Math.round((Number(balances.gold_balance) + gReceived - gPaid) * 100) / 100).toFixed(2);
                             } else if (tran_id === 'BI') {
                                 tn['unGBalance'] = (Math.round((Number(balances.un_gold_balance) + gPaid - gPayable) * 100) / 100).toFixed(2);
@@ -127,6 +128,8 @@ const BusinessStatementTransactions = ({ title, date, searched }) => {
                 (transaction.rate && (transaction.rate.toString()).includes(searched))
             ))
             setFilteredTransactions(filtered)
+        } else {
+            setFilteredTransactions(transactions)
         }
     }, [transactions, searched])
 

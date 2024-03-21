@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import DashboardItem from "../DashboardItem";
 import BusinessStatement from "./BusinessStatement";
+import Management from "./Management";
+import Workshop from "./Workshop";
 
 const Dashboard = ({ returnClickHandle }) => {
     const [one, setOne] = useState('#CDB450');
     const [two, setTwo] = useState('#CDB450');
     const [three, setThree] = useState('#CDB450');
     const [four, setFour] = useState('#CDB450');
+    const [five, setFive] = useState('#CDB450');
     const [clicked, setClicked] = useState('Dashboard');
     const [type, setType] = useState('');
 
@@ -29,17 +32,17 @@ const Dashboard = ({ returnClickHandle }) => {
             setter: setThree,
             color: three
         },
-        // {
-        //     title: "Ranged",
-        //     logo: "bi-calendar-range",
-        //     setter: setThree,
-        //     color: three
-        // },
         {
-            title: "Expenses",
+            title: "Management",
             logo: "bi-bag",
             setter: setFour,
             color: four
+        },
+        {
+            title: "Workshop",
+            logo: "bi-hammer",
+            setter: setFive,
+            color: five
         }
     ]
 
@@ -58,6 +61,7 @@ const Dashboard = ({ returnClickHandle }) => {
         setTwo('#CDB450');
         setThree('#CDB450');
         setFour('#CDB450');
+        setFive('#CDB450');
     }
 
     const switchView = (view) => {
@@ -67,6 +71,20 @@ const Dashboard = ({ returnClickHandle }) => {
                     <BusinessStatement 
                         returnClickHandle={itemClicked}
                         title={type}
+                    />
+                )
+
+            case 'Management':
+                return (
+                    <Management
+                        returnClickHandle={itemClicked}
+                    />
+                )
+
+            case 'Workshop':
+                return (
+                    <Workshop
+                        returnClickHandle={itemClicked}
                     />
                 )
 

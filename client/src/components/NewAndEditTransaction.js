@@ -14,6 +14,7 @@ import Taken from "./transactions/Taken";
 import AdvanceAndLoan from "./transactions/AdvanceAndLoan";
 import PureGoldBuyAndSell from "./transactions/PureGoldBuyAndSell";
 import BarExchangeInAndOut from "./transactions/BarExchangeInAndOut";
+import printService from "./ReceiptPrint"
 
 const currentDate = new Date().toLocaleString().split(', ');
 
@@ -22,6 +23,7 @@ const preventNegativeValues = (e) => {
 }
 
 const initialFormState = {
+    tranID: '',
     accountID: '',
     accoTranID: '',
     testID: '',
@@ -54,9 +56,16 @@ const initialFormState = {
     rate: '',
     discount: '',
     premium: '',
-    stdWeight: '',
-    egrWeight: '',
-    itemType: '10 Tola Gold',
+    inventoryDetails: [
+        {
+            itemType: '',
+            itemSubType: '',
+            points: '',
+            pure: '',
+            premium: '',
+            count: 1
+        }
+    ],
     amount: '',
     transferredDue: false,
     pendingTakeCash: '',
@@ -72,16 +81,20 @@ const initialFormState = {
     pureMinusGoldInCash: '',
     // Is for take cash converted to gold amount.
     takeCashInGold: '',
-    finalGold: ''
+    finalGold: '',
+    currBalance: '',
+    prevBalance: '',
+    globalID: ''
 }
 
-const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) => {
+const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData }) => {
     const [accountID, setAccountID] = useState(''); // Account ID selection.
     const [custDetails, setCustDetails] = useState(null) // Customer details at top right of modal.
     const [formData, dispatch] = useReducer(transactionReducer, initialFormState);
     const [transactionID, setTransactionID] = useState('');
     const [buttonDisable, setButtonDisable] = useState(false);
     const [alert, setAlert] = useState('');
+    // const [otherRemarkValidity, setOtherRemarkValidity] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const closeModal = useRef(null);
 
@@ -99,10 +112,34 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         payload: data
                     });
                     setEditMode(true);
+                    accountService.getAccount(parseInt(transaction[0]))
+                        .then(response => {
+                            setCustDetails(response);
+                            if (response.status) {
+                                void(response.status);
+                            }
+                        })
+                        .catch(() => setCustDetails('Something went wrong.'));
                 }
             })
         }
     }, [transaction, transactionID])
+
+    useEffect(() => {
+        if (formData.testType === 'Other') {
+            const sum = function(text) {
+                return (text.match(/\d*(?:\.\d*)?/g) || [])
+                .reduce(function(prev, curr) {
+                  return prev + +curr;
+                }, 0);
+            };
+            if (sum(formData.remarks) !== 1000) {
+                setButtonDisable(true);
+            } else {
+                setButtonDisable(false);
+            }
+        }
+    }, [formData.remarks, formData.testType])
 
     const handleAccoTranID = useCallback((data) => {
         dispatch({
@@ -111,11 +148,12 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
         });
     }, []);
 
-    const handleTextChange = (e) => {
+    const handleTextChange = (e, index) => {
         dispatch({
             type: "UpdateText",
             field: e.target.name,
-            payload: e.target.value
+            payload: e.target.value,
+            index: index
         });
     };
 
@@ -254,39 +292,71 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
         })
     }
 
-    const handlePureGoldTransactionRate = (e) => {
-        dispatch({
-            type: "UpdatePureGoldRateAndStuff",
-            payload: e.target.value
-        })
-    }
-
-    const handlePGPremiumUpdate = (e) => {
-        dispatch({
-            type: "UpdatePGPremiumAdjustment",
-            payload: e.target.value
-        })
-    }
-
-    const handleBEPremiumUpdate = (e) => {
-        dispatch({
-            type: "UpdateBEPremiumAdjustment",
-            payload: e.target.value
-        })
-    }
-
-    const handleBEWeights = (e) => {
-        dispatch({
-            type: "UpdateBEWeights",
-            payload: e.target.value
-        })
-    }
-
     const handleMetalSelect = (name, symbol) => {
         dispatch({
             type: 'UpdateMetalSelection',
             payload: { name: name, symbol: symbol }
         })
+    }
+
+    const handleClearCPandBR = () => {
+        dispatch({
+            type: 'ClearCPandBR'
+        })
+    }
+
+    const handleBEPGTypeChange = (e, metaData, index) => {
+        dispatch({
+            type: "UpdateBEPGType",
+            payload: e.target.value,
+            metaData: metaData,
+            index: index
+        });
+    };
+
+    const handleBEPGSubTypeChange = (e, metaData, index) => {
+        dispatch({
+            type: "UpdateBEPGSubType",
+            payload: e.target.value,
+            metaData: metaData,
+            index: index
+        });
+    };
+
+    const handleBEPGPure = (e, index) => {
+        dispatch({
+            type: "UpdateBEPGPure",
+            payload: e.target.value,
+            index: index
+        });
+    };
+
+    const handleBEPGPremium = (e, index) => {
+        dispatch({
+            type: "UpdateBEPGPremium",
+            payload: e.target.value,
+            index: index
+        });
+    };
+
+    const handleBEPGCount = (e, index) => {
+        dispatch({
+            type: "UpdateBEPGCount",
+            payload: e.target.value,
+            index: index
+        });
+    };
+
+    const handleInventoryItemAdd = (e) => {
+        dispatch({
+            type: 'UpdateInventoryItemList'
+       });
+    };
+
+    const handleBEPGCaluculations = (e) => {
+        dispatch({
+            type: 'UpdateBEPGCalculations'
+        });
     }
 
     const switchView = (view) => {
@@ -307,6 +377,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         preventNegativeValues={preventNegativeValues}
                         handleMetalSelect={handleMetalSelect}
                         readOnly={editMode}
+                        handleClearCPandBR={handleClearCPandBR}
                     />
                 )
 
@@ -380,9 +451,14 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         formData={formData}
                         handleTextChange={handleTextChange}
                         handleAccoTranID={handleAccoTranID}
-                        handlePureGoldTransactionRate={handlePureGoldTransactionRate}
-                        handlePGPremiumUpdate={handlePGPremiumUpdate}
                         preventNegativeValues={preventNegativeValues}
+                        handleBEPGTypeChange={handleBEPGTypeChange}
+                        handleBEPGSubTypeChange={handleBEPGSubTypeChange}
+                        handleBEPGPure={handleBEPGPure}
+                        handleBEPGPremium={handleBEPGPremium}
+                        handleBEPGCount={handleBEPGCount}
+                        handleBEPGCaluculations={handleBEPGCaluculations}
+                        handleInventoryItemAdd={handleInventoryItemAdd}
                         readOnly={editMode}
                     />
                 )
@@ -393,9 +469,14 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         formData={formData}
                         handleTextChange={handleTextChange}
                         handleAccoTranID={handleAccoTranID}
-                        handlePureGoldTransactionRate={handlePureGoldTransactionRate}
-                        handlePGPremiumUpdate={handlePGPremiumUpdate}
                         preventNegativeValues={preventNegativeValues}
+                        handleBEPGTypeChange={handleBEPGTypeChange}
+                        handleBEPGSubTypeChange={handleBEPGSubTypeChange}
+                        handleBEPGPure={handleBEPGPure}
+                        handleBEPGPremium={handleBEPGPremium}
+                        handleBEPGCount={handleBEPGCount}
+                        handleBEPGCaluculations={handleBEPGCaluculations}
+                        handleInventoryItemAdd={handleInventoryItemAdd}
                         readOnly={editMode}
                     />
                 )
@@ -406,9 +487,13 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         formData={formData}
                         handleTextChange={handleTextChange}
                         handleAccoTranID={handleAccoTranID}
-                        handleBEWeights={handleBEWeights}
-                        handleBEPremiumUpdate={handleBEPremiumUpdate}
-                        preventNegativeValues={preventNegativeValues}
+                        handleBEPGTypeChange={handleBEPGTypeChange}
+                        handleBEPGSubTypeChange={handleBEPGSubTypeChange}
+                        handleBEPGPure={handleBEPGPure}
+                        handleBEPGPremium={handleBEPGPremium}
+                        handleInventoryItemAdd={handleInventoryItemAdd}
+                        handleBEPGCount={handleBEPGCount}
+                        handleBEPGCaluculations={handleBEPGCaluculations}
                         readOnly={editMode}
                     />
                 )
@@ -419,9 +504,13 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                         formData={formData}
                         handleTextChange={handleTextChange}
                         handleAccoTranID={handleAccoTranID}
-                        handleBEWeights={handleBEWeights}
-                        handleBEPremiumUpdate={handleBEPremiumUpdate}
-                        preventNegativeValues={preventNegativeValues}
+                        handleBEPGTypeChange={handleBEPGTypeChange}
+                        handleBEPGSubTypeChange={handleBEPGSubTypeChange}
+                        handleBEPGPure={handleBEPGPure}
+                        handleBEPGPremium={handleBEPGPremium}
+                        handleInventoryItemAdd={handleInventoryItemAdd}
+                        handleBEPGCount={handleBEPGCount}
+                        handleBEPGCaluculations={handleBEPGCaluculations}
                         readOnly={editMode}
                     />
                 )
@@ -541,15 +630,24 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
         Object.keys(cleanedFormData).forEach((key) => {
             if (cleanedFormData[key] === "" || key === 'bPaid' || key === 'bReceived' || key === 'bPayabale' || key === 'bReceivable') { cleanedFormData[key] = null; }
             if (key === 'dateCreated') {
-                cleanedFormData[key] = `${currentDate[0]} ${currentDate[1]}`;
+                cleanedFormData[key] = cleanedFormData['dateCreated'] || `${currentDate[0]} ${currentDate[1]}`;
+            }
+            if (editMode && key === 'datesModified') {
+                cleanedFormData[key] = cleanedFormData['datesModified'] ? `${cleanedFormData['datesModified']}, ${currentDate[0]} ${currentDate[1]}` : `${currentDate[0]} ${currentDate[1]}`;
+            }
+            if (key === 'globalID') {
+                cleanedFormData[key] = transactionID || cleanedFormData['globalID']
+            }
+            if (key === 'prevBalance') {
+                cleanedFormData[key] = cleanedFormData['prevBalance'] || `${custDetails.message.curr_cash_balance} ${custDetails.message.curr_gold_balance} ${custDetails.message.curr_sample_balance}`;
             }
             if (key === 'transactionType') {
                 if (cleanedFormData[key] !== 'Testing') {
                     cleanedFormData['sampleReturned'] = null;
                     cleanedFormData['testType'] = null;
                 }
-                if (cleanedFormData[key] !== 'Bar Exchange In' || cleanedFormData[key] !== 'Bar Exchange Out') {
-                    cleanedFormData['itemType'] = null;
+                if (cleanedFormData[key] !== 'Bar Exchange In' && cleanedFormData[key] !== 'Bar Exchange Out' && cleanedFormData[key] !== 'Pure Gold Buy' && cleanedFormData[key] !== 'Pure Gold Sell') {
+                    cleanedFormData['inventoryDetails'] = null;
                 }
                 if (cleanedFormData[key] === 'Impure' || cleanedFormData[key] === 'Exchange' || cleanedFormData[key] === 'Tezab' | cleanedFormData[key] === 'Pure Gold Buy' || cleanedFormData[key] === 'Pure Gold Sell' || cleanedFormData[key] === 'Bar Exchange In' || cleanedFormData[key] === 'Bar Exchange Out') {
                     cleanedFormData['fees'] = null;
@@ -593,7 +691,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
         return cleanedFormData;
     }
 
-    const onSubmitForm = (e) => {
+    const onSubmitFormCreation = (e) => {
         e.preventDefault();
         const data = setNullerAndCreationDate();
         const createParams = {
@@ -620,9 +718,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
             remarks: data.remarks,
             test_type: data.testType,
             premium: data.premium,
-            standard_weight: data.stdWeight,
-            egr_weight: data.egrWeight,
-            item_type: data.itemType,
+            inventory_details: data.inventoryDetails,
             sample_returned: data.sampleReturned,
             received: data.cReceived,
             receivable: data.cReceivable,
@@ -639,7 +735,10 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
             include_test_fees: data.includeTestFees,
             pure_minus_gold_in_cash: data.pureMinusGoldInCash,
             taken_cash_in_gold: data.takeCashInGold, 
-            final_gold: data.finalGold
+            final_gold: data.finalGold,
+            current_balance: data.currBalance,
+            previous_balance: data.prevBalance,
+            global_id: data.globalID
         };
         transactionService.createTransaction(createParams)
             .then(response => {
@@ -647,7 +746,98 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                 if (response === 'true') { 
                     setTransactionID('');
                     closeModal.current.click();
-                    successTransactionHandle('Accounts', {acco_id: accountID, cust_id: custDetails.message.cust_id, cust_name: custDetails.message.cust_name, cust_primary_number: custDetails.message.cust_primary_number});
+                    const receiptData = {
+                        header: {
+                            date_created: createParams.date_created,
+                            acco_id: accountID,
+                            cust_id: custDetails.message.cust_id,
+                            cust_name: custDetails.message.cust_name,
+                            cust_primary_number: custDetails.message.cust_primary_number
+                        },
+                        is_testing: createParams.transaction_type === 'Testing' ? true : false,
+                        global_transaction_id: transactionID || createParams.global_id,
+                        transaction: {
+                            ...createParams
+                        }
+                    }
+                    successTransactionHandle('Accounts', {acco_id: accountID, cust_id: custDetails.message.cust_id, cust_name: custDetails.message.cust_name, cust_primary_number: custDetails.message.cust_primary_number, created: true, acco_tran_id: createParams.acco_tran_id, receiptData: receiptData});
+                }
+            })
+            .catch(response => handleAlert(response));
+    }
+    
+    const onSubmitFormUpdation = (e) => {
+        e.preventDefault();
+        const data = setNullerAndCreationDate();
+        const createParams = {
+            tran_id: data.tranID,
+            acco_id: data.accountID,
+            date_created: data.dateCreated,
+            date_finalized: data.dateFinalized,
+            dates_modified: data.datesModified,
+            acco_tran_id: data.accoTranID,
+            test_id: data.testID,
+            use_transaction_id: data.simpleTranID,
+            first_weight: data.firstWeight,
+            second_weight: data.secondWeight,
+            third_weight: data.thirdWeight,
+            total_sample_weight: data.totalWeight,
+            points: data.points,
+            pure_weight: data.pure,
+            taken_cash: data.takeCash,
+            taken_gold: data.takeGold,
+            fees: data.fees,
+            charges: data.charges,
+            rate: data.rate,
+            discount: data.discount,
+            amount: data.amount,
+            remarks: data.remarks,
+            test_type: data.testType,
+            premium: data.premium,
+            inventory_details: data.inventoryDetails,
+            sample_returned: data.sampleReturned,
+            received: data.cReceived,
+            receivable: data.cReceivable,
+            paid: data.cPaid,
+            payable: data.cPayable,
+            transaction_type: data.transactionType,
+            transferred: data.transferredDue,
+            pending_taken_cash: data.pendingTakeCash,
+            pending_taken_gold: data.pendingTakeGold,
+            gold_in_cash: data.goldInCash,
+            gross_amount: data.grossAmount,
+            net_amount: data.netAmount,
+            carried_fees: data.carriedFees,
+            include_test_fees: data.includeTestFees,
+            pure_minus_gold_in_cash: data.pureMinusGoldInCash,
+            taken_cash_in_gold: data.takeCashInGold, 
+            final_gold: data.finalGold,
+            current_balance: data.currBalance,
+            previous_balance: data.prevBalance,
+            global_id: data.globalID
+        };
+        transactionService.updateTransaction(createParams)
+            .then(response => {
+                handleAlert(response);
+                if (response === 'true') { 
+                    setTransactionID('');
+                    closeModal.current.click();
+                    const receiptData = {
+                        header: {
+                            date_created: createParams.date_created,
+                            acco_id: createParams.acco_id,
+                            cust_id: custDetails.message.cust_id,
+                            cust_name: custDetails.message.cust_name,
+                            cust_primary_number: custDetails.message.cust_primary_number
+                        },
+                        is_testing: createParams.transaction_type === 'Testing' ? true : false,
+                        global_transaction_id: createParams.global_id,
+                        transaction: {
+                            ...createParams
+                        }
+                    };
+                    setEditReceiptData(receiptData);
+                    handleRefresh(true)
                 }
             })
             .catch(response => handleAlert(response));
@@ -658,11 +848,11 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
             <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h1 className="modal-title fs-5">Tr. ID: {transactionID} • {currentDate[0]}</h1>
+                        <h1 className="modal-title fs-5">{editMode ? 'Editing' : `Tr. ID: ${transactionID} • ${currentDate[0]}`}</h1>
                         <button ref={closeModal} type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => resetFields()}></button>
                     </div>
                     <div className="modal-body">
-                        <form id="transactionForm" onSubmit={onSubmitForm}>
+                        <form id="transactionForm" onSubmit={editMode ? onSubmitFormUpdation : onSubmitFormCreation}>
                             <div className="col">
                                 <div className="row">
                                     <div className="col">
@@ -693,13 +883,14 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                                     switchView(formData.transactionType)
                                 }
                                 {   
-                                    (custDetails !== null && custDetails !== undefined) &&
+                                    (!transaction && custDetails !== null && custDetails !== undefined) &&
                                         <Sidebar
                                             status={custDetails.status}
                                             id={custDetails.message.cust_id}
                                             name={custDetails.message.cust_name}
                                             cash={custDetails.message.curr_cash_balance}
                                             gold={custDetails.message.curr_gold_balance}
+                                            sample={custDetails.message.curr_sample_balance}
                                             error={custDetails.message}
                                         />
                                 }
@@ -708,11 +899,76 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle }) 
                     </div>
                     <div className="modal-footer">
                         {
+                            editMode && <button className="btn" onClick={() => printService.receiptPrint(true, {
+                                header: {
+                                    date_created: formData.dateCreated,
+                                    acco_id: data.acco_id,
+                                    cust_id: data.cust_id,
+                                    cust_name: data.cust_name,
+                                    cust_primary_number: data.cust_primary_number
+                                },
+                                is_testing: formData.transactionType === 'Testing' ? true : false,
+                                global_transaction_id: transactionID || formData.globalID,
+                                transaction: {
+                                    acco_id: formData.accountID,
+                                    date_created: formData.dateCreated,
+                                    date_finalized: formData.dateFinalized,
+                                    dates_modified: formData.datesModified,
+                                    acco_tran_id: formData.accoTranID,
+                                    test_id: formData.testID,
+                                    use_transaction_id: formData.simpleTranID,
+                                    first_weight: formData.firstWeight,
+                                    second_weight: formData.secondWeight,
+                                    third_weight: formData.thirdWeight,
+                                    total_sample_weight: formData.totalWeight,
+                                    points: formData.points,
+                                    pure_weight: formData.pure,
+                                    taken_cash: formData.takeCash,
+                                    taken_gold: formData.takeGold,
+                                    fees: formData.fees,
+                                    charges: formData.charges,
+                                    rate: formData.rate,
+                                    discount: formData.discount,
+                                    amount: formData.amount,
+                                    remarks: formData.remarks,
+                                    test_type: formData.testType,
+                                    premium: formData.premium,
+                                    inventory_details: formData.inventoryDetails,
+                                    sample_returned: formData.sampleReturned,
+                                    received: formData.cReceived,
+                                    receivable: formData.cReceivable,
+                                    paid: formData.cPaid,
+                                    payable: formData.cPayable,
+                                    transaction_type: formData.transactionType,
+                                    transferred: formData.transferredDue,
+                                    pending_taken_cash: formData.pendingTakeCash,
+                                    pending_taken_gold: formData.pendingTakeGold,
+                                    gold_in_cash: formData.goldInCash,
+                                    gross_amount: formData.grossAmount,
+                                    net_amount: formData.netAmount,
+                                    carried_fees: formData.carriedFees,
+                                    include_test_fees: formData.includeTestFees,
+                                    pure_minus_gold_in_cash: formData.pureMinusGoldInCash,
+                                    taken_cash_in_gold: formData.takeCashInGold, 
+                                    final_gold: formData.finalGold,
+                                    current_balance: formData.currBalance,
+                                    previous_balance: formData.prevBalance,
+                                    global_id: formData.globalID
+                                }
+                            })} style={{backgroundColor:"grey", color:"white"}}>Reprint</button>
+                        }
+                        {
                             formData.dateFinalized === '' ? 
                                 <button className="btn btn-danger" onClick={() => dispatch({type: "UpdateFinalizedDate"})}>Finalize</button> :
                                 <button className="btn btn-success" onClick={() => dispatch({type: "UndoFinalizedDate"})}>Finalize</button>
                         }
-                        <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}} disabled={buttonDisable}>Save</button>
+                        {
+                            editMode ?
+                                formData.dateCreated.split(' ')[0] === currentDate[0] ?
+                                    <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}} disabled={buttonDisable}>Save</button> :
+                                    <></> :
+                                <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}} disabled={buttonDisable}>Save</button>
+                        }
                     </div>
                 </div>
             </div>

@@ -4,17 +4,27 @@ import transactionService from "../../services/transaction";
 import DataPopup from "../DataPopup";
 import AlertPopup from "../AlertPopup";
 import NewAndEditTransaction from "../NewAndEditTransaction"
+import printService from "../ReceiptPrint";
 
-const CustomerStatementTransactions = ({ accountID, searched }) => {
+const CustomerStatementTransactions = ({ accountID, searched, data }) => {
     const [transactions, setTransactions] = useState([]);
     const [display, setDisplay] = useState([false, 0, 0, '']);
     const [view, setView] = useState(false);
     const [transactionAlert, setTransactionAlert] = useState('');
     const [displayTransaction, setDisplayTransaction] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+    const [editReceiptData, setEditReceiptData] = useState(null);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setTransactionAlert('');
+        }, 3000);
+    }, [transactionAlert]);
 
     useEffect(() => {
         let balances = { cash: 0, gold: 0, sample: 0 };
+        let updateCurrBalances = [];
         customerStatmentService.getAllByID(accountID)
             .then(response => {
                 const cRegex = /\d+R/;
@@ -58,6 +68,7 @@ const CustomerStatementTransactions = ({ accountID, searched }) => {
                         gold: tn.gBalance,
                         sample: tn.sBalance
                     };
+                    updateCurrBalances.push([tn.tran_id, `${balances.cash} ${balances.gold} ${balances.sample}`]);
                 });
                 return response;
             })
@@ -65,10 +76,26 @@ const CustomerStatementTransactions = ({ accountID, searched }) => {
                 setView(true);
                 setTransactions(adjustedTransactions);
                 customerStatmentService.updateCustomerBalances(balances, Number(accountID))
-                    .then(response => void(response));
+                    .then(response => {
+                        if (data.created) {
+                            const currBalance = `${balances.cash} ${balances.gold} ${balances.sample}`
+                            const receiptData = data.receiptData;
+                            receiptData['transaction']['current_balance'] = currBalance;
+                            printService.receiptPrint(false, receiptData);
+                            transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balance: currBalance }).then(() => void(response))
+                        }
+                        if (refresh) {
+                            const currBalance = (updateCurrBalances.filter((idAndBalance) => idAndBalance[0] === displayTransaction[2]))[0][1];
+                            const receiptData = editReceiptData;
+                            receiptData['transaction']['current_balance'] = currBalance;
+                            printService.receiptPrint(false, receiptData, `${balances.cash} ${balances.gold} ${balances.sample}`);
+                            transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
+                            setRefresh(false);
+                        }
+                    });
             })
             // .catch(() => console.log("Yabai!"))
-    }, [accountID]);
+    }, [accountID, refresh, data, displayTransaction, editReceiptData]);
 
     const displayTransactionDetails = (e) => {
         transactionService.getTakenGivenRelateds(accountID, e.currentTarget.innerHTML)
@@ -120,7 +147,7 @@ const CustomerStatementTransactions = ({ accountID, searched }) => {
                     {
                         searched === '' && transactions.length !== 0 ?
                             view && transactions.map((transaction, index, {length}) => (
-                                <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id])} style={{ cursor: 'pointer' }}>
+                                <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id, transaction.tran_id])} style={{ cursor: 'pointer' }}>
                                     <td>{transaction.date_created.split(' ')[0]}</td>
                                     {
                                         transaction.acco_tran_id.slice(0, 2) === 'TA' || transaction.acco_tran_id.slice(0, 2) === 'GI' ?
@@ -193,7 +220,7 @@ const CustomerStatementTransactions = ({ accountID, searched }) => {
             {
                 display[0] && <DataPopup data={display} />
             }
-            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} />
+            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} data={data} handleRefresh={setRefresh} setEditReceiptData={setEditReceiptData} />
             {
                 transactionAlert !== '' && <AlertPopup status={transactionAlert} />
             }

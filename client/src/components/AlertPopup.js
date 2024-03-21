@@ -21,7 +21,7 @@ const AlertPopup = ({ status }) => {
                         animation: 'alert 3s',
                         animationDirection: 'normal'
                     }}>
-                        <p className="fs-8 text-center">Transaction created.</p>
+                        <p className="fs-8 text-center">Transaction updated.</p>
                     </div> :
                     <div style={{
                         width: '20vw',

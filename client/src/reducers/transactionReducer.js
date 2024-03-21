@@ -8,6 +8,16 @@ const transactionReducer = (state, action) => {
                     [action.field]: action.payload,
                     bReceived: action.payload
                 };
+            } else if (action.index !== undefined) {
+                let inventoryItem = state.inventoryDetails[action.index];
+                inventoryItem = { ...inventoryItem, points: action.payload };
+                let newInventoryDetails = state.inventoryDetails;
+                newInventoryDetails[action.index] = inventoryItem;
+                return {
+                    ...state,
+                    // [action.field]: action.payload,
+                    inventoryDetails: newInventoryDetails
+                };
             } else {
                 return {
                     ...state,
@@ -29,6 +39,16 @@ const transactionReducer = (state, action) => {
         case "UpdateType":
             return {
                 ...action.payload[0],
+                inventoryDetails: [
+                    {
+                        itemType: '',
+                        itemSubType: '',
+                        points: '',
+                        pure: '',
+                        premium: '',
+                        count: 1
+                    }
+                ],
                 transactionType: action.payload[1]
             }
 
@@ -182,8 +202,16 @@ const transactionReducer = (state, action) => {
             return {
                 ...state,
                 testType: action.payload,
-                cPaid: action.payload === 'Other' ? `${state.fees}R` : `${state.pure}G ${state.fees}R`,
-                bReceived: action.payload === 'Other' ? `${state.fees}R` : `${state.pure}G ${state.fees}R`,
+                cPayable: state.fees ? `${state.fees}R` : '',
+                cPaid: state.fees ? `${state.fees}R` : '',
+                cReceivable: '',
+                cReceived: '',
+                bReceived: state.fees ? `${state.fees}R` : '',
+                pure: '',
+                points: '',
+                remarks: '',
+                takeCash: '',
+                takeGold: ''
             }
 
         // Testing.
@@ -207,7 +235,7 @@ const transactionReducer = (state, action) => {
                     return {
                         ...state,
                         [action.field]: newWeight + oldWeight,
-                        totalWeight: newWeight + total,
+                        totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                         pure: '',
                         cPayable: payable,
                         cPaid: `${fees}R`,
@@ -217,7 +245,7 @@ const transactionReducer = (state, action) => {
                     return {
                         ...state,
                         [action.field]: newWeight + oldWeight,
-                        totalWeight: newWeight + total,
+                        totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                         pure: parseFloat((newWeight + total) * (points / 1000)).toFixed(2),
                         cPayable: payable,
                         cPaid: `${parseFloat((newWeight + total) * (points / 1000)).toFixed(2)}G  ${fees}R`,
@@ -251,7 +279,7 @@ const transactionReducer = (state, action) => {
                         return {
                             ...state,
                             [action.field]: '',
-                            totalWeight: newWeight + total,
+                            totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                             pure: pureW,
                             cPayable: payable,
                             cPaid: custPaid,
@@ -310,6 +338,15 @@ const transactionReducer = (state, action) => {
                 ...state,
                 // eslint-disable-next-line
                 remarks: state.remarks === '' ? action.payload.name + '(' + action.payload.symbol + ')' + ': 0' : state.remarks + ', ' + action.payload.name + '(' + action.payload.symbol + ')' + ': 0'
+            }
+        }
+
+        // Testing.
+        case 'ClearCPandBR': {
+            return {
+                ...state,
+                bReceived: '',
+                cPaid: ''
             }
         }
 
@@ -586,10 +623,11 @@ const transactionReducer = (state, action) => {
                     ...state,
                     rate: '',
                     amount: '',
-                    premium: '',
                     grossAmount: '',
-                    cReceivable: '',
-                    cPayable: '',
+                    cReceivable: state.transactionType === 'Pure Gold Buy' ? `${state.premium}R` : `${state.pure}G`,
+                    cReceived: state.transactionType === 'Pure Gold Buy' ? `${state.premium}R` : `${state.pure}G`,
+                    cPayable: state.transactionType !== 'Pure Gold Buy' ? `${state.premium}R` : `${state.pure}G`,
+                    cPaid: state.transactionType !== 'Pure Gold Buy' ? `${state.premium}R` : `${state.pure}G`
                 }
             } else {
                 let cashAmount = Math.round((Number(state.pure) * Number(action.payload)) / 11.664);
@@ -600,7 +638,9 @@ const transactionReducer = (state, action) => {
                     amount: adjustCashAmount,
                     grossAmount: cashAmount,
                     cReceivable: state.transactionType === 'Pure Gold Buy' ? `${adjustCashAmount}R` : `${state.pure}G`,
+                    cReceived: state.transactionType === 'Pure Gold Buy' ? `${adjustCashAmount}R` : `${state.pure}G`,
                     cPayable: state.transactionType === 'Pure Gold Buy' ? `${state.pure}G` : `${adjustCashAmount}R`,
+                    cPaid: state.transactionType === 'Pure Gold Buy' ? `${state.pure}G` : `${adjustCashAmount}R`
                 }
             }
         }
@@ -632,59 +672,191 @@ const transactionReducer = (state, action) => {
             }
         }
 
-        // Bar Exchange In and Out
-        case "UpdateBEPremiumAdjustment": {
-            if (action.payload === '') {
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateBEPGType": {
+            const itemType = action.payload;
+            const itemSubType = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === 'Coins') ? action.metaData.weight_class : '';
+            const points = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === '10 Tola Standard Bar') ? '999' : '';
+            const pure = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData[0].gold_weight : itemType === '10 Tola Standard Bar' ? action.metaData.slice(-1)[0].gold_weight : '';
+            const cash = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData[0].price : itemType === '10 Tola Standard Bar' ? action.metaData.slice(-1)[0].price : '';
+            const count = 1;
+            const inventoryItem = {
+                itemType: itemType,
+                itemSubType: itemSubType,
+                points: points,
+                pure: pure,
+                premium: cash,
+                count: count
+            };
+            let newInventoryDetails = state.inventoryDetails;
+            newInventoryDetails[action.index] = inventoryItem;
+            const form = {
+                ...state,
+                inventoryDetails: newInventoryDetails
+            };
+            if (state.transactionType.includes('Bar')) {
                 return {
-                    ...state,
-                    premium: '',
-                    cPayable: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${state.egrWeight}G`,
-                    cPaid: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${state.egrWeight}G`,
-                    cReceivable: state.transactionType === 'Bar Exchange In' ? `${state.egrWeight}G` :  `${state.stdWeight}G`,
-                    cReceived: state.transactionType === 'Bar Exchange In' ? `${state.egrWeight}G` :  `${state.stdWeight}G`
+                    ...form,
+                    // cReceivable: state.transactionType === 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cReceived: state.transactionType === 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPayable: state.transactionType !== 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPaid: state.transactionType !== 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
                 }
             } else {
                 return {
-                    ...state,
-                    premium: action.payload,
-                    cPayable: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${state.egrWeight}G ${action.payload}R`,
-                    cPaid: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${state.egrWeight}G ${action.payload}R`,
-                    cReceivable: state.transactionType === 'Bar Exchange In' ? `${state.egrWeight}G ${action.payload}R` :  `${state.stdWeight}G`,
-                    cReceived: state.transactionType === 'Bar Exchange In' ? `${state.egrWeight}G ${action.payload}R` :  `${state.stdWeight}G`
+                    ...form,
+                    // cReceivable: state.transactionType === 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cReceived: state.transactionType === 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPayable: state.transactionType !== 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPaid: state.transactionType !== 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
                 }
             }
         }
 
-        // Bar Exchange In and Out
-        case "UpdateBEWeights": {
-            if (action.payload === '') {
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateBEPGSubType": {
+            const itemType = state.inventoryDetails[action.index].itemType;
+            const itemSubType = action.payload;
+            const points = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === '10 Tola Standard Bar') ? '999' : '';
+            const pure = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData.filter(item => item.weight_class === itemSubType)[0].gold_weight : ''
+            const cash = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData.filter(item => item.weight_class === itemSubType)[0].price : ''
+            const count = 1;
+            const inventoryItem = {
+                itemType: itemType,
+                itemSubType: itemSubType,
+                points: points,
+                pure: pure,
+                premium: cash,
+                count: count
+            };
+            let newInventoryDetails = state.inventoryDetails;
+            newInventoryDetails[action.index] = inventoryItem;
+            const form = {
+                ...state,
+                inventoryDetails: newInventoryDetails
+            };
+            if (state.transactionType.includes('Bar')) {
                 return {
-                    ...state,
-                    egrWeight: '',
-                    cReceivable: '',
-                    cReceived: '',
-                    cPayable: '',
-                    cPaid: '',
-                    premium: ''
+                    ...form,
+                    // cReceivable: state.transactionType === 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cReceived: state.transactionType === 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPayable: state.transactionType !== 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPaid: state.transactionType !== 'Bar Exchange In' ? cash === '' ? '' : `${pure}G ${cash}R` : pure === '' ? '' : `${pure}G`,
                 }
             } else {
-                let premium = '';
-                if (state.premium !== '') {
-                    premium = ` ${state.premium}R`
-                } 
+                return {
+                    ...form,
+                    // cReceivable: state.transactionType === 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cReceived: state.transactionType === 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPayable: state.transactionType !== 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                    // cPaid: state.transactionType !== 'Pure Gold Buy' ? cash === '' ? '' : `${cash}R` : pure === '' ? '' : `${pure}G`,
+                }
+            }
+        }
+
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateBEPGPure": {
+            let inventoryItem = state.inventoryDetails[action.index];
+            inventoryItem = { ...inventoryItem, pure: action.payload };
+            let newInventoryDetails = state.inventoryDetails;
+            newInventoryDetails[action.index] = inventoryItem;
+            return {
+                ...state,
+                inventoryDetails: newInventoryDetails
+                // cReceivable: action.payload !== '' ? state.transactionType === 'Pure Gold Buy' ? '' : `${action.payload}G` : '',
+                // cReceived: action.payload !== '' ? state.transactionType === 'Pure Gold Buy' ? '' : `${action.payload}G` : '',
+                // cPayable: action.payload !== '' ? state.transactionType === 'Pure Gold Sell' ? '' : `${action.payload}G` : '',
+                // cPaid: action.payload !== '' ? state.transactionType === 'Pure Gold Sell' ? '' : `${action.payload}G` : ''
+            }
+        }
+
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateBEPGPremium": {
+            let inventoryItem = state.inventoryDetails[action.index];
+            inventoryItem = { ...inventoryItem, premium: action.payload };
+            let newInventoryDetails = state.inventoryDetails;
+            newInventoryDetails[action.index] = inventoryItem;
+            return {
+                ...state,
+                inventoryDetails: newInventoryDetails
+                // cReceivable: state.transactionType === 'Bar Exchange In' ? action.payload !== '' ? `${state.pure}G ${action.payload}R` : `${state.pure}G` : state.cReceivable,
+                // cReceived: state.transactionType === 'Bar Exchange In' ? action.payload !== '' ? `${state.pure}G ${action.payload}R` : `${state.pure}G` : state.cReceived,
+                // cPayable: state.transactionType !== 'Bar Exchange In' ? action.payload !== '' ? `${state.pure}G ${action.payload}R` : `${state.pure}G` : state.cPayable,
+                // cPaid: state.transactionType !== 'Bar Exchange In' ? action.payload !== '' ? `${state.pure}G ${action.payload}R` : `${state.pure}G` : state.cPaid
+            }
+        }
+
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateBEPGCount": {
+            let inventoryItem = state.inventoryDetails[action.index];
+            inventoryItem = { ...inventoryItem, count: action.payload };
+            let newInventoryDetails = state.inventoryDetails;
+            newInventoryDetails[action.index] = inventoryItem;
+            return {
+                ...state,
+                inventoryDetails: newInventoryDetails
+                // cReceivable: state.transactionType === 'Pure Gold Buy' ? action.payload !== '' ? `${action.payload}R` : '' : state.cReceivable,
+                // cReceived: state.transactionType === 'Pure Gold Buy' ? action.payload !== '' ? `${action.payload}R` : '' : state.cReceived,
+                // cPayable: state.transactionType !== 'Pure Gold Buy' ? action.payload !== '' ? `${action.payload}R` : '' : state.cPayable,
+                // cPaid: state.transactionType !== 'Pure Gold Buy' ? action.payload !== '' ? `${action.payload}R` : '' : state.cPaid
+            }
+        }
+
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case 'UpdateBEPGCalculations': {
+            const inventoryItems = state.inventoryDetails;
+            let totalPure = 0;
+            let totalCash = 0;
+            if (state.transactionType.includes('Bar')) {
+                inventoryItems.forEach(item => {
+                    totalPure = totalPure + (item.count * item.pure);
+                    totalCash = totalCash + (item.count * item.premium);
+                });
                 return {
                     ...state,
-                    egrWeight: action.payload,
-                    cPayable: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${action.payload}G` + premium,
-                    cPaid: state.transactionType === 'Bar Exchange In' ? `${state.stdWeight}G` :  `${action.payload}G` + premium,
-                    cReceivable: state.transactionType === 'Bar Exchange In' ? `${action.payload}G` + premium :  `${state.stdWeight}G`,
-                    cReceived: state.transactionType === 'Bar Exchange In' ? `${action.payload}G` + premium :  `${state.stdWeight}G`,
+                    cReceivable: state.transactionType === 'Bar Exchange In' ? `${totalPure}G ${totalCash}R` : `${totalPure}G`,
+                    cReceived: state.transactionType === 'Bar Exchange In' ? `${totalPure}G ${totalCash}R` : `${totalPure}G`,
+                    cPayable: state.transactionType !== 'Bar Exchange In' ? `${totalPure}G ${totalCash}R` : `${totalPure}G`,
+                    cPaid: state.transactionType !== 'Bar Exchange In' ? `${totalPure}G ${totalCash}R` : `${totalPure}G`
                 }
+            } else {
+                inventoryItems.forEach(item => {
+                    totalPure = totalPure + (item.count * item.pure);
+                    totalCash = totalCash + (item.count * item.premium);
+                });
+                let cashAmount = Math.round((Number(totalPure) * Number(state.rate)) / 11.664);
+                let adjustCashAmount = state.transactionType === 'Pure Gold Buy' ? cashAmount + Number(totalCash) : cashAmount - Number(totalCash);
+                return {
+                    ...state,
+                    cReceivable: state.transactionType === 'Pure Gold Buy' ? `${adjustCashAmount}R` : `${totalPure}G`,
+                    cReceived: state.transactionType === 'Pure Gold Buy' ? `${adjustCashAmount}R` : `${totalPure}G`,
+                    cPayable: state.transactionType === 'Pure Gold Buy' ? `${totalPure}G` : `${adjustCashAmount}R`,
+                    cPaid: state.transactionType === 'Pure Gold Buy' ? `${totalPure}G` : `${adjustCashAmount}R`
+                }
+            }
+        }
+
+        // Bar Exchange In and Out, Pure Gold Buy and Sell
+        case "UpdateInventoryItemList": {
+            return {
+                ...state,
+                inventoryDetails: [
+                    ...state.inventoryDetails,
+                    {
+                        itemType: '',
+                        itemSubType: '',
+                        points: '',
+                        pure: '',
+                        premium: '',
+                        count: 1
+                    }
+                ]
             }
         }
 
         case "DisplayExistingTransaction": {
             return {
+                tranID: action.payload.tran_id || '',
                 accountID: action.payload.acco_id || '',
                 dateCreated: action.payload.date_created || '',
                 dateFinalized: action.payload.date_finalized || '',
@@ -708,14 +880,16 @@ const transactionReducer = (state, action) => {
                 remarks: action.payload.remarks || '',
                 testType: action.payload.test_type || '',
                 premium: action.payload.premium || '',
-                stdWeight: action.payload.standard_weight || '',
-                egrWeight: action.payload.egr_weight || '',
-                itemType: action.payload.item_type || '',
                 sampleReturned: action.payload.sample_returned || '',
+                inventoryDetails: action.payload.inventory_details || '',
                 cReceived: action.payload.received || '',
                 cReceivable: action.payload.receivable || '',
                 cPaid: action.payload.paid || '',
                 cPayable: action.payload.payable || '',
+                bReceivable: action.payload.payable || '',
+                bReceived: action.payload.paid || '',
+                bPayable: action.payload.receivable || '',
+                bPaid:  action.payload.received || '',
                 transactionType: action.payload.transaction_type || '',
                 transferredDue: action.payload.transferred || '',
                 pendingTakeCash: action.payload.pending_taken_cash || '',
@@ -727,7 +901,10 @@ const transactionReducer = (state, action) => {
                 includeTestFees: action.payload.include_test_fees || '',
                 pureMinusGoldInCash: action.payload.pure_minus_gold_in_cash || '',
                 takeCashInGold: action.payload.taken_cash_in_gold || '', 
-                finalGold: action.payload.final_gold || ''
+                finalGold: action.payload.final_gold || '',
+                currBalance: action.payload.current_balance || '',
+                prevBalance: action.payload.previous_balance || '',
+                globalID: action.payload.global_id || ''
             }
         }
 
@@ -760,8 +937,21 @@ const transactionReducer = (state, action) => {
         }
 
         // Empty the form.
-        case "Reset":
-            return action.payload
+        case "Reset": {
+            return {
+                ...action.payload,
+                inventoryDetails: [
+                    {
+                        itemType: '',
+                        itemSubType: '',
+                        points: '',
+                        pure: '',
+                        premium: '',
+                        count: 1
+                    }
+                ]
+            }
+        }
 
         default:
             return state;

@@ -1,14 +1,14 @@
 import React from "react";
 import './Animations.css';
 
-const Sidebar = ({ status, id, name, cash, gold, error}) => {
+const Sidebar = ({ status, id, name, cash, gold, sample, error}) => {
     return (
         <>
             {
                 status ?
                     <div style={{
                         width: '20vw',
-                        height: '108px',
+                        height: '132px',
                         background: 'gold',
                         borderRadius: '8px',
                         paddingTop: '5px',
@@ -25,6 +25,7 @@ const Sidebar = ({ status, id, name, cash, gold, error}) => {
                         <span className="fw-semibold">Name: </span><span>{name}</span><br/>
                         <span className="fw-semibold">Cash Balance: </span><span>{cash}</span><br/>
                         <span className="fw-semibold">Gold Balance: </span><span>{gold}</span><br/>
+                        <span className="fw-semibold">Sample Balance: </span><span>{sample}</span><br/>
                     </div> :
                     <div style={{
                         width: '20vw',

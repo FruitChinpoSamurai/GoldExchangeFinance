@@ -11,5 +11,10 @@ const updateCustomerBalances = (balanceObject, id) => {
     return request.then(response => response.data); 
 }
 
-const customerStatmentService = { getAllByID, updateCustomerBalances };
+const retrieveCustomerBalances = (id) => {
+    const request = axios.get(`${baseUrl}/balance/${id}`);
+    return request.then(response => response.data); 
+}
+
+const customerStatmentService = { getAllByID, updateCustomerBalances, retrieveCustomerBalances };
 export default customerStatmentService;

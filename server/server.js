@@ -237,7 +237,7 @@ app.get("/accounts", async (request, response) => {
 app.get("/accounts/:id", async (request, response) => {
     try {
         const { id } = request.params;
-        const account = await pool.query("SELECT TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_test_fees, cust_pg_charges, curr_cash_balance, curr_gold_balance, cust_primary_number FROM accounts INNER JOIN customers ON accounts.cust_id = customers.cust_id WHERE accounts.acco_id = $1;", [id]);
+        const account = await pool.query("SELECT TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_test_fees, cust_pg_charges, curr_cash_balance, curr_gold_balance, curr_sample_balance, cust_primary_number FROM accounts INNER JOIN customers ON accounts.cust_id = customers.cust_id WHERE accounts.acco_id = $1;", [id]);
         if (account.rows.length === 0) {
             response.json({ status: false, message: "ID does not exist." });
             throw new Error("incorrect data: id does not exist")
@@ -249,25 +249,26 @@ app.get("/accounts/:id", async (request, response) => {
     }
 });
 
+// Create a new transaction.
 app.post("/transactions", async (request, response) => {
     try {
-        let { acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, standard_weight, egr_weight, item_type, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold } = request.body;
+        let { acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, inventory_details, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold, current_balance, previous_balance, global_id } = request.body;
         // If what customer has paid is equal to the payable fees, we set 'true' for the Testing Transaction.
         if (transaction_type === 'Testing') {
-            let feesPaid = paid.split(' ')[1];
-            if (feesPaid === payable || feesPaid === payable.split(' ')[1] - taken_cash) {
+            let feesPaid = paid ? paid.split(' ')[1] : '';
+            if (feesPaid === payable) {
                 transferred = true;
             }
             if (test_type === 'Other' && payable === paid) {
                 transferred = true;
             }
-        } else if (transaction_type === 'Bar Exchange In' || transaction_type === 'Bar Exchange Out' || transaction_type === 'Advance' || transaction_type === 'Loan') {
+        } else if (transaction_type === 'Bar Exchange In' || transaction_type === 'Bar Exchange Out' || transaction_type === 'Advance' || transaction_type === 'Loan' || transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
             charges = null;
             fees = null;
         }
         const transaction = await pool.query(
-            "INSERT INTO transactions (acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, standard_weight, egr_weight, item_type, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43) RETURNING *",
-            [acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, standard_weight, egr_weight, item_type, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold]
+            "INSERT INTO transactions (acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, inventory_details, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold, current_balance, previous_balance, global_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44) RETURNING *",
+            [acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, JSON.stringify(inventory_details), sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold, current_balance, previous_balance, global_id]
         );
         response.json('true');
         // Set non-relevant fields 'null' and update every transaction that is tied to each 'Taken' and 'Given' transaction.
@@ -304,18 +305,22 @@ app.post("/transactions", async (request, response) => {
             } else {
                 let updateTestTransaction = await pool.query("UPDATE transactions SET date_finalized = $1, sample_returned = $2 WHERE acco_tran_id = $3 AND acco_id = $4;", [date_finalized, sample_returned, test_id, acco_id]);
             }
+            const addToWorkshop = await pool.query("INSERT INTO workshop (date_created, done_impure, done_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET done_impure = workshop.done_impure + excluded.done_impure, done_pure = workshop.done_pure + excluded.done_pure, diff_impure = workshop.total_impure - workshop.done_impure - excluded.done_impure, diff_pure = workshop.total_pure - workshop.done_pure - excluded.done_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight]);
         } else if (transaction_type === 'Testing') {
             charges = fees;
             if (test_type === 'Other') {
                 acco_tran_id = acco_tran_id + '*';
             }
+            const addToWorkshop = await pool.query("INSERT INTO workshop (date_created, total_impure, total_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET total_impure = workshop.total_impure + excluded.total_impure, total_pure = workshop.total_pure + excluded.total_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight]);
         } else if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
-            charges = premium;
-            amount = `${gross_amount}R`;
+            charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium) * Number(currentItem.count), 0);
+            const totalWeightItems = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure) * Number(currentItem.count), 0);
+            amount = `${Math.round((Number(totalWeightItems) * Number(rate)) / 11.664)}R`;
         } else if (transaction_type === 'Bar Exchange In' || transaction_type === 'Bar Exchange Out') {
-            charges = premium;
-            pure_weight = transaction_type === 'Bar Exchange In' ? standard_weight : egr_weight;
+            charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium) * Number(currentItem.count), 0);
+            total_sample_weight = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure) * Number(currentItem.count), 0);
         }
+        // *** Create entry for the transaction on both the customer and business sides. *** //
         const customerStatment = await pool.query (
             "INSERT INTO customer_statements (tran_id, acco_id, date_created, acco_tran_id, total_sample_weight, pure_weight, taken_cash, taken_gold, charges, rate, amount, received, receivable, paid, payable) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);",
             [transaction.rows[0].tran_id, acco_id, date_created, acco_tran_id, total_sample_weight, pure_weight, taken_cash, taken_gold, charges, rate, amount, received, receivable, paid, payable]
@@ -324,10 +329,147 @@ app.post("/transactions", async (request, response) => {
             "INSERT INTO business_statement (tran_id, acco_id, date_created, acco_tran_id, total_sample_weight, pure_weight, given_cash, given_gold, charges, rate, amount, paid, payable, received, receivable) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);",
             [transaction.rows[0].tran_id, acco_id, date_created, acco_tran_id, total_sample_weight, pure_weight, taken_cash, taken_gold, charges, rate, amount, received, receivable, paid, payable]
         );
+        // *** //
+        // *** Update the inventory as necessary. *** //
+        if (transaction_type.includes('Gold') || transaction_type.includes('Bar')) {
+            inventory_details.forEach(async item => {
+                let upOrDec = item.count;
+                let subtype = (item.itemType === '10 Tola Standard Bar' || item.itemType === 'Articles') ? 'NA' : item.itemSubType;
+                if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Bar Exchange In') { upOrDec = upOrDec; }
+                else if (transaction_type === 'Pure Gold Sell' || transaction_type === 'Bar Exchange Out') { upOrDec = -upOrDec; }
+                const updateInventory = await pool.query ( 
+                    "UPDATE inventory SET quantity = (SELECT quantity FROM inventory WHERE category = $1 AND subcategory = $2) + $3 WHERE category = $1 AND subcategory = $2;",
+                    [item.itemType, subtype, upOrDec]
+                );
+            });
+        }
+        // *** //
     } catch (error) {
         console.error(error.message);
-        // response.json('false');
+        response.json('false');
     }
+});
+
+// Update an existing transaction.
+app.patch("/transactions", async (request, response) => {
+    try {
+        let { tran_id, acco_id, date_created, date_finalized, dates_modified, acco_tran_id, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, inventory_details, sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold, current_balance, previous_balance, global_id } = request.body;
+        // If what customer has paid is equal to the payable fees, we set 'true' for the Testing Transaction.
+        if (transaction_type === 'Testing') {
+            let feesPaid = paid ? paid.split(' ')[1] : '';
+            if (feesPaid === payable) {
+                transferred = true;
+            }
+            if (test_type === 'Other' && payable === paid) {
+                transferred = true;
+            }
+        } else if (transaction_type === 'Bar Exchange In' || transaction_type === 'Bar Exchange Out' || transaction_type === 'Advance' || transaction_type === 'Loan' || transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
+            charges = null;
+            fees = null;
+        }
+        const transaction = await pool.query(
+            "UPDATE transactions SET date_finalized = $2, dates_modified = $3, test_id = $4, use_transaction_id = $5, first_weight = $6, second_weight = $7, third_weight = $8, total_sample_weight = $9, points = $10, pure_weight = $11, taken_cash = $12, taken_gold = $13, fees = $14, charges = $15, rate = $16, discount = $17, amount = $18, remarks = $19, test_type = $20, premium = $21, inventory_details = $22, sample_returned = $23, received = $24, receivable = $25, paid = $26, payable = $27, transaction_type = $28, transferred = $29, pending_taken_cash = $30, pending_taken_gold = $31, gold_in_cash = $32, gross_amount = $33, net_amount = $34, carried_fees = $35, include_test_fees = $36, pure_minus_gold_in_cash = $37, taken_cash_in_gold = $38, final_gold = $39, current_balance = $40 WHERE tran_id = $1 RETURNING *",
+            [tran_id, date_finalized, dates_modified, test_id, use_transaction_id, first_weight, second_weight, third_weight, total_sample_weight, points, pure_weight, taken_cash, taken_gold, fees, charges, rate, discount, amount, remarks, test_type, premium, JSON.stringify(inventory_details), sample_returned, received, receivable, paid, payable, transaction_type, transferred, pending_taken_cash, pending_taken_gold, gold_in_cash, gross_amount, net_amount, carried_fees, include_test_fees, pure_minus_gold_in_cash, taken_cash_in_gold, final_gold, current_balance]
+        );
+        response.json('true');
+        // Set non-relevant fields 'null' and update every transaction that is tied to each 'Taken' and 'Given' transaction.
+        if (transaction_type === 'Taken' || transaction_type === 'Given') {
+            amount = null;
+            charges = null;
+            fees = null;
+            transferred = true;
+            let listIDs = use_transaction_id.split(' ');
+            for(let i = 0; i < listIDs.length; i++) {
+                let updateTransactions = await pool.query(
+                    "UPDATE transactions SET transferred = 'true' WHERE acco_tran_id = $1 AND acco_id = $2;",
+                    [listIDs[i], acco_id]
+                );
+            }
+        } else if (transaction_type === 'Impure' || transaction_type === 'Exchange' || transaction_type === 'Both') {
+            if (transaction_type === 'Impure') {
+                amount = gold_in_cash + 'R';
+                taken_cash = pending_taken_cash;
+            } else if (transaction_type === 'Both') {
+                taken_cash = pending_taken_cash;
+                taken_gold = pending_taken_gold;
+                if (taken_cash_in_gold !== '' && pure_minus_gold_in_cash !== '') {
+                    amount = `${taken_cash_in_gold}G ${pure_minus_gold_in_cash}R`;
+                } else if (taken_cash_in_gold !== '') {
+                    amount = `${taken_cash_in_gold}G`;
+                } else if (pure_minus_gold_in_cash !== '') {
+                    amount = `${pure_minus_gold_in_cash}R`;
+                }
+            }
+            sample_returned = null;
+            if (include_test_fees) {
+                let updateTestTransaction = await pool.query("UPDATE transactions SET transferred = $1, date_finalized = $2, sample_returned = $3 WHERE acco_tran_id = $4 AND acco_id = $5;", [transferred, date_finalized, sample_returned, test_id, acco_id]);
+            } else {
+                let updateTestTransaction = await pool.query("UPDATE transactions SET date_finalized = $1, sample_returned = $2 WHERE acco_tran_id = $3 AND acco_id = $4;", [date_finalized, sample_returned, test_id, acco_id]);
+            }
+            const adjustWorkshop = await pool.query("INSERT INTO workshop (date_created, done_impure, done_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET done_impure = workshop.done_impure - (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) + excluded.done_impure, done_pure = workshop.done_pure - (SELECT pure_weight FROM transactions WHERE tran_id = $4) + excluded.done_pure, diff_impure = workshop.total_impure - workshop.done_impure + (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) - excluded.done_impure, diff_pure = workshop.total_pure - workshop.done_pure + (SELECT pure_weight FROM transactions WHERE tran_id = $4) - excluded.done_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight, tran_id]);
+        } else if (transaction_type === 'Testing') {
+            charges = fees;
+            if (test_type === 'Other') {
+                acco_tran_id = acco_tran_id + '*';
+            }
+            const adjustWorkshop = await pool.query("INSERT INTO workshop (date_created, total_impure, total_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET total_impure = workshop.total_impure - (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) + excluded.total_impure, total_pure = workshop.total_pure - (SELECT pure_weight FROM transactions WHERE tran_id = $4) + excluded.total_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight, tran_id]);
+        } else if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
+            charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium), 0);
+            const totalWeightItems = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure), 0);
+            amount = `${Math.round((Number(totalWeightItems) * Number(state.rate)) / 11.664)}R`;
+        } else if (transaction_type === 'Bar Exchange In' || transaction_type === 'Bar Exchange Out') {
+            charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium), 0);
+            total_sample_weight = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure), 0);
+        }
+        const customerStatment = await pool.query (
+            "UPDATE customer_statements SET total_sample_weight = $2, pure_weight = $3, taken_cash = $4, taken_gold = $5, charges = $6, rate = $7, amount = $8, received = $9, receivable = $10, paid = $11, payable = $12 WHERE tran_id = $1;",
+            [tran_id, total_sample_weight, pure_weight, taken_cash, taken_gold, charges, rate, amount, received, receivable, paid, payable]
+        );
+        const businessStatment = await pool.query (
+            "UPDATE business_statement SET total_sample_weight = $2, pure_weight = $3, given_cash = $4, given_gold = $5, charges = $6, rate = $7, amount = $8, paid = $9, payable = $10, received = $11, receivable = $12 WHERE tran_id = $1;",
+            [tran_id, total_sample_weight, pure_weight, taken_cash, taken_gold, charges, rate, amount, received, receivable, paid, payable]
+        );
+        // *** Update the inventory as necessary. *** //
+        if (transaction_type.includes('Gold') || transaction_type.includes('Bar')) {
+            inventory_details.forEach(async item => {
+                let upOrDec = item.count;
+                let subtype = (item.itemType === '10 Tola Standard Bar' || item.itemType === 'Articles') ? 'NA' : item.itemSubType;
+                if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Bar Exchange In') { upOrDec = upOrDec; }
+                else if (transaction_type === 'Pure Gold Sell' || transaction_type === 'Bar Exchange Out') { upOrDec = -upOrDec; }
+                const updateInventory = await pool.query ( 
+                    "UPDATE inventory SET quantity = (SELECT quantity FROM inventory WHERE category = $1 AND subcategory = $2) + $3 WHERE category = $1 AND subcategory = $2;",
+                    [item.itemType, subtype, upOrDec]
+                );
+            });
+        }
+        // *** //
+    } catch (error) {
+        console.error(error.message);
+        response.json('false');
+    }
+});
+
+// Update a transaction's closing balance for billing purposes; updateTransactionClosingBalance().
+app.patch("/transactions/:acco_id/:acco_tran_id", async (request, response) => {
+    try {
+        const { acco_id, acco_tran_id } = request.params;
+        const { balance, balances, updateFrom } = request.body;
+        if (balance) {
+            const updateTransactionClosingBalance = await pool.query("UPDATE transactions SET current_balance = $3 WHERE acco_id = $1 AND acco_tran_id = $2;", [acco_id, acco_tran_id, balance]);
+        }
+        if (balances) {
+            const balancesFrom = balances.filter((idAndBalance) => updateFrom <= idAndBalance[0]);
+            const balancesFromIDs = balancesFrom.map((item) => item[0]);
+            const balancesFromBalances = balancesFrom.map((item) => item[1]);
+            const updateTransactionCurrentBalances = await pool.query("UPDATE transactions SET current_balance = bulk_query.updated_balance FROM (SELECT * FROM UNNEST($1::INT[], $2::TEXT[]) AS t(tran_id, updated_balance)) AS bulk_query WHERE transactions.tran_id = bulk_query.tran_id;", [balancesFromIDs, balancesFromBalances]);
+            const updateTransactionPreviousBalances = await pool.query("UPDATE transactions SET previous_balance = bulk_query.updated_balance FROM (SELECT * FROM UNNEST($1::INT[], $2::TEXT[]) AS t(tran_id, updated_balance)) AS bulk_query WHERE transactions.tran_id = bulk_query.tran_id;", [balancesFromIDs.slice(1), balancesFromBalances.slice(0, -1)]);
+        }
+        response.json('true');
+    } catch (error) {
+        console.error(error.message);
+        response.json('false');
+    }
+
 });
 
 // getAccoTranID();
@@ -459,6 +601,17 @@ app.post("/customer_statement/balance/:id", async (request, response) => {
     }
 });
 
+// Retrieve a customer's latest account balances.
+app.get("/customer_statement/balance/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+        const balances = await pool.query("SELECT curr_cash_balance, curr_gold_balance, curr_sample_balance FROM accounts WHERE acco_id = $1;", [id]);
+        response.json(balances.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
 // Retrieve all the transactions from the business side for the statement; getAll().
 app.get("/business_statement/:title/:date", async (request, response) => {
     try {
@@ -516,6 +669,126 @@ app.post("/business_statement/balance/", async (request, response) => {
         if (error.code === '23505') {
             response.json("Balances Already Updated")
         }
+    }
+});
+
+// Retrieve all suggested transactions; getAll() in suggestedTransaction.js.
+app.get("/suggested_transaction", async (request, response) => {
+    try {
+        const suggestedTransactions = await pool.query("SELECT * FROM suggested_transactions;")
+        response.json(suggestedTransactions.rows);
+    } catch (error) {
+        response.json('Failed to retrieve suggested transactions data. Please try again.');
+        console.log(error.message);
+    }
+});
+
+// Create a suggested transaction; createSuggestedTransactions().
+app.post("/suggested_transaction", async (request, response) => {
+    try {
+        const { transaction_id, transaction_date, customer_name, contact, sample_weight, expected_points, expected_pure, discussed_rate, remarks } = request.body;
+        const suggestedTransaction = await pool.query("INSERT INTO suggested_transactions (suggested_transaction_id, transaction_date, customer_name, contact, sample_weight, expected_points, expected_pure, discussed_rate, remarks) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING 0;", [Number(transaction_id), transaction_date, customer_name, contact, sample_weight, expected_points, expected_pure, discussed_rate, remarks]);
+        response.json(suggestedTransaction.rows[0]);
+    } catch (error) {
+        response.json(error.message);
+    }
+});
+
+// Retrieve latest count of suggested transactions; getSuggestedCount().
+app.get("/suggested_transaction/counts", async (request, response) => {
+    try {
+        const latestTranID = await pool.query("SELECT TO_CHAR(Count(*) + 1, '000000000') AS tran_id FROM suggested_transactions;");
+        response.json(latestTranID.rows[0].tran_id);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Retrieve all data to populate the inventory screen; getAllInventoryData().
+app.get("/inventory/all", async (request, response) => {
+    try {
+        const inventoryData = await pool.query("SELECT * FROM inventory ORDER BY item_id ASC;");
+        const metalData = await pool.query("SELECT * FROM metals;");
+        response.json({ inventoryData: inventoryData.rows, metalData: metalData.rows }); 
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Retrieve the latest business-side gold balance value; getGoldBalance().
+app.get("/inventory/balance", async (request, response) => {
+    try {
+        const businessBalanceData = await pool.query("SELECT gold_balance FROM business_balances WHERE balance_id=(SELECT MAX(balance_id) FROM business_balances);");
+        response.json(businessBalanceData.rows[0].gold_balance); 
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Retrieve the latest 5 management related requests; getAllManagementData().
+app.get("/management", async (request, response) => {
+    try {
+        const donations = await pool.query("SELECT * FROM donations ORDER BY donation_id DESC LIMIT 5;");
+        const generalExpenses = await pool.query("SELECT * FROM general_expenses ORDER BY g_expense_id DESC LIMIT 5;");
+        const salaries = await pool.query("SELECT * FROM salaries ORDER BY salary_id DESC LIMIT 5;");
+        const capitalGainLoss = await pool.query("SELECT * FROM capital_gain_loss ORDER BY capital_gl_id DESC LIMIT 5;");
+        const inventoryGoldGainLoss = await pool.query("SELECT * FROM inventory_gold_gain_loss ORDER BY invengold_gl_id DESC LIMIT 5;");
+        response.json({
+            donationsData: donations.rows,
+            generalExpensesData: generalExpenses.rows,
+            salariesData: salaries.rows,
+            capitalGainLossData: capitalGainLoss.rows,
+            inventoryGoldGainLossData: inventoryGoldGainLoss.rows
+        })
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Retrieve the values for weights and corresponding prices for BEI, BEO, PGB, and PGS; getWeightPriceMeta().
+app.get("/meta", async (request, response) => {
+    try {
+        const transMeta = await pool.query("SELECT * FROM standard_weights_to_prices ORDER BY gold_weight ASC;");
+        response.json(transMeta.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Update the price of the specific weight class for BEI, BEO, PGB, and PGS; updateWeightPriceMeta().
+app.patch("/meta", async (request, response) => {
+    try {
+        const { price, weightClass } = request.body;
+        const updateMeta = await pool.query("UPDATE standard_weights_to_prices SET price = $1 WHERE weight_class = $2;", [price, weightClass]);
+        response.json(true);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Fetch workshop data; getWorkhopData().
+app.get("/workshop", async (request, response) => {
+    try {
+        const workshopData = await pool.query("SELECT * FROM workshop ORDER BY workshop_id DESC;");
+        response.json(workshopData.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Update the actual and missing impure values for a record in the workshop; updateWorkshopRow().
+app.patch("/workshop", async (request, response) => {
+    try {
+        const { type, actualImpure, missingImpure, shopImpure, shopPure, shopMix, finalPure, dateCreated } = request.body;
+        if (type === 'actual') {
+            const updateWorkshop = await pool.query("UPDATE workshop SET actual_impure = $1, missing_impure = $2 WHERE date_created = $3;", [actualImpure, missingImpure, dateCreated]);
+        } else {
+            const updateWorkshop = await pool.query("UPDATE workshop SET shop_impure = $1, shop_pure = $2, shop_mix = $3, final_pure = $4 WHERE date_created = $5;", [shopImpure, shopPure, shopMix, finalPure, dateCreated]);
+        }
+        const workshopData = await pool.query("SELECT * FROM workshop ORDER BY workshop_id DESC;");
+        response.json(workshopData.rows);
+    } catch (error) {
+        console.error(error.message);
     }
 });
 
