@@ -305,13 +305,12 @@ app.post("/transactions", async (request, response) => {
             } else {
                 let updateTestTransaction = await pool.query("UPDATE transactions SET date_finalized = $1, sample_returned = $2 WHERE acco_tran_id = $3 AND acco_id = $4;", [date_finalized, sample_returned, test_id, acco_id]);
             }
-            const addToWorkshop = await pool.query("INSERT INTO workshop (date_created, done_impure, done_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET done_impure = workshop.done_impure + excluded.done_impure, done_pure = workshop.done_pure + excluded.done_pure, diff_impure = workshop.total_impure - workshop.done_impure - excluded.done_impure, diff_pure = workshop.total_pure - workshop.done_pure - excluded.done_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight]);
+            const addToWorkshop = await pool.query("INSERT INTO workshop (date_created, finalized_impure, finalized_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET finalized_impure = workshop.finalized_impure + excluded.finalized_impure, finalized_pure = workshop.finalized_pure + excluded.finalized_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight]);
         } else if (transaction_type === 'Testing') {
             charges = fees;
             if (test_type === 'Other') {
                 acco_tran_id = acco_tran_id + '*';
             }
-            const addToWorkshop = await pool.query("INSERT INTO workshop (date_created, total_impure, total_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET total_impure = workshop.total_impure + excluded.total_impure, total_pure = workshop.total_pure + excluded.total_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight]);
         } else if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
             charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium) * Number(currentItem.count), 0);
             const totalWeightItems = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure) * Number(currentItem.count), 0);
@@ -406,13 +405,12 @@ app.patch("/transactions", async (request, response) => {
             } else {
                 let updateTestTransaction = await pool.query("UPDATE transactions SET date_finalized = $1, sample_returned = $2 WHERE acco_tran_id = $3 AND acco_id = $4;", [date_finalized, sample_returned, test_id, acco_id]);
             }
-            const adjustWorkshop = await pool.query("INSERT INTO workshop (date_created, done_impure, done_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET done_impure = workshop.done_impure - (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) + excluded.done_impure, done_pure = workshop.done_pure - (SELECT pure_weight FROM transactions WHERE tran_id = $4) + excluded.done_pure, diff_impure = workshop.total_impure - workshop.done_impure + (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) - excluded.done_impure, diff_pure = workshop.total_pure - workshop.done_pure + (SELECT pure_weight FROM transactions WHERE tran_id = $4) - excluded.done_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight, tran_id]);
+            const adjustWorkshop = await pool.query("INSERT INTO workshop (date_created, finalized_impure, finalized_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET finalized_impure = workshop.finalized_impure - (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) + excluded.finalized_impure, finalized_pure = workshop.finalized_pure - (SELECT pure_weight FROM transactions WHERE tran_id = $4) + excluded.finalized_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight, tran_id]);
         } else if (transaction_type === 'Testing') {
             charges = fees;
             if (test_type === 'Other') {
                 acco_tran_id = acco_tran_id + '*';
             }
-            const adjustWorkshop = await pool.query("INSERT INTO workshop (date_created, total_impure, total_pure) VALUES ($1, $2, $3) ON CONFLICT (date_created) DO UPDATE SET total_impure = workshop.total_impure - (SELECT total_sample_weight FROM transactions WHERE tran_id = $4) + excluded.total_impure, total_pure = workshop.total_pure - (SELECT pure_weight FROM transactions WHERE tran_id = $4) + excluded.total_pure;", [date_created.split(' ')[0], total_sample_weight, pure_weight, tran_id]);
         } else if (transaction_type === 'Pure Gold Buy' || transaction_type === 'Pure Gold Sell') {
             charges = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.premium), 0);
             const totalWeightItems = inventory_details.reduce((accumulator, currentItem) => accumulator + Number(currentItem.pure), 0);
@@ -779,12 +777,34 @@ app.get("/workshop", async (request, response) => {
 // Update the actual and missing impure values for a record in the workshop; updateWorkshopRow().
 app.patch("/workshop", async (request, response) => {
     try {
-        const { type, actualImpure, missingImpure, shopImpure, shopPure, shopMix, finalPure, dateCreated } = request.body;
+        const { type, actualImpure, missingImpure, impureAtWorkshop, workshopMissingImpure, workshopMixImpure, points, workshopMixPure, finalPure, dateCreated } = request.body;
         if (type === 'actual') {
             const updateWorkshop = await pool.query("UPDATE workshop SET actual_impure = $1, missing_impure = $2 WHERE date_created = $3;", [actualImpure, missingImpure, dateCreated]);
         } else {
-            const updateWorkshop = await pool.query("UPDATE workshop SET shop_impure = $1, shop_pure = $2, shop_mix = $3, final_pure = $4 WHERE date_created = $5;", [shopImpure, shopPure, shopMix, finalPure, dateCreated]);
+            const updateWorkshop = await pool.query("UPDATE workshop SET impure_at_workshop = $1, workshop_missing_impure = $2, workshop_mix_impure = $3, points = $4, workshop_mix_pure = $5, final_pure = $6 WHERE date_created = $7;", [impureAtWorkshop, workshopMissingImpure, workshopMixImpure, points, workshopMixPure, finalPure, dateCreated]);
         }
+        const workshopData = await pool.query("SELECT * FROM workshop ORDER BY workshop_id DESC;");
+        response.json(workshopData.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Retrieve all finalized transactions that have occured in a day.
+app.get("/workshop/finalized", async (request, response) => {
+    try {
+        const currentDate = new Date().toLocaleString().split(', ')[0];
+        const finalizedTransactions = await pool.query("SELECT * FROM transactions WHERE date_finalized LIKE $1 AND transaction_type IN ('Impure', 'Exchange', 'Both') ORDER BY tran_id DESC;", [currentDate + '%']);
+        response.json(finalizedTransactions.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+app.patch("/workshop/sendoff", async (request, response) => {
+    try {
+        const { impure, pure, diff_impure, diff_pure, date_created } = request.body;
+        const updateWorkshop = await pool.query("UPDATE workshop SET to_workshop_impure = $1, to_workshop_pure = $2, remaining_impure = $3, remaining_pure = $4 WHERE date_created = $5;", [impure, pure, diff_impure, diff_pure, date_created]);
         const workshopData = await pool.query("SELECT * FROM workshop ORDER BY workshop_id DESC;");
         response.json(workshopData.rows);
     } catch (error) {

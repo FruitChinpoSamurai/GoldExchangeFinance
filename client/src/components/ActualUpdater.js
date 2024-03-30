@@ -16,7 +16,7 @@ const ActualUpdater = ({ updateData, handleDisplay, handleTableUpdate }) => {
         e.preventDefault();
         let body = null;
         if(updateData[2] === 'actual') {
-            const missingImpure = Math.round((updateData[0] - actualImpure) * 100) / 100;
+            const missingImpure = Math.round((Number(updateData[0]) - Number(actualImpure)) * 100) / 100;
             body = { type: type, actualImpure: actualImpure, missingImpure: missingImpure, dateCreated: updateData[1] }
         } else {
             const finalPure = Math.round((Number(shopPure) + Number(shopMix) - Number(updateData[0])) * 100) / 100;

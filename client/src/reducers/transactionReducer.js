@@ -428,8 +428,8 @@ const transactionReducer = (state, action) => {
                 pendingTakeGold: taken_gold || '',
                 carriedFees: fees,
                 testTransferredDue: transferred,
-                cPayable: state.transactionType === 'Exchange' ? `${charges * total_sample_weight}R` : '',
-                cPaid: state.transactionType === 'Exchange' ? `${charges * total_sample_weight}R` : '',
+                cPayable: state.transactionType === 'Exchange' ? `${Math.round(charges * total_sample_weight)}R` : '',
+                cPaid: state.transactionType === 'Exchange' ? `${Math.round(charges * total_sample_weight)}R` : '',
                 // Possible bug for exchange in statement.
                 cReceivable: '',
                 cReceived: state.transactionType === 'Exchange' ? `${pure_weight}G` : ''

@@ -73,7 +73,14 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                     }
                 </div>
                 <div className="col">
-                    <></>
+                    <div className="row">
+                        <div className="col">
+                            <input type="number" className="form-control" name="rattiIn" value={formData.rattiIn} placeholder="Ratti In" disabled />
+                        </div>
+                        <div className="col">
+                            <input type="number" className="form-control" name="rattiOut" value={formData.rattiOut} placeholder="Ratti Out" disabled />
+                        </div>
+                    </div>
                 </div>
                 <div className="col">
                     <></>
@@ -92,7 +99,7 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                     }
                 </div>
                 <div className="col">
-                    <></>
+                    <input type="number" className="form-control" name="karats" value={formData.karats} placeholder="Karats" disabled />
                 </div>
                 <div className="col">
                     <></>

@@ -649,9 +649,16 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                 if (cleanedFormData[key] !== 'Bar Exchange In' && cleanedFormData[key] !== 'Bar Exchange Out' && cleanedFormData[key] !== 'Pure Gold Buy' && cleanedFormData[key] !== 'Pure Gold Sell') {
                     cleanedFormData['inventoryDetails'] = null;
                 }
-                if (cleanedFormData[key] === 'Impure' || cleanedFormData[key] === 'Exchange' || cleanedFormData[key] === 'Tezab' | cleanedFormData[key] === 'Pure Gold Buy' || cleanedFormData[key] === 'Pure Gold Sell' || cleanedFormData[key] === 'Bar Exchange In' || cleanedFormData[key] === 'Bar Exchange Out') {
+                if (cleanedFormData[key] === 'Impure' || cleanedFormData[key] === 'Tezab' | cleanedFormData[key] === 'Pure Gold Buy' || cleanedFormData[key] === 'Pure Gold Sell' || cleanedFormData[key] === 'Bar Exchange In' || cleanedFormData[key] === 'Bar Exchange Out') {
                     cleanedFormData['fees'] = null;
                     if (cleanedFormData['cReceived'] === cleanedFormData['cReceivable'] && cleanedFormData['cPaid'] === cleanedFormData['cPayable'] ) {
+                        cleanedFormData['transferredDue'] = true;
+                        cleanedFormData['dateFinalized'] = `${currentDate[0]} ${currentDate[1]}`;
+                    }
+                }
+                if (cleanedFormData[key] === 'Exchange') {
+                    cleanedFormData['fees'] = null;
+                    if (cleanedFormData['cPaid'] === cleanedFormData['cPayable']) {
                         cleanedFormData['transferredDue'] = true;
                         cleanedFormData['dateFinalized'] = `${currentDate[0]} ${currentDate[1]}`;
                     }
