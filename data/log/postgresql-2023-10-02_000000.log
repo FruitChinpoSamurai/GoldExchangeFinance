@@ -1,6 +1,0 @@
-2023-10-02 21:03:08.054 PKT [3084] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
-	
-2023-10-02 21:03:08.054 PKT [9500] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
-	
-2023-10-02 21:03:08.054 PKT [11232] LOG:  could not receive data from client: An existing connection was forcibly closed by the remote host.
-	

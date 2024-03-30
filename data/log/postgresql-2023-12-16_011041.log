@@ -1,7 +1,0 @@
-2023-12-16 01:10:41.859 PKT [6724] LOG:  database system shutdown was interrupted; last known up at 2023-12-16 01:10:12 PKT
-2023-12-16 01:10:42.735 PKT [6724] LOG:  database system was not properly shut down; automatic recovery in progress
-2023-12-16 01:10:42.740 PKT [6724] LOG:  redo starts at 0/7011908
-2023-12-16 01:10:42.743 PKT [6724] LOG:  invalid record length at 0/7011940: expected at least 24, got 0
-2023-12-16 01:10:42.743 PKT [6724] LOG:  redo done at 0/7011908 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
-2023-12-16 01:10:42.755 PKT [6708] LOG:  checkpoint starting: end-of-recovery immediate wait
-2023-12-16 01:10:42.764 PKT [6708] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.002 s, total=0.010 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/7011940, redo lsn=0/7011940
