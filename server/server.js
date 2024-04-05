@@ -1,4 +1,5 @@
 const express = require("express");
+// const path = require('path');
 const app = express();
 const cors = require("cors");
 const pool = require("./database");
@@ -508,9 +509,9 @@ app.get("/transactions", async (request, response) => {
 });
 
 // getTestingTransaction();
-app.get("/transactions/:id/testing/:test", async (request, response) => {
+app.get("/transactions/:id/testing/:test/:type", async (request, response) => {
     try {
-        const { id, test } = request.params;
+        const { id, test, type } = request.params;
         if (test.slice(0, 2) !== 'TE') {
             response.json({ status: false, data: 'Not a Testing transaction.' });    
         } else {
@@ -521,7 +522,13 @@ app.get("/transactions/:id/testing/:test", async (request, response) => {
                 if (testingData.rows[0].date_finalized !== null) {
                     response.json({ status: false, data: 'Already finalized.'})
                 } else {
-                    response.json({ status: true, data: testingData.rows[0] });
+                    if (testingData.rows[0].taken_gold && (type === 'Impure' || type === 'Exchange')) {
+                        response.json({ status: false, data: 'Invalid dealing.'})
+                    } else if (testingData.rows[0].taken_cash && type === 'Exchange') {
+                        response.json({ status: false, data: 'Invalid dealing.'})
+                    } else {
+                        response.json({ status: true, data: testingData.rows[0] });
+                    }
                 }
             }
         }
@@ -813,6 +820,13 @@ app.patch("/workshop/sendoff", async (request, response) => {
 });
 
 // ------ //
+
+// For production.
+// app.use(express.static(path.join(__dirname, 'build')));
+
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 app.listen(5000, () => {
     console.log("Server has started on port 5000.");

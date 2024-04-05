@@ -32,8 +32,8 @@ const getAllAccoTranIDs = id => {
     return request.then(response => response.data);
 }
 
-const getTestingTransaction = (accountID, testID) => {
-    const request = axios.get(`${baseUrl}/${accountID}/testing/${testID}`);
+const getTestingTransaction = (accountID, testID, type) => {
+    const request = axios.get(`${baseUrl}/${accountID}/testing/${testID}/${type}`);
     return request.then(response => response.data);
 }
 

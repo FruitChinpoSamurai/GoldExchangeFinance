@@ -19,7 +19,7 @@ class LineBreakTransformer {
 const scaleRead = async () => {
     // let usbVendorId = 0x1A86;
   const port = await navigator.serial.requestPort();
-  await port.open({ baudRate: 9600, dataBits: 8, stopBits: 1, parity: `none`, flowControl: `none` });
+  await port.open({ baudRate: 2400, dataBits: 7, stopBits: 1, parity: `even`, flowControl: `none` });
   const textDecoder = new TextDecoderStream();
   const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
   const reader = textDecoder.readable.pipeThrough(new TransformStream(new LineBreakTransformer())).getReader();

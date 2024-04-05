@@ -88,34 +88,34 @@ const transactionReducer = (state, action) => {
                     return {
                         ...state,
                         fees: fees,
-                        cPaid: custPaid.replace(regex, ''),
+                        // cPaid: custPaid.replace(regex, ''),
                         cPayable: custPayable.replace(regex, ''),
-                        bReceived: busiReceived.replace(regex, ''),
+                        // bReceived: busiReceived.replace(regex, ''),
                     }
                 } else if (custPaid === '' && custPayable === '' && busiReceived === '') {
                     return {
                         ...state,
                         fees: fees,
-                        cPaid: `${fees}R`,
+                        // cPaid: `${fees}R`,
                         cPayable: `${fees}R`,
-                        bReceived: `${fees}R`,
+                        // bReceived: `${fees}R`,
                     }
                 } else {
                     return {
                         ...state,
                         fees: fees,
-                        cPaid: custPaid.replace(regex, `${fees}R`),
+                        // cPaid: custPaid.replace(regex, `${fees}R`),
                         cPayable: custPayable.replace(regex, `${takeCash + fees}R`),
-                        bReceived: busiReceived.replace(regex, `${fees}R`),
+                        // bReceived: busiReceived.replace(regex, `${fees}R`),
                     }
                 }
             } else {
                 return {
                     ...state,
                     fees: '',
-                    cPaid: custPaid.replace(regex, ''),
+                    // cPaid: custPaid.replace(regex, ''),
                     cPayable: custPayable.replace(regex, ''),
-                    bReceived: busiReceived.replace(regex, ''),
+                    // bReceived: busiReceived.replace(regex, ''),
                 }
             }
         };
@@ -132,7 +132,7 @@ const transactionReducer = (state, action) => {
                     takeCash: '',
                     cPayable: fees ? goldTaken ? `${goldTaken}G ${fees}R` : `${fees}R` : state.cPayable.replace(regex, ''),
                     cReceivable: state.cReceivable.replace(regex, ''),
-                    cReceived: state.cReceived.replace(regex, '')
+                    // cReceived: state.cReceived.replace(regex, '')
                 }    
             } else {
                 if (goldTaken === 0) {
@@ -141,7 +141,7 @@ const transactionReducer = (state, action) => {
                         takeCash: action.payload,
                         cPayable: `${cashTaken + fees}R`,
                         cReceivable: `${cashTaken}R`,
-                        cReceived: `${cashTaken}R`,
+                        // cReceived: `${cashTaken}R`,
                     }    
                 } else {
                     return {
@@ -149,7 +149,7 @@ const transactionReducer = (state, action) => {
                         takeCash: action.payload,
                         cPayable: `${goldTaken}G ${cashTaken + fees}R`,
                         cReceivable: `${goldTaken}G ${cashTaken}R`,
-                        cReceived: `${goldTaken}G ${cashTaken}R`,
+                        // cReceived: `${goldTaken}G ${cashTaken}R`,
                     }
                 }
             }
@@ -167,7 +167,7 @@ const transactionReducer = (state, action) => {
                     takeGold: '',
                     cPayable: fees ? cashTaken ? `${cashTaken + fees}R` : `${fees}R` : state.cPayable.replace(regex, ''),
                     cReceivable: state.cReceivable.replace(regex, ''),
-                    cReceived: state.cReceived.replace(regex, '')
+                    // cReceived: state.cReceived.replace(regex, '')
                 }    
             } else {
                 if (cashTaken === 0) {
@@ -176,7 +176,7 @@ const transactionReducer = (state, action) => {
                         takeGold: action.payload,
                         cPayable: `${goldTaken}G ${fees}R`,
                         cReceivable: `${goldTaken}G`,
-                        cReceived: `${goldTaken}G`,
+                        // cReceived: `${goldTaken}G`,
                     }    
                 } else {
                     return {
@@ -184,7 +184,7 @@ const transactionReducer = (state, action) => {
                         takeGold: action.payload,
                         cPayable: `${goldTaken}G ${cashTaken + fees}R`,
                         cReceivable: `${goldTaken}G ${cashTaken}R`,
-                        cReceived: `${goldTaken}G ${cashTaken}R`,
+                        // cReceived: `${goldTaken}G ${cashTaken}R`,
                     }
                 }
             }
@@ -203,10 +203,10 @@ const transactionReducer = (state, action) => {
                 ...state,
                 testType: action.payload,
                 cPayable: state.fees ? `${state.fees}R` : '',
-                cPaid: state.fees ? `${state.fees}R` : '',
+                // cPaid: state.fees ? `${state.fees}R` : '',
                 cReceivable: '',
                 cReceived: '',
-                bReceived: state.fees ? `${state.fees}R` : '',
+                // bReceived: state.fees ? `${state.fees}R` : '',
                 pure: '',
                 points: '',
                 remarks: '',
@@ -238,8 +238,8 @@ const transactionReducer = (state, action) => {
                         totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                         pure: '',
                         cPayable: payable,
-                        cPaid: `${fees}R`,
-                        bReceived: `${fees}R`
+                        // cPaid: `${fees}R`,
+                        // bReceived: `${fees}R`
                     };
                 } else {
                     return {
@@ -248,8 +248,8 @@ const transactionReducer = (state, action) => {
                         totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                         pure: parseFloat((newWeight + total) * (points / 1000)).toFixed(2),
                         cPayable: payable,
-                        cPaid: `${parseFloat((newWeight + total) * (points / 1000)).toFixed(2)}G  ${fees}R`,
-                        bReceived: `${parseFloat((newWeight + total) * (points / 1000)).toFixed(2)}G ${fees}R`
+                        cPaid: `${parseFloat((newWeight + total) * (points / 1000)).toFixed(2)}G`,
+                        bReceived: `${parseFloat((newWeight + total) * (points / 1000)).toFixed(2)}G`
                     };
                 }
             } else {
@@ -273,8 +273,8 @@ const transactionReducer = (state, action) => {
                         let busiReceived = `${pureW}G  ${fees}R`;
                         if (pureW === '0.00') {
                             pureW = '';
-                            custPaid = `${fees}R`;
-                            busiReceived = `${fees}R`;
+                            // custPaid = `${fees}R`;
+                            // busiReceived = `${fees}R`;
                         }
                         return {
                             ...state,
@@ -282,8 +282,8 @@ const transactionReducer = (state, action) => {
                             totalWeight: Math.round((newWeight + total) * 1000) / 1000,
                             pure: pureW,
                             cPayable: payable,
-                            cPaid: custPaid,
-                            bReceived: busiReceived
+                            // cPaid: custPaid,
+                            // bReceived: busiReceived
                         };
                     }
                 } 
@@ -309,8 +309,8 @@ const transactionReducer = (state, action) => {
                     [action.field]: action.payload,
                     pure: pureW,
                     cPayable: payable,
-                    cPaid: `${pureW}G ${testFees}R`,
-                    bReceived: `${pureW}G ${testFees}R`
+                    cPaid: `${pureW}G`,
+                    bReceived: `${pureW}G`
                 };
             } else {
                 let custPaid = state.cPaid;
@@ -320,8 +320,8 @@ const transactionReducer = (state, action) => {
                         ...state,
                         [action.field]: '',
                         pure: '',
-                        cPaid: `${testFees}R`,
-                        bReceived: `${testFees}R`
+                        // cPaid: `${testFees}R`,
+                        // bReceived: `${testFees}R`
                     };    
                 } else {
                     return {
@@ -450,14 +450,14 @@ const transactionReducer = (state, action) => {
                     cReceived: '',
                     cPaid: '',
                     grossAmount: '',
-                    newAmount: ''
+                    netAmount: ''
                 }    
             } else {
                 let goldToCash = Math.round((action.payload * state.pure) / 11.664);
                 let pureMinusPendingGoldInCash = Math.round((action.payload * (state.pure - state.pendingTakeGold)) / 11.664);
                 let pendingTakeCashInGold = Math.round(((state.pendingTakeCash * 11.664) / action.payload) * 100) / 100;
                 let gross = goldToCash - state.charges;
-                let net = gross + state.pendingTakeCash;
+                let net = gross - state.pendingTakeCash;
                 let receivable = '';
                 let paid = '';
                 let payable = '';
@@ -525,7 +525,7 @@ const transactionReducer = (state, action) => {
                     ...state,
                     includeTestFees: action.payload,
                     charges: newCharges,
-                    netAmount: state.transactionType === 'Exchange' ? '' : state.goldInCash - newCharges + state.pendingTakeCash,
+                    netAmount: state.transactionType === 'Exchange' ? '' : state.goldInCash - newCharges - state.pendingTakeCash,
                     cPayable: state.transactionType === 'Exchange' ? newCharges : '',
                     cPaid: state.transactionType === 'Exchange' ? newCharges : '',
                 }

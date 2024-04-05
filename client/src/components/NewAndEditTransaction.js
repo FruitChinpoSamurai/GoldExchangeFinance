@@ -588,7 +588,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
     }
 
     const pullTestingTransaction = () => {
-        transactionService.getTestingTransaction(parseInt(formData.accountID), formData.testID)
+        transactionService.getTestingTransaction(parseInt(formData.accountID), formData.testID, formData.transactionType)
             .then(response => {
                 if (response.status) {
                     handleTestingSelectInitial(response.data);
