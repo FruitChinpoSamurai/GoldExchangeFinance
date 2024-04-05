@@ -1,3 +1,0 @@
-2023-10-26 00:11:26.815 PKT [6360] LOG:  database system was shut down at 2023-10-26 00:10:59 PKT
-2023-10-26 00:16:26.800 PKT [6344] LOG:  checkpoint starting: time
-2023-10-26 00:16:26.823 PKT [6344] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.002 s, total=0.024 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/6E23900, redo lsn=0/6E238C8
