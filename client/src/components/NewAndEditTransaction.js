@@ -92,7 +92,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
     const [custDetails, setCustDetails] = useState(null) // Customer details at top right of modal.
     const [formData, dispatch] = useReducer(transactionReducer, initialFormState);
     const [transactionID, setTransactionID] = useState('');
-    const [buttonDisable, setButtonDisable] = useState(false);
+    const [buttonDisable, setButtonDisable] = useState(true);
     const [alert, setAlert] = useState('');
     // const [otherRemarkValidity, setOtherRemarkValidity] = useState(false);
     const [editMode, setEditMode] = useState(false);
@@ -584,6 +584,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                 setCustDetails(response);
                 if (response.status) {
                     handleAccountSelectInitial(response);
+                    setButtonDisable(false);
                 }
             })
             .catch(() => setCustDetails('Something went wrong.'));
@@ -866,7 +867,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                                 <div className="row">
                                     <div className="col">
                                         <div className="input-group mb-3">
-                                            <input type="number" className="form-control" value={accountID || formData.accountID} placeholder="Account ID..." onChange={(e) => setAccountID(e.target.value)} disabled={editMode} />
+                                            <input type="number" className="form-control" value={accountID || formData.accountID} placeholder="Account ID..." onChange={(e) => setAccountID(e.target.value)} disabled={editMode} required />
                                             <button className="btn btn-outline-secondary" type="button" onClick={() => pullAccount()} disabled={editMode}>Select</button>
                                         </div>
                                     </div>

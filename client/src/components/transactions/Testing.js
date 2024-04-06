@@ -21,7 +21,7 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                             ? 
                                 <>
                                     <div className="input-group">
-                                        <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="First Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" />
+                                        <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="First Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" required />
                                         <button className="btn btn-outline-secondary" type="button" onClick={() => handleWeightsChange(scaleReading, "firstWeight")}>Set</button>
                                     </div>
                                 </>
