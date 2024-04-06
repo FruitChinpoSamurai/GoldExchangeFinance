@@ -21,6 +21,8 @@ const Dashboard = () => {
     const [transactionAlert, setTransactionAlert] = useState('');
     const [custStatementHeader, setCustStatementHeader] = useState({});
     const [display, setDisplay] = useState(false);
+    const [showScale, setShowScale] = useState(false);
+    const [scaleReading, setScaleReading] = useState(0);
 
     useEffect(() => {
         setTimeout(() => {
@@ -95,6 +97,11 @@ const Dashboard = () => {
         setDisplay(!display)
     }
 
+    const handleScaleReading = () => {
+        setShowScale(!showScale);
+        readService.scaleRead(setScaleReading);
+    }
+
     const switchView = (view) => {
         switch (view) {
             case 'Customers':
@@ -148,7 +155,7 @@ const Dashboard = () => {
                                 }
                             </div>
                         </div>
-                        <NewAndEditTransaction handleAlert={setTransactionAlert} successTransactionHandle={itemClicked} />
+                        <NewAndEditTransaction handleAlert={setTransactionAlert} successTransactionHandle={itemClicked} scaleReading={scaleReading} />
                         {
                             transactionAlert !== '' && <AlertPopup status={transactionAlert} />
                         }
@@ -158,10 +165,19 @@ const Dashboard = () => {
     }
 
     return (
-        <>
-            <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={(e) => displayCalculator(e)}></i>
-            <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
-            <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={async () => readService.scaleRead()}></i>
+        <>  
+            <div className="row">
+                <div className="col">
+                    <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={(e) => displayCalculator(e)}></i>
+                    <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
+                </div>
+                <div className="col" style={{ textAlign: 'end' }}>
+                    {
+                        showScale && <span style={{ color: 'white', marginRight: '15px', borderRadius: '5px', borderColor: 'gold', borderStyle: 'solid', padding: '5px' }}>{scaleReading}g</span>
+                    }   
+                    <i className="bi bi-wallet-fill" style={{fontSize: "2rem", color: 'white', cursor: 'pointer', width: 'auto'}} onClick={async () => handleScaleReading()}></i>
+                </div>
+            </div>
             {
                 display && <Calculator />
             }

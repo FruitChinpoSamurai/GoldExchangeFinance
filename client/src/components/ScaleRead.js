@@ -7,7 +7,6 @@ class LineBreakTransformer {
     this.container += chunk;
     const lines = this.container.split('\r\n');
     this.container = lines.pop();
-    console.log(this.container);
     lines.forEach(line => controller.enqueue(line));
   }
 
@@ -16,21 +15,22 @@ class LineBreakTransformer {
   }
 }
 
-const scaleRead = async () => {
+const scaleRead = async (setScaleReading) => {
     // let usbVendorId = 0x1A86;
   const port = await navigator.serial.requestPort();
   await port.open({ baudRate: 2400, dataBits: 7, stopBits: 1, parity: `even`, flowControl: `none` });
   const textDecoder = new TextDecoderStream();
   const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
   const reader = textDecoder.readable.pipeThrough(new TransformStream(new LineBreakTransformer())).getReader();
-  let textContent = '';
+  // let textContent = '';
   while (true) {
     const { value, done } = await reader.read();
     if (value) {
-      textContent += value + '\n';
+      // textContent += value + '\n';
+      // console.log(value);
+      setScaleReading(Math.round(Number(value) * 100) / 100);
     }
     if (done) {
-      console.log('[readLoop] DONE', done);
       reader.releaseLock();
       break;
     }

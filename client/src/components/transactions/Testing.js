@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import transactionService from "../../services/transaction";
 import DisplayMetals from "../DisplayMetals";
 
-const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleReturned, handleTestType, handleWeightsChange, handlePureChange, handleTakeCashChange, handleTakeGoldChange, handleAccoTranID, preventNegativeValues, handleMetalSelect, readOnly, handleClearCPandBR }) => {
+const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleReturned, handleTestType, handleWeightsChange, handlePureChange, handleTakeCashChange, handleTakeGoldChange, handleAccoTranID, preventNegativeValues, handleMetalSelect, readOnly, handleClearCPandBR, scaleReading }) => {
     useEffect(() => {
         if (!readOnly) {
             transactionService.getAccoTranID(formData.transactionType, formData.accountID)
@@ -18,8 +18,20 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                 <div className="col">
                     {
                         formData.testType === 'Raw Gold'
-                            ? <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="First Weight" onInput={(e) => handleWeightsChange(e)} min="0" max="999" />
-                            : <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="Weight" onInput={(e) => handleWeightsChange(e)} min="0" max="999" />
+                            ? 
+                                <>
+                                    <div className="input-group">
+                                        <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="First Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" />
+                                        <button className="btn btn-outline-secondary" type="button" onClick={() => handleWeightsChange(scaleReading, "firstWeight")}>Set</button>
+                                    </div>
+                                </>
+                            : 
+                                <>
+                                    <div className="input-group">
+                                        <input type="number" step="0.01" className="form-control" name="firstWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.firstWeight} placeholder="Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" />
+                                        <button className="btn btn-outline-secondary" type="button" onClick={() => handleWeightsChange(scaleReading, "firstWeight")}>Set</button>
+                                    </div>
+                                </>
                     }
                 </div>
                 <div className="col">
@@ -45,7 +57,10 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                     formData.testType === 'Raw Gold'
                         ?   <>
                                 <div className="col">
-                                    <input type="number" step="0.01" className="form-control" name="secondWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.secondWeight} placeholder="Second Weight" onInput={(e) => handleWeightsChange(e)} min="0" max="999" />
+                                    <div className="input-group">
+                                        <input type="number" step="0.01" className="form-control" name="secondWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.secondWeight} placeholder="Second Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" />
+                                        <button className="btn btn-outline-secondary" type="button" onClick={() => handleWeightsChange(scaleReading, "secondWeight")}>Set</button>
+                                    </div>
                                 </div>
                                 <div className="col">
                                     <input type="number" className="form-control" name="charges" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.charges} placeholder="Charges" onInput={(e) => handleTextChange(e)} min="0" max="999" required />
@@ -68,7 +83,13 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                 <div className="col">
                     {
                         formData.testType === 'Raw Gold'
-                            ? <input type="number" step="0.01" className="form-control" name="thirdWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.thirdWeight} placeholder="Third Weight" onInput={(e) => handleWeightsChange(e)} min="0" max="999" />
+                            ?
+                                <>
+                                    <div className="input-group">
+                                        <input type="number" step="0.01" className="form-control" name="thirdWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.thirdWeight} placeholder="Third Weight" onInput={(e) => handleWeightsChange(e.target.value, e.target.name)} min="0" max="999" />
+                                        <button className="btn btn-outline-secondary" type="button" onClick={() => handleWeightsChange(scaleReading, "thirdWeight")}>Set</button>
+                                    </div>
+                                </>
                             : <></>
                     }
                 </div>

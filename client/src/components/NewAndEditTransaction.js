@@ -87,7 +87,7 @@ const initialFormState = {
     globalID: ''
 }
 
-const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData }) => {
+const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData, scaleReading }) => {
     const [accountID, setAccountID] = useState(''); // Account ID selection.
     const [custDetails, setCustDetails] = useState(null) // Customer details at top right of modal.
     const [formData, dispatch] = useReducer(transactionReducer, initialFormState);
@@ -208,11 +208,11 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
         });
     };
 
-    const handleWeightsChange = (e) => {
+    const handleWeightsChange = (value, name) => {
         dispatch({
             type: "UpdateWeights",
-            field: e.target.name,
-            payload: e.target.value
+            field: name,
+            payload: value
         });
     }
 
@@ -378,6 +378,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                         handleMetalSelect={handleMetalSelect}
                         readOnly={editMode}
                         handleClearCPandBR={handleClearCPandBR}
+                        scaleReading={scaleReading}
                     />
                 )
 
@@ -442,6 +443,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                         handleReceivableUpdate={handleReceivableUpdate}
                         preventNegativeValues={preventNegativeValues}
                         readOnly={editMode}
+                        scaleReading={scaleReading}
                     />
                 )
 

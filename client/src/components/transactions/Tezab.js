@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import transactionService from "../../services/transaction";
 
-const Tezab = ({ formData, handleTextChange, handlePureChange, handleAccoTranID, handleRateChange, handleDiscountChange, handleReceivableUpdate, preventNegativeValues, readOnly }) => {
+const Tezab = ({ formData, handleTextChange, handlePureChange, handleAccoTranID, handleRateChange, handleDiscountChange, handleReceivableUpdate, preventNegativeValues, readOnly, scaleReading }) => {
     useEffect(() => {
         if (!readOnly) {
             transactionService.getAccoTranID(formData.transactionType, formData.accountID)
@@ -18,7 +18,10 @@ const Tezab = ({ formData, handleTextChange, handlePureChange, handleAccoTranID,
                     <></>
                 </div>
                 <div className="col">
-                    <input type="number" step="0.01" className="form-control" name="totalWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.totalWeight} placeholder="Total Weight" onInput={(e) => handleTextChange(e)} min="0" max="999" required />
+                    <div className="input-group">
+                        <input type="number" step="0.01" className="form-control" name="totalWeight" onKeyDown={(e) => preventNegativeValues(e)} onWheel={e => e.target.blur()} value={formData.totalWeight} placeholder="Total Weight" onInput={(e) => handleTextChange(e)} min="0" max="999" required />
+                        <button className="btn btn-outline-secondary" type="button" onClick={() => handleTextChange({target: { value: scaleReading, name: "totalWeight"}})}>Set</button>
+                    </div>
                 </div>
                 <div className="col">
                     <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} />
