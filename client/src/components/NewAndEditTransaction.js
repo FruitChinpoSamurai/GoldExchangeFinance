@@ -618,6 +618,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
     const resetFields = () => {
         setCustDetails(null);
         setAlert('');
+        setButtonDisable(true);
         setTimeout(() => {
             setAccountID('');
             dispatch({
