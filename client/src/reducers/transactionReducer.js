@@ -685,7 +685,7 @@ const transactionReducer = (state, action) => {
                 itemSubType: itemSubType,
                 points: points,
                 pure: pure,
-                premium: cash,
+                premium: (state.transactionType === 'Pure Gold Buy') ? 0 : cash,
                 count: count
             };
             let newInventoryDetails = state.inventoryDetails;
@@ -726,7 +726,7 @@ const transactionReducer = (state, action) => {
                 itemSubType: itemSubType,
                 points: points,
                 pure: pure,
-                premium: cash,
+                premium: (state.transactionType === 'Pure Gold Buy') ? 0 : cash,
                 count: count
             };
             let newInventoryDetails = state.inventoryDetails;
@@ -825,7 +825,7 @@ const transactionReducer = (state, action) => {
                     totalCash = totalCash + (item.count * item.premium);
                 });
                 let cashAmount = Math.round((Number(totalPure) * Number(state.rate)) / 11.664);
-                let adjustCashAmount = state.transactionType === 'Pure Gold Buy' ? cashAmount + Number(totalCash) : cashAmount - Number(totalCash);
+                let adjustCashAmount = state.transactionType === 'Pure Gold Sell' ? cashAmount + Number(totalCash) : cashAmount - Number(totalCash);
                 return {
                     ...state,
                     cReceivable: state.transactionType === 'Pure Gold Buy' ? `${adjustCashAmount}R` : `${totalPure}G`,
