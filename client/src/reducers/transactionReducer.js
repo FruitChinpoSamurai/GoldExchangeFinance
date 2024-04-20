@@ -269,8 +269,8 @@ const transactionReducer = (state, action) => {
                     } else {
                         let points = Number(state.points);
                         let pureW = parseFloat((newWeight + total) * (points / 1000)).toFixed(2);
-                        let custPaid = `${pureW}G  ${fees}R`;
-                        let busiReceived = `${pureW}G  ${fees}R`;
+                        // let custPaid = `${pureW}G  ${fees}R`;
+                        // let busiReceived = `${pureW}G  ${fees}R`;
                         if (pureW === '0.00') {
                             pureW = '';
                             // custPaid = `${fees}R`;
@@ -299,6 +299,9 @@ const transactionReducer = (state, action) => {
             let takeCash = Number(state.takeCash);
             let takeGold = state.takeGold;
             let payable = `${takeCash + testFees}R`;
+            let rattiInside = Math.round(((96 * (points / 1000)) - 96) * 100) / 100;
+            let rattiOutside = Math.round(((96 / (points / 1000)) - 96) * 100) / 100;
+            let Karat = Math.round((24 * (points / 1000)) * 100) / 100;
             if (takeGold !== '') {
                 payable = `${takeGold}G ${takeCash + testFees}R`;
             }
@@ -310,7 +313,10 @@ const transactionReducer = (state, action) => {
                     pure: pureW,
                     cPayable: payable,
                     cPaid: `${pureW}G`,
-                    bReceived: `${pureW}G`
+                    bReceived: `${pureW}G`,
+                    rattiIn: rattiInside,
+                    rattiOut: rattiOutside,
+                    karats: Karat
                 };
             } else {
                 let custPaid = state.cPaid;
@@ -322,12 +328,18 @@ const transactionReducer = (state, action) => {
                         pure: '',
                         // cPaid: `${testFees}R`,
                         // bReceived: `${testFees}R`
+                        rattiIn: '',
+                        rattiOut: '',
+                        karats: ''
                     };    
                 } else {
                     return {
                         ...state,
                         [action.field]: '',
-                        pure: ''
+                        pure: '',
+                        rattiIn: '',
+                        rattiOut: '',
+                        karats: ''
                     };
                 }
             };

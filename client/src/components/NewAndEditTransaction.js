@@ -84,7 +84,10 @@ const initialFormState = {
     finalGold: '',
     currBalance: '',
     prevBalance: '',
-    globalID: ''
+    globalID: '',
+    rattiIn: '',
+    rattiOut: '',
+    karats: ''
 }
 
 const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData, scaleReading }) => {
@@ -976,7 +979,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                         {
                             editMode ?
                                 formData.dateCreated.split(' ')[0] === currentDate[0] ?
-                                    <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}} disabled={buttonDisable}>Save</button> :
+                                    <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}}>Save</button> :
                                     <></> :
                                 <button className="btn" form='transactionForm' type="submit" style={{backgroundColor:"grey", color:"white"}} disabled={buttonDisable}>Save</button>
                         }
