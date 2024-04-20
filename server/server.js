@@ -1,5 +1,8 @@
 const express = require("express");
-// const path = require('path');
+const path = require('path');
+const https = require('https');
+const fs = require('fs')
+const fileURLToPath = require('url')
 const app = express();
 const cors = require("cors");
 const pool = require("./database");
@@ -822,12 +825,27 @@ app.patch("/workshop/sendoff", async (request, response) => {
 // ------ //
 
 // For production.
-// app.use(express.static(path.join(__dirname, 'build')));
+// https://zellwk.com/blog/serving-https-locally-with-node/
+app.use(express.static(path.join(__dirname, 'build')));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
-
-app.listen(5000, () => {
-    console.log("Server has started on port 5000.");
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+const server = https.createServer(
+    {
+      key: fs.readFileSync(`D:/\EGR/\server/\certs\/key.pem`, 'utf8'),
+      cert: fs.readFileSync(`D:/\EGR/\server/\certs/\cert.pem`, 'utf8'),
+    },
+    app,
+  )
+
+server.listen(443, _ => {
+    console.log('App listening at https://192.168.18.166')
+})
+
+/////
+
+// app.listen(5000, () => {
+//     console.log("Server has started on port 5000.");
+// });
