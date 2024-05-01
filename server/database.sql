@@ -323,3 +323,11 @@ CREATE TABLE workshop(
     final_pure NUMERIC(10, 2),
     PRIMARY KEY (workshop_id)
 );
+
+CREATE TABLE global_rates(
+    sell_rate INTEGER,
+    buy_rate INTEGER,
+    PRIMARY KEY (sell_rate, buy_rate)
+);
+
+INSERT INTO global_rates (sell_rate, buy_rate) VALUES(225000, 225000);

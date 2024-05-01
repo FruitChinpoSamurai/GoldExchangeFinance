@@ -5,8 +5,9 @@ import DataPopup from "../DataPopup";
 import AlertPopup from "../AlertPopup";
 import NewAndEditTransaction from "../NewAndEditTransaction"
 import printService from "../ReceiptPrint";
+import bigPrintService from "../TestPrint";
 
-const CustomerStatementTransactions = ({ accountID, searched, data }) => {
+const CustomerStatementTransactions = ({ accountID, searched, data, globalRates }) => {
     const [transactions, setTransactions] = useState([]);
     const [display, setDisplay] = useState([false, 0, 0, '']);
     const [view, setView] = useState(false);
@@ -92,10 +93,15 @@ const CustomerStatementTransactions = ({ accountID, searched, data }) => {
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
                             setRefresh(false);
                         }
+                        if (data.receiptData) {
+                            if (data.receiptData.is_testing && (data.receiptData.transaction.points !== null)) {
+                                bigPrintService.print(data, globalRates.current.buyRate);
+                            }
+                        }
                     });
             })
             // .catch(() => console.log("Yabai!"))
-    }, [accountID, refresh, data, displayTransaction, editReceiptData]);
+    }, [accountID, refresh, data, displayTransaction, editReceiptData, globalRates]);
 
     const displayTransactionDetails = (e) => {
         transactionService.getTakenGivenRelateds(accountID, e.currentTarget.innerHTML)

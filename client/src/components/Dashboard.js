@@ -9,8 +9,9 @@ import Inventory from "./Inventory";
 import Calculator from "./Calculator";
 import AlertPopup from "./AlertPopup";
 import readService from "./ScaleRead";
+import RateSetter from "./RateSetter";
 
-const Dashboard = () => {
+const Dashboard = ({ globalRates }) => {
     const [one, setOne] = useState('#CDB450');
     const [two, setTwo] = useState('#CDB450');
     const [three, setThree] = useState('#CDB450');
@@ -20,7 +21,8 @@ const Dashboard = () => {
     const [clicked, setClicked] = useState('Dashboard');
     const [transactionAlert, setTransactionAlert] = useState('');
     const [custStatementHeader, setCustStatementHeader] = useState({});
-    const [display, setDisplay] = useState(false);
+    const [displayCalc, setDisplayCalc] = useState(false);
+    const [displayRate, setDisplayRate] = useState(false);
     const [showScale, setShowScale] = useState(false);
     const [scaleReading, setScaleReading] = useState(0);
 
@@ -93,8 +95,12 @@ const Dashboard = () => {
         }
     }
 
-    const displayCalculator = (e) => {
-        setDisplay(!display)
+    const displayCalculator = () => {
+        setDisplayCalc(!displayCalc)
+    }
+
+    const displayRateSetter = () => {
+        setDisplayRate(!displayRate)
     }
 
     const handleScaleReading = () => {
@@ -116,6 +122,7 @@ const Dashboard = () => {
                     <Accounts 
                         returnClickHandle={itemClicked}
                         data={custStatementHeader}
+                        globalRates={globalRates}
                     />
                 )
 
@@ -168,8 +175,9 @@ const Dashboard = () => {
         <>  
             <div className="row">
                 <div className="col">
-                    <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={(e) => displayCalculator(e)}></i>
+                    <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayCalculator()}></i>
                     <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
+                    <i className="bi bi-coin" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayRateSetter()}></i>
                 </div>
                 <div className="col" style={{ textAlign: 'end' }}>
                     {
@@ -179,7 +187,10 @@ const Dashboard = () => {
                 </div>
             </div>
             {
-                display && <Calculator />
+                displayCalc && <Calculator />
+            }
+            {
+                displayRate && <RateSetter globalRates={globalRates} />
             }
             <SuggestedTransaction />
             {

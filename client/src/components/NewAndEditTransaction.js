@@ -752,7 +752,10 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
             final_gold: data.finalGold,
             current_balance: data.currBalance,
             previous_balance: data.prevBalance,
-            global_id: data.globalID
+            global_id: data.globalID,
+            ratti_in: data.rattiIn,
+            ratti_out: data.rattiOut,
+            karats: data.karats
         };
         transactionService.createTransaction(createParams)
             .then(response => {

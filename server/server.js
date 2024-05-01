@@ -230,7 +230,7 @@ app.post("/accounts", async (request, response) => {
 // Get all financial accounts; for the Accounts view with getAllAccounts().
 app.get("/accounts", async (request, response) => {
     try {
-        const allAccounts = await pool.query("SELECT TO_CHAR(acco_id, '000000') AS acco_id, TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id");
+        const allAccounts = await pool.query("SELECT TO_CHAR(acco_id, '000000') AS acco_id, TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id ORDER BY acco_id");
         response.json(allAccounts.rows);
     } catch (error) {
         console.error(error.message);
@@ -822,30 +822,49 @@ app.patch("/workshop/sendoff", async (request, response) => {
     }
 });
 
+app.get("/rates", async (request, response) => {
+    try {
+        const rates = await pool.query("SELECT * FROM global_rates;");
+        response.json(rates.rows[0]);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+app.patch("/rates", async (request, response) => {
+    try {
+        const { sellRate, buyRate } = request.body;
+        const rates = await pool.query("UPDATE global_rates SET sell_rate = $1, buy_rate = $2;", [sellRate, buyRate]);
+        response.json(true);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
 // ------ //
 
 // For production.
 // https://zellwk.com/blog/serving-https-locally-with-node/
-// app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
-// const server = https.createServer(
-//     {
-//       key: fs.readFileSync(`D:/\EGR/\server/\certs\/key.pem`, 'utf8'),
-//       cert: fs.readFileSync(`D:/\EGR/\server/\certs/\cert.pem`, 'utf8'),
-//     },
-//     app,
-//   )
+const server = https.createServer(
+    {
+      key: fs.readFileSync(`D:/\EGR/\server/\certs\/key.pem`, 'utf8'),
+      cert: fs.readFileSync(`D:/\EGR/\server/\certs/\cert.pem`, 'utf8'),
+    },
+    app,
+  )
 
-// server.listen(443, _ => {
-//     console.log('App listening at https://192.168.18.166')
-// })
+server.listen(443, _ => {
+    console.log('App listening at https://192.168.18.166')
+})
 
 /////
 
-app.listen(5000, () => {
-    console.log("Server has started on port 5000.");
-});
+// app.listen(5000, () => {
+//     console.log("Server has started on port 5000.");
+// });
