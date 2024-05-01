@@ -274,7 +274,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Gold Rate
-  firstPage.drawText(rate, {
+  firstPage.drawText(String(rate), {
     x: 280,
     y: 56,
     size: 13.5

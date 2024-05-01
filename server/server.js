@@ -1,8 +1,8 @@
 const express = require("express");
-// const path = require('path');
-// const https = require('https');
-// const fs = require('fs')
-// const fileURLToPath = require('url')
+const path = require('path');
+const https = require('https');
+const fs = require('fs')
+const fileURLToPath = require('url')
 const app = express();
 const cors = require("cors");
 const pool = require("./database");
@@ -853,14 +853,14 @@ app.get('/', function (req, res) {
 
 const server = https.createServer(
     {
-      key: fs.readFileSync(`D:/\EGR/\server/\certs\/key.pem`, 'utf8'),
-      cert: fs.readFileSync(`D:/\EGR/\server/\certs/\cert.pem`, 'utf8'),
+      key: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs\/key.pem`, 'utf8'),
+      cert: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs/\cert.pem`, 'utf8'),
     },
     app,
   )
 
 server.listen(443, _ => {
-    console.log('App listening at https://192.168.18.166')
+    console.log('App listening at https://192.168.100.165')
 })
 
 /////
