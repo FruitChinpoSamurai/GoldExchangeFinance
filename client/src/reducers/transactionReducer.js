@@ -916,7 +916,10 @@ const transactionReducer = (state, action) => {
                 finalGold: action.payload.final_gold || '',
                 currBalance: action.payload.current_balance || '',
                 prevBalance: action.payload.previous_balance || '',
-                globalID: action.payload.global_id || ''
+                globalID: action.payload.global_id || '',
+                rattiIn: Math.round(((96 * (action.payload.points / 1000)) - 96) * 100) / 100 || '',
+                rattiOut: Math.round(((96 / (action.payload.points / 1000)) - 96) * 100) / 100 || '',
+                karats: Math.round((24 * (action.payload.points / 1000)) * 100) / 100 || ''
             }
         }
 

@@ -95,7 +95,12 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
                         }
                         if (data.receiptData) {
                             if (data.receiptData.is_testing && (data.receiptData.transaction.points !== null)) {
-                                bigPrintService.print(data, globalRates.current.buyRate);
+                                bigPrintService.print(data.receiptData, globalRates.current.buyRate);
+                            }
+                        }
+                        if (editReceiptData && !refresh) {
+                            if (editReceiptData.is_testing && (editReceiptData.transaction.points !== null)) {
+                                bigPrintService.print(editReceiptData, globalRates.current.buyRate);
                             }
                         }
                     });
@@ -226,7 +231,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
             {
                 display[0] && <DataPopup data={display} />
             }
-            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} data={data} handleRefresh={setRefresh} setEditReceiptData={setEditReceiptData} />
+            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} handleRefresh={setRefresh} setEditReceiptData={setEditReceiptData} />
             {
                 transactionAlert !== '' && <AlertPopup status={transactionAlert} />
             }

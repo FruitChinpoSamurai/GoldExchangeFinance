@@ -831,7 +831,10 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
             final_gold: data.finalGold,
             current_balance: data.currBalance,
             previous_balance: data.prevBalance,
-            global_id: data.globalID
+            global_id: data.globalID,
+            ratti_in: Math.round(((96 * (data.points / 1000)) - 96) * 100) / 100,
+            ratti_out: Math.round(((96 / (data.points / 1000)) - 96) * 100) / 100,
+            karats: Math.round((24 * (data.points / 1000)) * 100) / 100
         };
         transactionService.updateTransaction(createParams)
             .then(response => {
@@ -970,7 +973,10 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                                     final_gold: formData.finalGold,
                                     current_balance: formData.currBalance,
                                     previous_balance: formData.prevBalance,
-                                    global_id: formData.globalID
+                                    global_id: formData.globalID,
+                                    ratti_in: formData.rattiIn,
+                                    ratti_out: formData.rattiOut,
+                                    karats: formData.karats
                                 }
                             })} style={{backgroundColor:"grey", color:"white"}}>Reprint</button>
                         }

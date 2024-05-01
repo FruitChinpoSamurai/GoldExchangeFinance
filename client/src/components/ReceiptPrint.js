@@ -168,10 +168,12 @@ async function printer(device, commands) {
     await device.open();
     await device.selectConfiguration(1);
     await device.claimInterface(0);
-    await device.transferOut(
-        device.configuration.interfaces[0].alternate.endpoints.find(obj => obj.direction === 'out').endpointNumber,
-        commands
-    );
+    for (let index = 0; index < 2; index++) {
+        await device.transferOut(
+            device.configuration.interfaces[0].alternate.endpoints.find(obj => obj.direction === 'out').endpointNumber,
+            commands
+        );
+    }
     await device.close();
 }
 

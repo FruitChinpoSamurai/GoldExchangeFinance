@@ -19,14 +19,14 @@ const print = async (transactionData, rate) => {
   firstPage.drawSvgPath(svgPath, { scale: 0.5 })
 
   // Serial No.
-  firstPage.drawText(transactionData.receiptData.global_transaction_id.substring(7), {
+  firstPage.drawText(transactionData.global_transaction_id.substring(7), {
     x: 100,
     y: 565,
     size: 13.5
   })
 
   // Com. No.
-  firstPage.drawText(transactionData.receiptData.global_transaction_id.substring(0, 7), {
+  firstPage.drawText(transactionData.global_transaction_id.substring(0, 7), {
     x: 100,
     y: 547.5,
     size: 13.5
@@ -41,7 +41,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Cust. ID. value
-  firstPage.drawText(transactionData.receiptData.header.cust_id, {
+  firstPage.drawText(transactionData.header.cust_id, {
     x: 95,
     y: 520,
     size: 13.5
@@ -56,14 +56,14 @@ const print = async (transactionData, rate) => {
   })
 
   // Acc. ID. value
-  firstPage.drawText(transactionData.receiptData.header.acco_id, {
+  firstPage.drawText(String(transactionData.header.acco_id), {
     x: 185,
     y: 520,
     size: 13.5
   })
 
   // Name
-  firstPage.drawText(transactionData.receiptData.header.cust_name, {
+  firstPage.drawText(transactionData.header.cust_name, {
     x: 212.5,
     y: 565,
     size: 13.5,
@@ -71,21 +71,21 @@ const print = async (transactionData, rate) => {
   })
   
   // Date
-  firstPage.drawText(transactionData.receiptData.header.date_created.split(' ')[0], {
+  firstPage.drawText(transactionData.header.date_created.split(' ')[0], {
     x: 452,
     y: 565,
     size: 13.5
   })
 
   // Time
-  firstPage.drawText(transactionData.receiptData.header.date_created.split(' ')[1], {
+  firstPage.drawText(transactionData.header.date_created.split(' ')[1], {
     x: 452,
     y: 547.5,
     size: 13.5
   })
 
   // Total Weight
-  firstPage.drawText(String(transactionData.receiptData.transaction.total_sample_weight), {
+  firstPage.drawText(String(transactionData.transaction.total_sample_weight), {
     x: 280,
     y: 498,
     size: 13.5,
@@ -93,7 +93,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Pure Gold
-  firstPage.drawText(String(transactionData.receiptData.transaction.pure_weight), {
+  firstPage.drawText(String(transactionData.transaction.pure_weight), {
     x: 280,
     y: 475.5,
     size: 13.5,
@@ -101,21 +101,21 @@ const print = async (transactionData, rate) => {
   })
 
   // Test Fee
-  firstPage.drawText(String(transactionData.receiptData.transaction.fees), {
+  firstPage.drawText(String(transactionData.transaction.fees), {
     x: 280,
     y: 447.625,
     size: 13.5
   })
 
   // Labour Charges
-  firstPage.drawText(String(transactionData.receiptData.transaction.charges), {
+  firstPage.drawText(String(transactionData.transaction.charges), {
     x: 280,
     y: 422.375,
     size: 13.5
   })
 
   // Total Labour Charges
-  firstPage.drawText(String(Math.round(transactionData.receiptData.transaction.charges * transactionData.receiptData.transaction.total_sample_weight * 100) / 100), {
+  firstPage.drawText(String(Math.round(transactionData.transaction.charges * transactionData.transaction.total_sample_weight) + transactionData.transaction.fees), {
     x: 280,
     y: 395.25,
     size: 13.5
@@ -133,7 +133,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Ratti In
-  firstPage.drawText(String(Math.abs(transactionData.receiptData.transaction.ratti_in)), {
+  firstPage.drawText(String(Math.abs(transactionData.transaction.ratti_in)), {
     x: 475,
     y: 480,
     size: 13.5,
@@ -141,21 +141,21 @@ const print = async (transactionData, rate) => {
   })
 
   // Ratti Out
-  firstPage.drawText(String(transactionData.receiptData.transaction.ratti_out), {
+  firstPage.drawText(String(transactionData.transaction.ratti_out), {
     x: 475,
     y: 458,
     size: 13.5
   })
 
   // Karats
-  firstPage.drawText(String(transactionData.receiptData.transaction.karats), {
+  firstPage.drawText(String(transactionData.transaction.karats), {
     x: 475,
     y: 436,
     size: 13.5
   })
 
   // Points
-  firstPage.drawText(String(transactionData.receiptData.transaction.points), {
+  firstPage.drawText(String(transactionData.transaction.points), {
     x: 475,
     y: 415,
     size: 13.5
@@ -171,14 +171,14 @@ const print = async (transactionData, rate) => {
   firstPage.drawSvgPath(svgPath, { scale: 0.5 })
 
   // Serial No.
-  firstPage.drawText(transactionData.receiptData.global_transaction_id.substring(7), {
+  firstPage.drawText(transactionData.global_transaction_id.substring(7), {
     x: 100,
     y: 240,
     size: 13.5
   })
 
   // Com. No.
-  firstPage.drawText(transactionData.receiptData.global_transaction_id.substring(0, 7), {
+  firstPage.drawText(transactionData.global_transaction_id.substring(0, 7), {
     x: 100,
     y: 222,
     size: 13.5
@@ -193,7 +193,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Cust. ID. value
-  firstPage.drawText(transactionData.receiptData.header.cust_id, {
+  firstPage.drawText(transactionData.header.cust_id, {
     x: 95,
     y: 200,
     size: 13.5
@@ -208,14 +208,14 @@ const print = async (transactionData, rate) => {
   })
 
   // Acc. ID. value
-  firstPage.drawText(transactionData.receiptData.header.acco_id, {
+  firstPage.drawText(String(transactionData.header.acco_id), {
     x: 185,
     y: 200,
     size: 13.5
   })
 
   // Name
-  firstPage.drawText(transactionData.receiptData.header.cust_name, {
+  firstPage.drawText(transactionData.header.cust_name, {
     x: 212.5,
     y: 240,
     size: 13.5,
@@ -223,21 +223,21 @@ const print = async (transactionData, rate) => {
   })
   
   // Date
-  firstPage.drawText(transactionData.receiptData.header.date_created.split(' ')[0], {
+  firstPage.drawText(transactionData.header.date_created.split(' ')[0], {
     x: 452,
     y: 242,
     size: 13.5
   })
 
   // Time
-  firstPage.drawText(transactionData.receiptData.header.date_created.split(' ')[1], {
+  firstPage.drawText(transactionData.header.date_created.split(' ')[1], {
     x: 452,
     y: 224,
     size: 13.5
   })
 
   // Total Weight
-  firstPage.drawText(String(transactionData.receiptData.transaction.total_sample_weight), {
+  firstPage.drawText(String(transactionData.transaction.total_sample_weight), {
     x: 280,
     y: 180,
     size: 13.5,
@@ -245,7 +245,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Pure Gold
-  firstPage.drawText(String(transactionData.receiptData.transaction.pure_weight), {
+  firstPage.drawText(String(transactionData.transaction.pure_weight), {
     x: 280,
     y: 156,
     size: 13.5,
@@ -253,21 +253,21 @@ const print = async (transactionData, rate) => {
   })
 
   // Test Fee
-  firstPage.drawText(String(transactionData.receiptData.transaction.fees), {
+  firstPage.drawText(String(transactionData.transaction.fees), {
     x: 280,
     y: 128,
     size: 13.5
   })
 
   // Labour Charges
-  firstPage.drawText(String(transactionData.receiptData.transaction.charges), {
+  firstPage.drawText(String(transactionData.transaction.charges), {
     x: 280,
     y: 104,
     size: 13.5
   })
 
   // Total Labour Charges
-  firstPage.drawText(String(Math.round(transactionData.receiptData.transaction.charges * transactionData.receiptData.transaction.total_sample_weight * 100) / 100), {
+  firstPage.drawText(String(Math.round(transactionData.transaction.charges * transactionData.transaction.total_sample_weight) + transactionData.transaction.fees), {
     x: 280,
     y: 79,
     size: 13.5
@@ -281,7 +281,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Amount
-  firstPage.drawText(String(Math.round(((transactionData.receiptData.transaction.pure_weight) / 11.664) * rate * 100) / 100), {
+  firstPage.drawText(String(Math.round(((transactionData.transaction.pure_weight) / 11.664) * rate)), {
     x: 280,
     y: 31,
     size: 13.5,
@@ -300,7 +300,7 @@ const print = async (transactionData, rate) => {
   })
 
   // Ratti In
-  firstPage.drawText(String(Math.abs(transactionData.receiptData.transaction.ratti_in)), {
+  firstPage.drawText(String(Math.abs(transactionData.transaction.ratti_in)), {
     x: 475,
     y: 163,
     size: 13.5,
@@ -308,21 +308,21 @@ const print = async (transactionData, rate) => {
   })
 
   // Ratti Out
-  firstPage.drawText(String(transactionData.receiptData.transaction.ratti_out), {
+  firstPage.drawText(String(transactionData.transaction.ratti_out), {
     x: 475,
     y: 139,
     size: 13.5
   })
 
   // Karats
-  firstPage.drawText(String(transactionData.receiptData.transaction.karats), {
+  firstPage.drawText(String(transactionData.transaction.karats), {
     x: 475,
     y: 118,
     size: 13.5
   })
 
   // Points
-  firstPage.drawText(String(transactionData.receiptData.transaction.points), {
+  firstPage.drawText(String(transactionData.transaction.points), {
     x: 475,
     y: 97,
     size: 13.5
@@ -331,7 +331,7 @@ const print = async (transactionData, rate) => {
   ///
 
   const pdfBytes = await pdfDoc.save()
-  downloadjs(pdfBytes, `BigReport_${transactionData.receiptData.header.date_created.split(' ')[0]}_${transactionData.receiptData.global_transaction_id}.pdf`, "application/pdf");
+  downloadjs(pdfBytes, `BigReport_${transactionData.header.date_created.split(' ')[0]}_${transactionData.global_transaction_id}.pdf`, "application/pdf");
 }
 
 const bigPrintService = { print };
