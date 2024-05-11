@@ -83,6 +83,9 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
                             const receiptData = data.receiptData;
                             receiptData['transaction']['current_balance'] = currBalance;
                             printService.receiptPrint(false, receiptData);
+                            setTimeout(() => {
+                                printService.receiptPrint(false, receiptData);
+                            }, 1000);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balance: currBalance }).then(() => void(response))
                         }
                         if (refresh) {
@@ -90,6 +93,9 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
                             const receiptData = editReceiptData;
                             receiptData['transaction']['current_balance'] = currBalance;
                             printService.receiptPrint(false, receiptData, `${balances.cash} ${balances.gold} ${balances.sample}`);
+                            setTimeout(() => {
+                                printService.receiptPrint(false, receiptData, `${balances.cash} ${balances.gold} ${balances.sample}`);
+                            }, 1000);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
                             setRefresh(false);
                         }

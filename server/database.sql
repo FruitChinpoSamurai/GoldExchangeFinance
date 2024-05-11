@@ -53,7 +53,7 @@ CREATE TABLE transactions(
     second_weight NUMERIC(6, 2),
     third_weight NUMERIC(6, 2),
     total_sample_weight NUMERIC(6, 2),
-    points INTEGER,
+    points NUMERIC(4,1),
     pure_weight NUMERIC(6, 2),
     taken_cash INTEGER,
     taken_gold NUMERIC(6, 2),
@@ -138,7 +138,7 @@ CREATE TABLE business_balances(
     PRIMARY KEY (balance_id)
 );
 
-INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES('3/7/2024', 4500000, 1800.00, 0, 0, 0.00);
+INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES('5/7/2024', 4500000, 1800.00, 0, 0, 0.00);
 
 CREATE TABLE inventory(
     item_id INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -203,7 +203,7 @@ CREATE TABLE suggested_transactions(
     customer_name VARCHAR(60),
     contact VARCHAR(13),
     sample_weight NUMERIC(6, 2),
-    expected_points NUMERIC(6, 2),
+    expected_points NUMERIC(4,1),
     expected_pure NUMERIC(6, 2),
     discussed_rate INTEGER,
     remarks VARCHAR(500),
@@ -318,7 +318,7 @@ CREATE TABLE workshop(
     workshop_missing_impure NUMERIC(10, 2),
     pure_at_workshop NUMERIC(10, 2),
     workshop_mix_impure NUMERIC(10, 2),
-    points NUMERIC(10, 2),
+    points NUMERIC(4,1),
     workshop_mix_pure NUMERIC(10, 2),
     final_pure NUMERIC(10, 2),
     PRIMARY KEY (workshop_id)

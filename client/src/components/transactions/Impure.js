@@ -25,7 +25,7 @@ const Impure = ({ formData, handleTextChange, handleAccoTranID, pullTestingTrans
                     <input type="number" className="form-control" value={formData.totalWeight} placeholder="Total Weight" disabled />
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} />
+                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} min={100000} max={1000000} />
                 </div>
                 <div className="col">
                     <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.discount} placeholder="Discount" max={Number(formData.charges) + Number(formData.pendingTakeCash)} onInput={(e) => handleDiscountChange(e)} />
@@ -37,7 +37,7 @@ const Impure = ({ formData, handleTextChange, handleAccoTranID, pullTestingTrans
                     <span style={{color: 'red'}}><small>{alertMessage}</small></span>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled />
+                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled step=".1" min={0} max={999} />
                 </div>
                 <div className="col">
                     <></>

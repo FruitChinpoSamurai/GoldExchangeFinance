@@ -25,7 +25,7 @@ const Both = ({ formData, handleTextChange, handleAccoTranID, pullTestingTransac
                     <input type="number" className="form-control" value={formData.totalWeight} placeholder="Total Weight" disabled />
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} />
+                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} min={100000} max={1000000}/>
                 </div>
                 <div className="col">
                     <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.discount} placeholder="Discount" onInput={(e) => handleDiscountChange(e)} />
@@ -37,7 +37,7 @@ const Both = ({ formData, handleTextChange, handleAccoTranID, pullTestingTransac
                     <span style={{color: 'red'}}><small>{alertMessage}</small></span>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled />
+                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled min={0} max={999} step=".1" />
                 </div>
                 <div className="col">
                     <select className="form-select" name="includeTestFees" value={formData.includeTestFees} onChange={(e) => handleIncludeTestFees(e)} disabled={formData.testTransferredDue || formData.rate !== '' ? true : false}>

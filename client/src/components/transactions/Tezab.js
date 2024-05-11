@@ -24,7 +24,7 @@ const Tezab = ({ formData, handleTextChange, handlePureChange, handleAccoTranID,
                     </div>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} />
+                    <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleRateChange(e)} min={100000} max={1000000} />
                 </div>
                 <div className="col">
                     <input type="number" className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.discount} placeholder="Discount" max={Number(formData.charges)} onInput={(e) => handleDiscountChange(e)} />
@@ -36,7 +36,7 @@ const Tezab = ({ formData, handleTextChange, handlePureChange, handleAccoTranID,
                     <></>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" name="points" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.points} placeholder="Points" onInput={(e) => handlePureChange(e)} min="0" max="999" />
+                    <input type="number" className="form-control" name="points" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.points} placeholder="Points" onInput={(e) => handlePureChange(e)} min="0" max="999" step=".1" />
                 </div>
                 <div className="col">
                     <input type="number" className="form-control" style={{backgroundColor:'#E7CD78', cursor: 'pointer'}} value={formData.grossAmount} placeholder="Gross Amount" readOnly onClick={(e) => handleReceivableUpdate(e)} />

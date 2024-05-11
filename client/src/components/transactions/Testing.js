@@ -40,7 +40,7 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                 <div className="col">
                     {
                         formData.testType === 'Raw Gold'
-                            ? <input type="number" className="form-control" name="points" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.points} placeholder="Points" onInput={(e) => handlePureChange(e)} min="0" max="999"/>
+                            ? <input type="number" className="form-control" name="points" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.points} placeholder="Points" onInput={(e) => handlePureChange(e)} min="0" max="999" step=".1"/>
                             : <></>
                     }
                 </div>
@@ -138,7 +138,7 @@ const Testing = ({ formData, handleTextChange, handleFeesChange, handleSampleRet
                                     <input type="number" className="form-control" name="takeCash" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.takeCash} placeholder="Takeaway Cash" onInput={(e) => handleTakeCashChange(e)} min="0" max="999999999"/>
                                 </div>
                                 <div className="col">
-                                    <input type="number" className="form-control" name="takeGold" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.takeGold} placeholder="Takeaway Gold" onInput={(e) => handleTakeGoldChange(e)} min="0" max="9999"/>
+                                    <input type="number" className="form-control" name="takeGold" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.takeGold} placeholder="Takeaway Gold" onInput={(e) => handleTakeGoldChange(e)} step=".01" min="0" max="9999"/>
                                 </div>
                                 <div className="col">
                                     <></>

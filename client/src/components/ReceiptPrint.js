@@ -4,9 +4,9 @@ async function printShopLegend() {
     const commands = await render(
         <Printer type="epson">
             <Text size={{ width: 2, height: 4 }} align='center'>Eastern Gold</Text>
-            <Text size={{ width: 2, height: 1 }} align='center' underline="1dot-thick" bold={true}>Refiners & Assayers</Text>
+            {/* <Text size={{ width: 2, height: 1 }} align='center' underline="1dot-thick" bold={true}>Refiners & Assayers</Text>
             <Text size={{ width: 1, height: 1 }} align='center' bold={true}>Shop 1-13 Ground Floor Parr Street, Sarah Sunar</Text>
-            <Text size={{ width: 1, height: 1 }} align='center' bold={true}>Center Saddar, Karachi. Tel: 35657951-2</Text>
+            <Text size={{ width: 1, height: 1 }} align='center' bold={true}>Center Saddar, Karachi. Tel: 35657951-2</Text> */}
         </Printer>
     );
     return commands;
@@ -168,54 +168,94 @@ async function printer(device, commands) {
     await device.open();
     await device.selectConfiguration(1);
     await device.claimInterface(0);
-    for (let index = 0; index < 2; index++) {
-        await device.transferOut(
-            device.configuration.interfaces[0].alternate.endpoints.find(obj => obj.direction === 'out').endpointNumber,
-            commands
-        );
-    }
+    await device.transferOut(
+        device.configuration.interfaces[0].alternate.endpoints.find(obj => obj.direction === 'out').endpointNumber,
+        commands
+    );
     await device.close();
 }
 
 const receiptPrint = (reprint, displayData, latestBalance) => {
-    navigator.usb.requestDevice({ filters: [{ vendorId: 0x0fe6 }] })
-        .then((device) => {
-            printShopLegend().then((shopLegend) => {
-                printer(device, shopLegend).then(() => {
-                    // if (!reprint) {
-                        if (displayData.customer_name) {
-                            printHeaderSuggested(displayData).then((receiptData) => {
-                                printer(device, receiptData)
-                            })
-                        } else {
-                            printHeaderNormal(displayData.header).then((header) => {
-                                printer(device, header).then(() => {
-                                    if (displayData.is_testing) {
-                                        // If points was entered, generate Post-Points slip/report.
-                                        if (displayData.transaction.points) {
-                                            printTestingPostPoints(displayData.global_transaction_id, displayData.transaction, latestBalance).then((transaction) => {
-                                                printer(device, transaction)
-                                            })
-                                        } else { // Otherwise, generate Pre-Points slip.
-                                            if (displayData.transaction.test_type === 'Other' && displayData.transaction.remarks) {
-                                                printTestingOtherPostPoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
+    navigator.usb.getDevices().then((devices) => {
+        devices.forEach((device) => {
+            if (device.vendorId === 0x0fe6) {
+                printShopLegend().then((shopLegend) => {
+                    printer(device, shopLegend).then(() => {
+                        // if (!reprint) {
+                            if (displayData.customer_name) {
+                                printHeaderSuggested(displayData).then((receiptData) => {
+                                    printer(device, receiptData)
+                                })
+                            } else {
+                                printHeaderNormal(displayData.header).then((header) => {
+                                    printer(device, header).then(() => {
+                                        if (displayData.is_testing) {
+                                            // If points was entered, generate Post-Points slip/report.
+                                            if (displayData.transaction.points) {
+                                                printTestingPostPoints(displayData.global_transaction_id, displayData.transaction, latestBalance).then((transaction) => {
                                                     printer(device, transaction)
                                                 })
-                                            } else {
-                                                printTestingPrePoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
-                                                    printer(device, transaction)
-                                                })
+                                            } else { // Otherwise, generate Pre-Points slip.
+                                                if (displayData.transaction.test_type === 'Other' && displayData.transaction.remarks) {
+                                                    printTestingOtherPostPoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
+                                                        printer(device, transaction)
+                                                    })
+                                                } else {
+                                                    printTestingPrePoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
+                                                        printer(device, transaction)
+                                                    })
+                                                }
                                             }
                                         }
-                                    }
+                                    })
                                 })
-                            })
-                        }
-                    // }
+                            }
+                        // }
+                    })
                 })
-            })
-        })
-        .catch((error) => console.log(error))
+                .catch((error) => console.log(error))
+            } else {
+                navigator.usb.requestDevice({ filters: [{ vendorId: 0x0fe6 }] })
+                    .then((device) => {
+                        printShopLegend().then((shopLegend) => {
+                            printer(device, shopLegend).then(() => {
+                                // if (!reprint) {
+                                    if (displayData.customer_name) {
+                                        printHeaderSuggested(displayData).then((receiptData) => {
+                                            printer(device, receiptData)
+                                        })
+                                    } else {
+                                        printHeaderNormal(displayData.header).then((header) => {
+                                            printer(device, header).then(() => {
+                                                if (displayData.is_testing) {
+                                                    // If points was entered, generate Post-Points slip/report.
+                                                    if (displayData.transaction.points) {
+                                                        printTestingPostPoints(displayData.global_transaction_id, displayData.transaction, latestBalance).then((transaction) => {
+                                                            printer(device, transaction)
+                                                        })
+                                                    } else { // Otherwise, generate Pre-Points slip.
+                                                        if (displayData.transaction.test_type === 'Other' && displayData.transaction.remarks) {
+                                                            printTestingOtherPostPoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
+                                                                printer(device, transaction)
+                                                            })
+                                                        } else {
+                                                            printTestingPrePoints(displayData.global_transaction_id, displayData.transaction).then((transaction) => {
+                                                                printer(device, transaction)
+                                                            })
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                        })
+                                    }
+                                // }
+                            })
+                        })
+                    })
+                    .catch((error) => console.log(error))
+            }
+        });
+    });
 }
 
 // const closeReceiptWithBalanceAndPrint = (balances) => {

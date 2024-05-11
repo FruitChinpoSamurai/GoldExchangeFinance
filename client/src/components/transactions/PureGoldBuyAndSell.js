@@ -78,7 +78,7 @@ const PureGoldBuy = ({ formData, handleTextChange, handleAccoTranID, preventNega
                             }                        </ul>
                         <button className="btn btn-sm" type="button" style={{backgroundColor:"grey", color:"white", height: '35px', width: 'auto'}} onClick={() => handleBEPGCaluculations()}>Total</button>
                     </div>
-                    <input type="number" name='rate' className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleTextChange(e)} required disabled={formData.inventoryDetails[0].pure ? false : true} />
+                    <input type="number" name='rate' className="form-control" onWheel={e => e.target.blur()} onKeyDown={(e) => preventNegativeValues(e)} value={formData.rate} placeholder="Rate" onInput={(e) => handleTextChange(e)} required disabled={formData.inventoryDetails[0].pure ? false : true} min={100000} max={1000000} />
                 </div>
                 <div className="col">
                     <></>

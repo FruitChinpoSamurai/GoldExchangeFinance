@@ -844,7 +844,7 @@ app.patch("/rates", async (request, response) => {
 // ------ //
 
 // For production.
-// https://zellwk.com/blog/serving-https-locally-with-node/
+//https://zellwk.com/blog/serving-https-locally-with-node/
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/', function (req, res) {

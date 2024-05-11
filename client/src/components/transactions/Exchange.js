@@ -39,7 +39,7 @@ const Exchange = ({ formData, handleTextChange, handleAccoTranID, pullTestingTra
                     <span style={{color: 'red'}}><small>{alertMessage}</small></span>
                 </div>
                 <div className="col">
-                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled />
+                    <input type="number" className="form-control" value={formData.points} placeholder="Points" disabled min={0} max={999} step=".1" />
                 </div>
                 <div className="col">
                     <></>

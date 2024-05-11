@@ -618,7 +618,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
             .catch(() => console.log('Nope.'));
     }
 
-    const resetFields = () => {
+    const resetFields = (speed) => {
         setCustDetails(null);
         setAlert('');
         setButtonDisable(true);
@@ -628,7 +628,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                 type: 'Reset',
                 payload: initialFormState
             });
-        }, 750)
+        }, speed === 'quick' ? 0 : 750)
     }
 
     const setNullerAndCreationDate = () => {
@@ -869,7 +869,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                 <div className="modal-content">
                     <div className="modal-header">
                         <h1 className="modal-title fs-5">{editMode ? 'Editing' : `Tr. ID: ${transactionID} • ${currentDate[0]}`}</h1>
-                        <button ref={closeModal} type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => resetFields()}></button>
+                        <button ref={closeModal} type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => resetFields('slow')}></button>
                     </div>
                     <div className="modal-body">
                         <form id="transactionForm" onSubmit={editMode ? onSubmitFormUpdation : onSubmitFormCreation}>
@@ -879,6 +879,9 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                                         <div className="input-group mb-3">
                                             <input type="number" className="form-control" value={accountID || formData.accountID} placeholder="Account ID..." onChange={(e) => setAccountID(e.target.value)} disabled={editMode} required />
                                             <button className="btn btn-outline-secondary" type="button" onClick={() => pullAccount()} disabled={editMode}>Select</button>
+                                            {
+                                                formData.accountID !== '' && <i className="bi bi-x-circle" style={{ position: 'absolute', top: '7px', right: '80px', cursor: 'pointer' }} onClick={() => resetFields('quick')}></i>
+                                            }
                                         </div>
                                     </div>
                                     <div className="col">
