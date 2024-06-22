@@ -176,9 +176,7 @@ async function printer(device, commands) {
 }
 
 const receiptPrint = (reprint, displayData, latestBalance) => {
-    const filters = [
-        { vendorId: 0x0fe6 }
-    ];
+    const filters = [];
     navigator.usb.getDevices().then((devices) => {
         if (devices.length === 0) {
             navigator.usb.requestDevice({ filters })
