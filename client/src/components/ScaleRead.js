@@ -27,8 +27,10 @@ const scaleRead = async (setScaleReading) => {
     const { value, done } = await reader.read();
     if (value) {
       // textContent += value + '\n';
-      console.log(value);
-      setScaleReading(Math.round(Number(value) * 100) / 100);
+      // console.log(value);
+      const regexCheck = /\d+.\d+/;
+      const cleaned_value = Math.round(value.match(regexCheck)[0] * 100) / 100;
+      setScaleReading(cleaned_value);
     }
     if (done) {
       reader.releaseLock();
