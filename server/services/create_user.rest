@@ -3,8 +3,8 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-    "user_name": "newguybruh",
-    "user_password": "goldenadmindrowssap"
+    "user_name": "admin",
+    "user_password": "admin"
 }
 
 ### FAILURE Create one user; username is duplicated.
