@@ -4,7 +4,7 @@ import AccountsRecords from "./AccountsRecords";
 import CustomerStatement from "./CustomerStatement";
 import accountService from "../../services/account";
 
-const Accounts = ({ returnClickHandle, data, globalRates }) => {
+const Accounts = ({ returnClickHandle, data, globalRates, setGlobalReceipt }) => {
     const [accounts, setAccounts] = useState([]);
     const [viewAccount, setViewAccount] = useState({});
     const [searched, setSearched] = useState('');
@@ -48,6 +48,7 @@ const Accounts = ({ returnClickHandle, data, globalRates }) => {
                                 returnClickHandle={itemClicked}
                                 flag={shortcutFlag}
                                 globalRates={globalRates}
+                                setGlobalReceipt={setGlobalReceipt}
                             />
                         </div>
                     </div>

@@ -11,7 +11,10 @@ import AlertPopup from "./AlertPopup";
 import readService from "./ScaleRead";
 import RateSetter from "./RateSetter";
 
-const Dashboard = ({ globalRates }) => {
+// import print from 'print-js';
+// import './Receipt.css';
+
+const Dashboard = ({ globalRates, setGlobalReceipt }) => {
     const [one, setOne] = useState('#CDB450');
     const [two, setTwo] = useState('#CDB450');
     const [three, setThree] = useState('#CDB450');
@@ -123,6 +126,7 @@ const Dashboard = ({ globalRates }) => {
                         returnClickHandle={itemClicked}
                         data={custStatementHeader}
                         globalRates={globalRates}
+                        setGlobalReceipt={setGlobalReceipt}
                     />
                 )
 
@@ -162,7 +166,7 @@ const Dashboard = ({ globalRates }) => {
                                 }
                             </div>
                         </div>
-                        <NewAndEditTransaction handleAlert={setTransactionAlert} successTransactionHandle={itemClicked} scaleReading={scaleReading} />
+                        <NewAndEditTransaction handleAlert={setTransactionAlert} successTransactionHandle={itemClicked} scaleReading={scaleReading} setGlobalReceipt={setGlobalReceipt} />
                         {
                             transactionAlert !== '' && <AlertPopup status={transactionAlert} />
                         }
@@ -173,11 +177,41 @@ const Dashboard = ({ globalRates }) => {
 
     return (
         <>  
+            {/* <div className="col hide-me" style={{ width: '280px' }} id="test">
+                <div className="row" style={{ textAlignLast: 'center' }}>
+                    <span style={{ fontSize: '25px', fontWeight: 'bold' }}>Eastern Gold</span>
+                </div>
+                <hr style={{ margin: '0rem 0' }}/>
+                <div className="row" style={{ textAlignLast: 'center' }}>
+                    <span style={{ fontSize: '10px' }}>07/08/2024 - 09:45PM</span>
+                </div>
+                <hr style={{ margin: '0rem 0' }}/>
+                <div className="row" >
+                    <div className="col">
+                        <span style={{ fontSize: '10px' }}>Customer/Account ID:</span>
+                    </div>
+                    <div className="col" style={{ textAlignLast: 'right' }}>
+                        <span style={{ fontSize: '10px' }}>000001</span>
+                    </div>
+                </div>
+                <div className="row" >
+                    <div className="col">
+                        <span style={{ fontSize: '10px' }}>Chinga Pingaman:</span>
+                    </div>
+                    <div className="col" style={{ textAlignLast: 'right' }}>
+                        <span style={{ fontSize: '10px' }}>03462177528</span>
+                    </div>
+                </div>
+                <hr style={{ margin: '0rem 0' }}/>                 
+            </div> */}
             <div className="row">
                 <div className="col">
                     <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayCalculator()}></i>
                     <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
                     <i className="bi bi-coin" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayRateSetter()}></i>
+                    {/* <button type="button" onClick={() => print({printable: 'test', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})}>
+                        Print
+                    </button> */}
                 </div>
                 <div className="col" style={{ textAlign: 'end' }}>
                     {
@@ -192,7 +226,7 @@ const Dashboard = ({ globalRates }) => {
             {
                 displayRate && <RateSetter globalRates={globalRates} />
             }
-            <SuggestedTransaction />
+            <SuggestedTransaction setGlobalReceipt={setGlobalReceipt} />
             {
                 switchView(clicked)
             }

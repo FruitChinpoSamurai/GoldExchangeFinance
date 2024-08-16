@@ -4,10 +4,10 @@ import transactionService from "../../services/transaction";
 import DataPopup from "../DataPopup";
 import AlertPopup from "../AlertPopup";
 import NewAndEditTransaction from "../NewAndEditTransaction"
-import printService from "../ReceiptPrint";
 import bigPrintService from "../TestPrint";
+import print from 'print-js';
 
-const CustomerStatementTransactions = ({ accountID, searched, data, globalRates }) => {
+const CustomerStatementTransactions = ({ accountID, searched, data, globalRates, setGlobalReceipt }) => {
     const [transactions, setTransactions] = useState([]);
     const [display, setDisplay] = useState([false, 0, 0, '']);
     const [view, setView] = useState(false);
@@ -79,32 +79,39 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
                 customerStatmentService.updateCustomerBalances(balances, Number(accountID))
                     .then(response => {
                         if (data.created) {
+                            console.log(1)
                             const currBalance = `${balances.cash} ${balances.gold} ${balances.sample}`
                             const receiptData = data.receiptData;
                             receiptData['transaction']['current_balance'] = currBalance;
-                            printService.receiptPrint(false, receiptData);
+                            setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: null});
                             setTimeout(() => {
-                                printService.receiptPrint(false, receiptData);
-                            }, 1000);
+                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+                            }, 1500);
+                            setTimeout(() => {
+                                setGlobalReceipt(null);
+                            }, 1500);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balance: currBalance }).then(() => void(response))
                         }
                         if (refresh) {
+                            console.log(2)
                             const currBalance = (updateCurrBalances.filter((idAndBalance) => idAndBalance[0] === displayTransaction[2]))[0][1];
                             const receiptData = editReceiptData;
                             receiptData['transaction']['current_balance'] = currBalance;
-                            printService.receiptPrint(false, receiptData, `${balances.cash} ${balances.gold} ${balances.sample}`);
+                            setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: `${balances.cash} ${balances.gold} ${balances.sample}`});
                             setTimeout(() => {
-                                printService.receiptPrint(false, receiptData, `${balances.cash} ${balances.gold} ${balances.sample}`);
-                            }, 1000);
+                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+                            }, 1500);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
                             setRefresh(false);
                         }
                         if (data.receiptData) {
+                            console.log(3)
                             if (data.receiptData.is_testing && (data.receiptData.transaction.points !== null)) {
                                 bigPrintService.print(data.receiptData, globalRates.current.buyRate);
                             }
                         }
-                        if (editReceiptData && !refresh) {
+                        if (editReceiptData && refresh) {
+                            console.log(4)
                             if (editReceiptData.is_testing && (editReceiptData.transaction.points !== null)) {
                                 bigPrintService.print(editReceiptData, globalRates.current.buyRate);
                             }
@@ -112,7 +119,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
                     });
             })
             // .catch(() => console.log("Yabai!"))
-    }, [accountID, refresh, data, displayTransaction, editReceiptData, globalRates]);
+    }, [accountID, refresh, data, editReceiptData, globalRates, setGlobalReceipt]);
 
     const displayTransactionDetails = (e) => {
         transactionService.getTakenGivenRelateds(accountID, e.currentTarget.innerHTML)
@@ -237,7 +244,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates 
             {
                 display[0] && <DataPopup data={display} />
             }
-            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} handleRefresh={setRefresh} setEditReceiptData={setEditReceiptData} />
+            <NewAndEditTransaction transaction={displayTransaction} handleAlert={setTransactionAlert} handleRefresh={setRefresh} setEditReceiptData={setEditReceiptData} data={data} setGlobalReceipt={setGlobalReceipt} />
             {
                 transactionAlert !== '' && <AlertPopup status={transactionAlert} />
             }

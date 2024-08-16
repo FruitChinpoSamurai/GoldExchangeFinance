@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useReducer, useState} from "react";
 import suggestedTransactionReducer from "../reducers/suggestedTransactionReducer";
 import suggestedTransactionService from "../services/suggestedTransaction";
-import printService from "./ReceiptPrint";
+import print from 'print-js';
 
 const initialFormState = {
     date: '',
@@ -14,7 +14,7 @@ const initialFormState = {
     remarks: ''
 }
 
-const SuggestedTransaction = () => {
+const SuggestedTransaction = ({ setGlobalReceipt }) => {
     const closeModal = useRef(null);
     const [formData, dispatch] = useReducer(suggestedTransactionReducer, initialFormState);
     const [create, setCreate] = useState(false);
@@ -47,7 +47,6 @@ const SuggestedTransaction = () => {
 
     useEffect(() => {
         if (suggestedTransactions.length > 0) {
-            console.log(suggestedTransactions)
             const filtered = suggestedTransactions.filter(transaction => (
                 (transaction.suggested_transaction_id && transaction.suggested_transaction_id === Number(searched)) ||
                 (transaction.transaction_date.split(' ')[0]).includes(searched) ||
@@ -120,7 +119,10 @@ const SuggestedTransaction = () => {
         suggestedTransactionService.createSuggestedTransaction(createBody)
             .then(response => {
                 resetFields();
-                printService.receiptPrint(false, createBody);
+                setGlobalReceipt({ reprint: false, displayData: createBody, latestBalance: 'none' })
+                setTimeout(() => {
+                    print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+                }, 1500);
             })
             .catch(response => {
                 console.log(response);

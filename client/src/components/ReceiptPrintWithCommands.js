@@ -309,5 +309,5 @@ const receiptPrint = (reprint, displayData, latestBalance) => {
 //         })
 // }
 
-const printService = { receiptPrint };
-export default printService;
+const printServiceOld = { receiptPrint };
+export default printServiceOld;

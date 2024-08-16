@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CustomerStatementHeader from "./CustomerStatementHeader";
 import CustomerStatementTransactions from "./CustomerStatementTransactions";
 
-const CustomerStatement = ({ data, returnClickHandle, flag, globalRates }) => {
+const CustomerStatement = ({ data, returnClickHandle, flag, globalRates, setGlobalReceipt }) => {
     const [searched, setSearched] = useState('')
 
     const searchHandle = (e) => {
@@ -18,7 +18,7 @@ const CustomerStatement = ({ data, returnClickHandle, flag, globalRates }) => {
                 searched={searched}
                 searchHandle={searchHandle}
             />
-            <CustomerStatementTransactions accountID={data.acco_id} searched={searched} data={data} globalRates={globalRates} />
+            <CustomerStatementTransactions accountID={data.acco_id} searched={searched} data={data} globalRates={globalRates} setGlobalReceipt={setGlobalReceipt} />
         </>
     )
 };

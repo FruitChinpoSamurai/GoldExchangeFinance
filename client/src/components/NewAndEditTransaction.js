@@ -14,7 +14,7 @@ import Taken from "./transactions/Taken";
 import AdvanceAndLoan from "./transactions/AdvanceAndLoan";
 import PureGoldBuyAndSell from "./transactions/PureGoldBuyAndSell";
 import BarExchangeInAndOut from "./transactions/BarExchangeInAndOut";
-import printService from "./ReceiptPrint"
+import print from 'print-js';
 
 const currentDate = new Date().toLocaleString().split(', ');
 
@@ -90,7 +90,7 @@ const initialFormState = {
     karats: ''
 }
 
-const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData, scaleReading }) => {
+const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, data, handleRefresh, setEditReceiptData, scaleReading, setGlobalReceipt }) => {
     const [accountID, setAccountID] = useState(''); // Account ID selection.
     const [custDetails, setCustDetails] = useState(null) // Customer details at top right of modal.
     const [formData, dispatch] = useReducer(transactionReducer, initialFormState);
@@ -863,6 +863,72 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
             .catch(response => handleAlert(response));
     }
 
+    const printReceipt = () => {
+        setGlobalReceipt({reprint: true, displayData: {
+            header: {
+                date_created: formData.dateCreated,
+                acco_id: data.acco_id,
+                cust_id: data.cust_id,
+                cust_name: data.cust_name,
+                cust_primary_number: data.cust_primary_number
+            },
+            is_testing: formData.transactionType === 'Testing' ? true : false,
+            global_transaction_id: transactionID || formData.globalID,
+            transaction: {
+                acco_id: formData.accountID,
+                date_created: formData.dateCreated,
+                date_finalized: formData.dateFinalized,
+                dates_modified: formData.datesModified,
+                acco_tran_id: formData.accoTranID,
+                test_id: formData.testID,
+                use_transaction_id: formData.simpleTranID,
+                first_weight: formData.firstWeight,
+                second_weight: formData.secondWeight,
+                third_weight: formData.thirdWeight,
+                total_sample_weight: formData.totalWeight,
+                points: formData.points,
+                pure_weight: formData.pure,
+                taken_cash: formData.takeCash,
+                taken_gold: formData.takeGold,
+                fees: formData.fees,
+                charges: formData.charges,
+                rate: formData.rate,
+                discount: formData.discount,
+                amount: formData.amount,
+                remarks: formData.remarks,
+                test_type: formData.testType,
+                premium: formData.premium,
+                inventory_details: formData.inventoryDetails,
+                sample_returned: formData.sampleReturned,
+                received: formData.cReceived,
+                receivable: formData.cReceivable,
+                paid: formData.cPaid,
+                payable: formData.cPayable,
+                transaction_type: formData.transactionType,
+                transferred: formData.transferredDue,
+                pending_taken_cash: formData.pendingTakeCash,
+                pending_taken_gold: formData.pendingTakeGold,
+                gold_in_cash: formData.goldInCash,
+                gross_amount: formData.grossAmount,
+                net_amount: formData.netAmount,
+                carried_fees: formData.carriedFees,
+                include_test_fees: formData.includeTestFees,
+                pure_minus_gold_in_cash: formData.pureMinusGoldInCash,
+                taken_cash_in_gold: formData.takeCashInGold, 
+                final_gold: formData.finalGold,
+                current_balance: formData.currBalance,
+                previous_balance: formData.prevBalance,
+                global_id: formData.globalID,
+                ratti_in: formData.rattiIn,
+                ratti_out: formData.rattiOut,
+                karats: formData.karats
+            }
+        }, latestBalance: null});
+        setTimeout(() => {
+            print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+        }, 1500);
+    };
+
     return (
         <div className="modal fade" id="transactionEditCreate" tabIndex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
             <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -922,66 +988,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
                     </div>
                     <div className="modal-footer">
                         {
-                            editMode && <button className="btn" onClick={() => printService.receiptPrint(true, {
-                                header: {
-                                    date_created: formData.dateCreated,
-                                    acco_id: data.acco_id,
-                                    cust_id: data.cust_id,
-                                    cust_name: data.cust_name,
-                                    cust_primary_number: data.cust_primary_number
-                                },
-                                is_testing: formData.transactionType === 'Testing' ? true : false,
-                                global_transaction_id: transactionID || formData.globalID,
-                                transaction: {
-                                    acco_id: formData.accountID,
-                                    date_created: formData.dateCreated,
-                                    date_finalized: formData.dateFinalized,
-                                    dates_modified: formData.datesModified,
-                                    acco_tran_id: formData.accoTranID,
-                                    test_id: formData.testID,
-                                    use_transaction_id: formData.simpleTranID,
-                                    first_weight: formData.firstWeight,
-                                    second_weight: formData.secondWeight,
-                                    third_weight: formData.thirdWeight,
-                                    total_sample_weight: formData.totalWeight,
-                                    points: formData.points,
-                                    pure_weight: formData.pure,
-                                    taken_cash: formData.takeCash,
-                                    taken_gold: formData.takeGold,
-                                    fees: formData.fees,
-                                    charges: formData.charges,
-                                    rate: formData.rate,
-                                    discount: formData.discount,
-                                    amount: formData.amount,
-                                    remarks: formData.remarks,
-                                    test_type: formData.testType,
-                                    premium: formData.premium,
-                                    inventory_details: formData.inventoryDetails,
-                                    sample_returned: formData.sampleReturned,
-                                    received: formData.cReceived,
-                                    receivable: formData.cReceivable,
-                                    paid: formData.cPaid,
-                                    payable: formData.cPayable,
-                                    transaction_type: formData.transactionType,
-                                    transferred: formData.transferredDue,
-                                    pending_taken_cash: formData.pendingTakeCash,
-                                    pending_taken_gold: formData.pendingTakeGold,
-                                    gold_in_cash: formData.goldInCash,
-                                    gross_amount: formData.grossAmount,
-                                    net_amount: formData.netAmount,
-                                    carried_fees: formData.carriedFees,
-                                    include_test_fees: formData.includeTestFees,
-                                    pure_minus_gold_in_cash: formData.pureMinusGoldInCash,
-                                    taken_cash_in_gold: formData.takeCashInGold, 
-                                    final_gold: formData.finalGold,
-                                    current_balance: formData.currBalance,
-                                    previous_balance: formData.prevBalance,
-                                    global_id: formData.globalID,
-                                    ratti_in: formData.rattiIn,
-                                    ratti_out: formData.rattiOut,
-                                    karats: formData.karats
-                                }
-                            })} style={{backgroundColor:"grey", color:"white"}}>Reprint</button>
+                            editMode && <button className="btn" onClick={() => printReceipt()} style={{backgroundColor:"grey", color:"white"}}>Reprint</button>
                         }
                         {
                             formData.dateFinalized === '' ? 
