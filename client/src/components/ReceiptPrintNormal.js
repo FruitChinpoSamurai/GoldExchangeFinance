@@ -172,18 +172,18 @@ const printTestingPostPoints = (global_id, data, latestBal) => {
             </div>
             <div className="row" >
                 <div className="col">
-                    <span style={{ fontSize: '10px' }}>Test Fees</span>
+                    <span style={{ fontSize: '10px' }}>Pure Weight</span>
                 </div>
                 <div className="col" style={{ textAlignLast: 'right' }}>
-                    <span style={{ fontSize: '10px' }}>{data.fees}</span>
+                    <span style={{ fontSize: '10px' }}>{data.pure_weight}</span>
                 </div>
             </div>
             <div className="row" >
                 <div className="col">
-                    <span style={{ fontSize: '10px' }}>Labour Charges Per Gram</span>
+                    <span style={{ fontSize: '10px' }}>Test Fees</span>
                 </div>
                 <div className="col" style={{ textAlignLast: 'right' }}>
-                    <span style={{ fontSize: '10px' }}>{data.charges}/g</span>
+                    <span style={{ fontSize: '10px' }}>{data.fees}</span>
                 </div>
             </div>
             <div className="row" >
@@ -242,6 +242,120 @@ const printTestingPostPoints = (global_id, data, latestBal) => {
                         <hr style={{ margin: '0rem 0' }}/>
                     </>
             }
+            <div className="row" style={{ textAlignLast: 'center' }}>
+                <span style={{ fontSize: '10px' }}>Thank you!</span>
+            </div>
+        </>
+    );
+}
+
+const printImpure = (global_id, data) => {
+    const prevBalance = data.previous_balance.split(' ');
+    const currBalance = data.current_balance.split(' ');
+    return (
+        <>
+            <br/>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>{global_id} | {data.acco_tran_id}</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>Testing ID: {data.test_id}</span>
+                </div>
+            </div>
+            <br/>
+            <hr style={{ margin: '0rem 0' }}/>
+            <div className="row" style={{ textAlignLast: 'center' }}>
+                <span style={{ fontSize: '10px' }}>Opening Balance</span>
+            </div>
+            <div className="row" style={{ textAlignLast: 'center' }}>
+                <span style={{ fontSize: '10px' }}>Cash: {prevBalance[0]} | Gold: {prevBalance[1]} | Sample: {prevBalance[2]}</span>
+            </div>
+            <hr style={{ margin: '0rem 0' }}/>
+            <br/>
+            <hr style={{ margin: '0rem 0' }}/>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Sample Weight</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.total_sample_weight}g</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Points</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.points}</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Pure Weight</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.pure_weight}g</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Test Fees (if included)</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.include_test_fees ? data.carried_fees : '0'}</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Charges</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.charges}</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Rate</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.rate}/tola</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Previous amount to be paid</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.pending_taken_cash ? data.taken_gold : 'NA'}</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Receivable</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.receivable}</span>
+                </div>
+            </div>
+            <div className="row" >
+                <div className="col">
+                    <span style={{ fontSize: '10px' }}>Received</span>
+                </div>
+                <div className="col" style={{ textAlignLast: 'right' }}>
+                    <span style={{ fontSize: '10px' }}>{data.received}</span>
+                </div>
+            </div>
+            <hr style={{ margin: '0rem 0' }}/>
+            <br/>
+            <hr style={{ margin: '0rem 0' }}/>
+            <div className="row" style={{ textAlignLast: 'center' }}>
+                <span style={{ fontSize: '10px' }}>Closing Balance</span>
+            </div>
+            <div className="row" style={{ textAlignLast: 'center' }}>
+                <span style={{ fontSize: '10px' }}>Cash: {currBalance[0]} | Gold: {currBalance[1]} | Sample: {currBalance[2]}</span>
+            </div>
+            <hr style={{ margin: '0rem 0' }}/>
             <div className="row" style={{ textAlignLast: 'center' }}>
                 <span style={{ fontSize: '10px' }}>Thank you!</span>
             </div>
@@ -330,7 +444,7 @@ const printHeaderSuggested = (data) => {
 
 
 const ReceiptPrintDisplay = ({reprint, displayData, latestBalance}) => {
-    console.log(reprint, displayData, latestBalance);
+    console.log(displayData)
     return (
         <>
             <div className="col hide-me" style={{ width: '280px' }} id="printreceipt">
@@ -344,12 +458,26 @@ const ReceiptPrintDisplay = ({reprint, displayData, latestBalance}) => {
                                     <>
                                         { printHeaderNormal(displayData.header) }
                                         {
-                                            displayData.is_testing &&
+                                            displayData.is_testing ?
                                                 displayData.transaction.points ?
                                                     <>{ printTestingPostPoints(displayData.global_transaction_id, displayData.transaction, latestBalance) }</> :
                                                     (displayData.transaction.test_type === 'Other' && displayData.transaction.remarks) ?
                                                         <>{ printTestingOtherPostPoints(displayData.global_transaction_id, displayData.transaction) }</> :
                                                         <>{ printTestingPrePoints(displayData.global_transaction_id, displayData.transaction) }</>
+                                                :   <>
+                                                        { displayData.transaction.transaction_type === 'Impure' && printImpure(displayData.global_transaction_id, displayData.transaction) }
+                                                        {/* { displayData.transaction.transaction_type === 'Exchange' && printExchange(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Both' && printBoth(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Tezab' && printTezab(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Pure Gold Buy' && printPGB(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Pure Gold Sell' && printPGS(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Bar Exchange In' && printBEI(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Bar Exchange Out' && printBEO(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Given' && printGiven(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Taken' && printTaken(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Advance' && printAdvance(displayData.global_transaction_id, displayData.transaction) }
+                                                        { displayData.transaction.transaction_type === 'Loan' && printLoan(displayData.global_transaction_id, displayData.transaction) } */}
+                                                    </>
                                         }
                                     </>
                             }

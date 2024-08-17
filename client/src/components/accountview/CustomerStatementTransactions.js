@@ -78,13 +78,13 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                 setTransactions(adjustedTransactions);
                 customerStatmentService.updateCustomerBalances(balances, Number(accountID))
                     .then(response => {
-                        if (data.created) {
-                            console.log(1)
+                        if (!refresh && data.created) {
                             const currBalance = `${balances.cash} ${balances.gold} ${balances.sample}`
                             const receiptData = data.receiptData;
                             receiptData['transaction']['current_balance'] = currBalance;
                             setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: null});
                             setTimeout(() => {
+                                console.log('me')
                                 print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
                             }, 1500);
                             setTimeout(() => {
@@ -93,25 +93,24 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balance: currBalance }).then(() => void(response))
                         }
                         if (refresh) {
-                            console.log(2)
                             const currBalance = (updateCurrBalances.filter((idAndBalance) => idAndBalance[0] === displayTransaction[2]))[0][1];
                             const receiptData = editReceiptData;
+                            console.log(editReceiptData)
                             receiptData['transaction']['current_balance'] = currBalance;
                             setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: `${balances.cash} ${balances.gold} ${balances.sample}`});
                             setTimeout(() => {
+                                console.log('you')
                                 print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
                             }, 1500);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
                             setRefresh(false);
                         }
                         if (data.receiptData) {
-                            console.log(3)
                             if (data.receiptData.is_testing && (data.receiptData.transaction.points !== null)) {
                                 bigPrintService.print(data.receiptData, globalRates.current.buyRate);
                             }
                         }
                         if (editReceiptData && refresh) {
-                            console.log(4)
                             if (editReceiptData.is_testing && (editReceiptData.transaction.points !== null)) {
                                 bigPrintService.print(editReceiptData, globalRates.current.buyRate);
                             }
@@ -119,7 +118,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                     });
             })
             // .catch(() => console.log("Yabai!"))
-    }, [accountID, refresh, data, editReceiptData, globalRates, setGlobalReceipt]);
+    }, [accountID, data, globalRates, editReceiptData]);
 
     const displayTransactionDetails = (e) => {
         transactionService.getTakenGivenRelateds(accountID, e.currentTarget.innerHTML)

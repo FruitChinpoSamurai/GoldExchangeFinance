@@ -845,26 +845,26 @@ app.patch("/rates", async (request, response) => {
 
 // For production.
 //https://zellwk.com/blog/serving-https-locally-with-node/
-app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
-const server = https.createServer(
-    {
-      key: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs\/key.pem`, 'utf8'),
-      cert: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs/\cert.pem`, 'utf8'),
-    },
-    app,
-  )
+// const server = https.createServer(
+//     {
+//       key: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs\/key.pem`, 'utf8'),
+//       cert: fs.readFileSync(`D:/\EGR/\GoldExchangeFinance/\server/\certs/\cert.pem`, 'utf8'),
+//     },
+//     app,
+//   )
 
-server.listen(443, _ => {
-    console.log('App listening at https://192.168.100.165')
-})
+// server.listen(443, _ => {
+//     console.log('App listening at https://192.168.100.165')
+// })
 
 ///
 
-// app.listen(5000, () => {
-//     console.log("Server has started on port 5000.");
-// });
+app.listen(5000, () => {
+    console.log("Server has started on port 5000.");
+});
