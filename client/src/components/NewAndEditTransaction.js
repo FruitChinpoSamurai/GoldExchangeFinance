@@ -925,7 +925,7 @@ const NewTransaction = ({ transaction, handleAlert, successTransactionHandle, da
             }
         }, latestBalance: null});
         setTimeout(() => {
-            print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+            print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; } @page { size: 80mm 100%; padding: 0; margin: 0; } body { padding: 0; margin: 0; } html, body, #root, #root > div { padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden; }'})
         }, 1500);
     };
 

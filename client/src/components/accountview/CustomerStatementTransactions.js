@@ -85,7 +85,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                             setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: null});
                             setTimeout(() => {
                                 console.log('me')
-                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; } @page { size: 80mm 100%; padding: 0; margin: 0; } body { padding: 0; margin: 0; } html, body, #root, #root > div { padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden; }'})
                             }, 1500);
                             setTimeout(() => {
                                 setGlobalReceipt(null);
@@ -100,7 +100,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                             setGlobalReceipt({reprint: false, displayData: receiptData, latestBalance: `${balances.cash} ${balances.gold} ${balances.sample}`});
                             setTimeout(() => {
                                 console.log('you')
-                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})
+                                print({printable: 'printreceipt', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; } @page { size: 80mm 100%; padding: 0; margin: 0; } body { padding: 0; margin: 0; } html, body, #root, #root > div { padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden; }'})
                             }, 1500);
                             transactionService.updateTransactionClosingBalance(data.acco_id, data.acco_tran_id, { balances: updateCurrBalances, updateFrom: displayTransaction[2] }).then(() => void(response))
                             setRefresh(false);

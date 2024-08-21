@@ -429,7 +429,6 @@ const transactionReducer = (state, action) => {
         // Impure, Exchange, Both
         case "UpdateTestingInitial": {
             const { fees, total_sample_weight, points, pure_weight, charges, taken_cash, taken_gold, transferred } = action.payload;
-            console.log(taken_cash)
             return {
                 ...state,
                 totalWeight: total_sample_weight,
@@ -538,8 +537,8 @@ const transactionReducer = (state, action) => {
                     includeTestFees: action.payload,
                     charges: newCharges,
                     netAmount: state.transactionType === 'Exchange' ? '' : state.goldInCash - newCharges - state.pendingTakeCash,
-                    cPayable: state.transactionType === 'Exchange' ? newCharges : '',
-                    cPaid: state.transactionType === 'Exchange' ? newCharges : '',
+                    cPayable: state.transactionType === 'Exchange' ? `${newCharges}R` : '',
+                    cPaid: state.transactionType === 'Exchange' ? `${newCharges}R` : '',
                 }
             } else {
                 let newCharges = state.charges;
@@ -687,7 +686,7 @@ const transactionReducer = (state, action) => {
         // Bar Exchange In and Out, Pure Gold Buy and Sell
         case "UpdateBEPGType": {
             const itemType = action.payload;
-            const itemSubType = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === 'Coins') ? action.metaData.weight_class : '';
+            const itemSubType = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === 'Coins') ? action.metaData[0].weight_class : '';
             const points = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE' || itemType === '10 Tola Standard Bar') ? '999' : '';
             const pure = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData[0].gold_weight : itemType === '10 Tola Standard Bar' ? action.metaData.slice(-1)[0].gold_weight : '';
             const cash = (itemType === 'Millat' || itemType === 'Small Pieces' || itemType === 'KBE') ? action.metaData[0].price : itemType === '10 Tola Standard Bar' ? action.metaData.slice(-1)[0].price : '';
