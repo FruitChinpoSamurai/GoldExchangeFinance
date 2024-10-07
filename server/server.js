@@ -23,32 +23,32 @@ const checkMissOrEmpty = (value) => {
 // AUTOMATICS //
 
 // Mainly for holidays. If balance is not manually updated by the user before the end of the day, the current day's balances will be pushed forward to the next day.
-const updateBalancesOnHoliday = async () => {
-    try {
-        const currentDate = new Date().toLocaleString().split(', ')[0];
-        const currentTime = new Date()
-        if (currentTime.getHours === 23 && currentTime.getMinutes() > 30) {
-            const latestBalances = await pool.query("SELECT * FROM business_balances ORDER BY balance_id DESC LIMIT 1;");
-            if (currentDate !== latestBalances.rows[0].date_updated) {
-                const updateForNextDay = await pool.query("INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES ($1, $2, $3, $4, $5, $6) RETURNING 0;", [currentDate, latestBalances.rows[0].cash_balance, latestBalances.rows[0].gold_balance, latestBalances.rows[0].sample_balance, latestBalances.rows[0].un_cash_balance, latestBalances.rows[0].un_gold_balance]);
-                if (updateForNextDay.rows[0].length === 0) {
-                    console.log("Auto Balance Update Failed");
-                } else {
-                    console.log("Auto Balance Update Passed");
-                }
-            } else {
-                console.log("No Need to Update Balances");
-            }
-        }
-    } catch (error) {
-        console.log(error.message);
-        if (error.code === '23505') {
-            response.json("Balance Already Updated")
-        }
-    }
-}
+// const updateBalancesOnHoliday = async () => {
+//     try {
+//         const currentDate = new Date().toLocaleString().split(', ')[0];
+//         const currentTime = new Date()
+//         if (currentTime.getHours === 23 && currentTime.getMinutes() > 30) {
+//             const latestBalances = await pool.query("SELECT * FROM business_balances ORDER BY balance_id DESC LIMIT 1;");
+//             if (currentDate !== latestBalances.rows[0].date_updated) {
+//                 const updateForNextDay = await pool.query("INSERT INTO business_balances (date_updated, cash_balance, gold_balance, sample_balance, un_cash_balance, un_gold_balance) VALUES ($1, $2, $3, $4, $5, $6) RETURNING 0;", [currentDate, latestBalances.rows[0].cash_balance, latestBalances.rows[0].gold_balance, latestBalances.rows[0].sample_balance, latestBalances.rows[0].un_cash_balance, latestBalances.rows[0].un_gold_balance]);
+//                 if (updateForNextDay.rows[0].length === 0) {
+//                     console.log("Auto Balance Update Failed");
+//                 } else {
+//                     console.log("Auto Balance Update Passed");
+//                 }
+//             } else {
+//                 console.log("No Need to Update Balances");
+//             }
+//         }
+//     } catch (error) {
+//         console.log(error.message);
+//         if (error.code === '23505') {
+//             response.json("Balance Already Updated")
+//         }
+//     }
+// }
 
-setInterval(updateBalancesOnHoliday, 1000 * 60 * 60 * 0.5);
+// setInterval(updateBalancesOnHoliday, 1000 * 60 * 60 * 0.5);
 
 // ------- //
 
@@ -189,7 +189,7 @@ app.put("/customers/:id", async (request, response) => {
 app.get("/customers", async (request, response) => {
     try {
         const allCustomers = await pool.query(
-            "SELECT TO_CHAR(cust_id, '00000') AS cust_id, cust_name, cust_primary_number, COALESCE(cust_alternate_number, '') AS cust_alternate_number, COALESCE(cust_nic, '') AS cust_nic, COALESCE(cust_email, '') AS cust_email, COALESCE(cust_ptclf_number, '') AS cust_ptclf_number, COALESCE(cust_ptcls_number, '') AS cust_ptcls_number, COALESCE(cust_shop_address, '') AS cust_shop_address, COALESCE(cust_reference, '') AS cust_reference, cust_test_fees, cust_pg_charges FROM customers ORDER BY cust_id"
+            "SELECT TO_CHAR(cust_id, 'FM00000') AS cust_id, cust_name, cust_primary_number, COALESCE(cust_alternate_number, '') AS cust_alternate_number, COALESCE(cust_nic, '') AS cust_nic, COALESCE(cust_email, '') AS cust_email, COALESCE(cust_ptclf_number, '') AS cust_ptclf_number, COALESCE(cust_ptcls_number, '') AS cust_ptcls_number, COALESCE(cust_shop_address, '') AS cust_shop_address, COALESCE(cust_reference, '') AS cust_reference, cust_test_fees, cust_pg_charges FROM customers ORDER BY cust_id"
         );
         response.json(allCustomers.rows);
     } catch (error) {
@@ -201,7 +201,7 @@ app.get("/customers", async (request, response) => {
 app.get("/customers/:id/accounts", async (request, response) => {
     try {
         const { id } = request.params;
-        const customer = await pool.query("SELECT TO_CHAR(acco_id, '000000') AS acco_id FROM accounts WHERE cust_id = $1", [id]);
+        const customer = await pool.query("SELECT TO_CHAR(acco_id, 'FM000000') AS acco_id FROM accounts WHERE cust_id = $1", [id]);
         response.json(customer.rows);
     } catch (error) {
         console.error(error.message);
@@ -230,7 +230,7 @@ app.post("/accounts", async (request, response) => {
 // Get all financial accounts; for the Accounts view with getAllAccounts().
 app.get("/accounts", async (request, response) => {
     try {
-        const allAccounts = await pool.query("SELECT TO_CHAR(acco_id, '000000') AS acco_id, TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id ORDER BY acco_id");
+        const allAccounts = await pool.query("SELECT TO_CHAR(acco_id, 'FM000000') AS acco_id, TO_CHAR(accounts.cust_id, 'FM00000') AS cust_id, cust_name, cust_primary_number, curr_gold_balance, curr_cash_balance FROM customers INNER JOIN accounts ON accounts.cust_id = customers.cust_id ORDER BY acco_id");
         response.json(allAccounts.rows);
     } catch (error) {
         console.error(error.message);
@@ -241,7 +241,7 @@ app.get("/accounts", async (request, response) => {
 app.get("/accounts/:id", async (request, response) => {
     try {
         const { id } = request.params;
-        const account = await pool.query("SELECT TO_CHAR(accounts.cust_id, '00000') AS cust_id, cust_name, cust_test_fees, cust_pg_charges, curr_cash_balance, curr_gold_balance, curr_sample_balance, cust_primary_number FROM accounts INNER JOIN customers ON accounts.cust_id = customers.cust_id WHERE accounts.acco_id = $1;", [id]);
+        const account = await pool.query("SELECT TO_CHAR(accounts.cust_id, 'FM00000') AS cust_id, cust_name, cust_test_fees, cust_pg_charges, curr_cash_balance, curr_gold_balance, curr_sample_balance, cust_primary_number FROM accounts INNER JOIN customers ON accounts.cust_id = customers.cust_id WHERE accounts.acco_id = $1;", [id]);
         if (account.rows.length === 0) {
             response.json({ status: false, message: "ID does not exist." });
             throw new Error("incorrect data: id does not exist")
@@ -504,7 +504,7 @@ app.get("/transactions/:id", async (request, response) => {
 // getTranID();
 app.get("/transactions", async (request, response) => {
     try {
-        const latestTranID = await pool.query("SELECT TO_CHAR(Count(*) + 1, '000000000') AS tran_id FROM transactions;");
+        const latestTranID = await pool.query("SELECT TO_CHAR(Count(*) + 1, 'FM000000000') AS tran_id FROM transactions;");
         response.json(latestTranID.rows[0].tran_id);
     } catch (error) {
         console.error(error.message);
@@ -515,10 +515,10 @@ app.get("/transactions", async (request, response) => {
 app.get("/transactions/:id/testing/:test/:type", async (request, response) => {
     try {
         const { id, test, type } = request.params;
-        if (test.slice(0, 2) !== 'TE') {
+        if ((test.slice(0, 2)).toUpperCase() !== 'TE') {
             response.json({ status: false, data: 'Not a Testing transaction.' });    
         } else {
-            const testingData = await pool.query("SELECT fees, total_sample_weight, points, pure_weight, charges, taken_cash, taken_gold, date_finalized, transferred FROM transactions WHERE acco_id = $1 AND acco_tran_id = $2;", [id, test]);
+            const testingData = await pool.query("SELECT fees, total_sample_weight, points, pure_weight, charges, taken_cash, taken_gold, date_finalized, transferred FROM transactions WHERE acco_id = $1 AND acco_tran_id = $2;", [id, `${(test.slice(0, 2)).toUpperCase() + test.slice(2)}`]);
             if (testingData.rows.length === 0) {
                 response.json({ status: false, data: 'Transaction does not exist.' });    
             } else {
@@ -705,7 +705,7 @@ app.post("/suggested_transaction", async (request, response) => {
 // Retrieve latest count of suggested transactions; getSuggestedCount().
 app.get("/suggested_transaction/counts", async (request, response) => {
     try {
-        const latestTranID = await pool.query("SELECT TO_CHAR(Count(*) + 1, '000000000') AS tran_id FROM suggested_transactions;");
+        const latestTranID = await pool.query("SELECT TO_CHAR(Count(*) + 1, 'FM000000000') AS tran_id FROM suggested_transactions;");
         response.json(latestTranID.rows[0].tran_id);
     } catch (error) {
         console.error(error.message);
@@ -838,6 +838,45 @@ app.patch("/rates", async (request, response) => {
         response.json(true);
     } catch (error) {
         console.error(error.message);
+    }
+});
+
+// For searching by global transaction ID; getTransactionByGlobalID().
+app.get("/global/:globalID", async (request, response) => {
+    try {
+        const { globalID } = request.params;
+        let dataToSend = {
+            acco_id: '',
+            cust_id: '',
+            cust_name: '',
+            cust_primary_number: '',
+            created: false,
+            acco_tran_id: '',
+            receiptData: null,
+            global_id: '',
+        };
+        if (globalID === null || globalID === '') {
+            response.json({status: 'false', isSearch: 'true'});
+        } else {
+            const transaction = await pool.query("SELECT acco_id, acco_tran_id FROM transactions WHERE global_id = $1;", [globalID.padStart(9, '0')]);
+            if (transaction.rows.length === 0) {
+                response.json({status: 'false', isSearch: 'true'});
+            } else {
+                const customer = await pool.query("SELECT a.cust_id AS cust_id, c.cust_name AS cust_name, c.cust_primary_number AS cust_primary_number FROM customers c JOIN accounts a ON a.cust_id = c.cust_id WHERE a.acco_id = $1;", [transaction.rows[0].acco_id]);
+                dataToSend = { 
+                    ...dataToSend,
+                    acco_id: transaction.rows[0].acco_id,
+                    cust_id: customer.rows[0].cust_id,
+                    cust_name: customer.rows[0].cust_name,
+                    cust_primary_number: customer.rows[0].cust_primary_number,
+                    acco_tran_id: transaction.rows[0].acco_tran_id,
+                    global_id: globalID.padStart(9, '0')
+                };
+                response.json({...dataToSend, status: 'true', isSearch: 'true'});
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
     }
 });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import './Animations.css';
 
-const AlertPopup = ({ status }) => {
+const AlertPopup = ({ status, isSearch }) => {
     return (
         <>
             {
@@ -38,7 +38,7 @@ const AlertPopup = ({ status }) => {
                         animation: 'alert 3s',
                         animationDirection: 'normal'
                     }}>
-                        <p className="fs-8 text-center">Transaction failed.</p>
+                        <p className="fs-8 text-center">{isSearch === 'true' ? 'Search' : 'Transaction' } failed.</p>
                     </div>
             }
         </>

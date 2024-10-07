@@ -143,6 +143,17 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
         }
     }, [transactions, searched])
 
+    useEffect(() => {
+        setTimeout(() => {
+            if (data.isSearch) {
+                const idNumber = Number(data.global_id);
+                const idText = idNumber.toString();
+                const myTransaction = document.getElementById('custPage' + idText);
+                myTransaction.click();
+            }
+        }, 1800);
+    }, [])
+
     return (
         <div className="mb-2 mx-2">
             <table className="table table-striped table-hover table-bordered text-center">
@@ -170,7 +181,7 @@ const CustomerStatementTransactions = ({ accountID, searched, data, globalRates,
                     {
                         searched === '' && transactions.length !== 0 ?
                             view && transactions.map((transaction, index, {length}) => (
-                                <tr key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id, transaction.tran_id])} style={{ cursor: 'pointer' }}>
+                                <tr id={'custPage' + (transaction.tran_id).toString()} key={index} data-bs-toggle="modal" data-bs-target="#transactionEditCreate" onClick={() => setDisplayTransaction([transaction.acco_id, transaction.acco_tran_id, transaction.tran_id])} style={{ cursor: 'pointer' }}>
                                     <td>{transaction.date_created.split(' ')[0]}</td>
                                     {
                                         transaction.acco_tran_id.slice(0, 2) === 'TA' || transaction.acco_tran_id.slice(0, 2) === 'GI' ?

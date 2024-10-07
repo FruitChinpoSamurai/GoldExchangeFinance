@@ -10,9 +10,7 @@ import Calculator from "./Calculator";
 import AlertPopup from "./AlertPopup";
 import readService from "./ScaleRead";
 import RateSetter from "./RateSetter";
-
-// import print from 'print-js';
-// import './Receipt.css';
+import transactionService from "../services/transaction";
 
 const Dashboard = ({ globalRates, setGlobalReceipt }) => {
     const [one, setOne] = useState('#CDB450');
@@ -22,18 +20,21 @@ const Dashboard = ({ globalRates, setGlobalReceipt }) => {
     const [five, setFive] = useState('#CDB450');
     const [six, setSix] = useState('#CDB450');
     const [clicked, setClicked] = useState('Dashboard');
-    const [transactionAlert, setTransactionAlert] = useState('');
+    const [transactionAlert, setTransactionAlert] = useState(null);
+    const [searchAlert, setSearchAlert] = useState(null);
     const [custStatementHeader, setCustStatementHeader] = useState({});
     const [displayCalc, setDisplayCalc] = useState(false);
     const [displayRate, setDisplayRate] = useState(false);
     const [showScale, setShowScale] = useState(false);
     const [scaleReading, setScaleReading] = useState(0);
+    const [globalSearchValue, setGlobalSearchValue] = useState('');
 
     useEffect(() => {
         setTimeout(() => {
-            setTransactionAlert('');
+            setTransactionAlert(null);
+            setSearchAlert(null);
         }, 3000);
-    }, [transactionAlert]);
+    }, [transactionAlert, searchAlert]);
 
     const dashboardItems = [
         {
@@ -111,6 +112,29 @@ const Dashboard = ({ globalRates, setGlobalReceipt }) => {
         readService.scaleRead(setScaleReading);
     }
 
+    const searchHandle = (e) => {
+        setGlobalSearchValue(e.target.value);
+    };
+
+    const searchForTransaction = () => {
+        transactionService.getTransactionByGlobalID(globalSearchValue)
+            .then(response => {
+                if (response.status === 'true') {
+                    itemClicked('Accounts', {...response});
+                    setTimeout(() => {
+                        setGlobalSearchValue('');
+                    }, 2000);
+                } else {
+                    setTransactionAlert(response.status);
+                    setSearchAlert(response.isSearch);
+                }
+            })
+            .catch(response => {
+                setTransactionAlert(response.status);
+                setSearchAlert(response.isSearch);
+            });
+    };
+
     const switchView = (view) => {
         switch (view) {
             case 'Customers':
@@ -168,7 +192,7 @@ const Dashboard = ({ globalRates, setGlobalReceipt }) => {
                         </div>
                         <NewAndEditTransaction handleAlert={setTransactionAlert} successTransactionHandle={itemClicked} scaleReading={scaleReading} setGlobalReceipt={setGlobalReceipt} />
                         {
-                            transactionAlert !== '' && <AlertPopup status={transactionAlert} />
+                            transactionAlert !== null && <AlertPopup status={transactionAlert} isSearch={searchAlert} />
                         }
                     </div>
                 )
@@ -177,42 +201,21 @@ const Dashboard = ({ globalRates, setGlobalReceipt }) => {
 
     return (
         <>  
-            {/* <div className="col hide-me" style={{ width: '280px' }} id="test">
-                <div className="row" style={{ textAlignLast: 'center' }}>
-                    <span style={{ fontSize: '25px', fontWeight: 'bold' }}>Eastern Gold</span>
-                </div>
-                <hr style={{ margin: '0rem 0' }}/>
-                <div className="row" style={{ textAlignLast: 'center' }}>
-                    <span style={{ fontSize: '10px' }}>07/08/2024 - 09:45PM</span>
-                </div>
-                <hr style={{ margin: '0rem 0' }}/>
-                <div className="row" >
-                    <div className="col">
-                        <span style={{ fontSize: '10px' }}>Customer/Account ID:</span>
-                    </div>
-                    <div className="col" style={{ textAlignLast: 'right' }}>
-                        <span style={{ fontSize: '10px' }}>000001</span>
-                    </div>
-                </div>
-                <div className="row" >
-                    <div className="col">
-                        <span style={{ fontSize: '10px' }}>Chinga Pingaman:</span>
-                    </div>
-                    <div className="col" style={{ textAlignLast: 'right' }}>
-                        <span style={{ fontSize: '10px' }}>03462177528</span>
-                    </div>
-                </div>
-                <hr style={{ margin: '0rem 0' }}/>                 
-            </div> */}
             <div className="row">
                 <div className="col">
                     <i className="bi bi-calculator" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayCalculator()}></i>
                     <i className="bi bi-journal-bookmark" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} data-bs-toggle="modal" data-bs-target="#transactionSuggested"></i>
                     <i className="bi bi-coin" style={{fontSize: "2rem", color: 'white', cursor: 'pointer'}} onClick={() => displayRateSetter()}></i>
-                    {/* <button type="button" onClick={() => print({printable: 'test', type: 'html', targetStyles: ["*"], font_size: '', style: '.hide-me { display: block !important; }'})}>
-                        Print
-                    </button> */}
                 </div>
+                {
+                    clicked === 'Dashboard' ?
+                        <div className="col" style={{ textAlign: 'center' }}>
+                            <div className="input-group">
+                                <input type="input" className="col form-control mx-auto" placeholder="Search Global ID..." value={globalSearchValue} onInput={(e) => searchHandle(e)}/>
+                                <button className="btn btn-outline-secondary btn-light" type="button" onClick={() => searchForTransaction()}>Search</button>
+                            </div>
+                        </div> : <></>
+                }
                 <div className="col" style={{ textAlign: 'end' }}>
                     {
                         showScale && <span style={{ color: 'white', marginRight: '15px', borderRadius: '5px', borderColor: 'gold', borderStyle: 'solid', padding: '5px' }}>{scaleReading}g</span>

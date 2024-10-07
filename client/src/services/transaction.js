@@ -62,6 +62,11 @@ const getWeightPriceMeta = () => {
     return request.then(response => response.data);
 }
 
+const getTransactionByGlobalID = (global_id) => {
+    const request = axios.get(`/global/${global_id}`);
+    return request.then(response => response.data);
+}
+
 const transactionService = { 
     createTransaction,
     updateTransaction,
@@ -73,6 +78,7 @@ const transactionService = {
     getAdvanceLoanTransaction,
     getOneByIDs,
     updateTransactionClosingBalance,
-    getWeightPriceMeta
+    getWeightPriceMeta,
+    getTransactionByGlobalID
 };
 export default transactionService;
